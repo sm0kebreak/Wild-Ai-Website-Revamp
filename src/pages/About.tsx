@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { useChapters } from '@/hooks/useChapters';
+import { formatMemberCount, useChapters } from '@/hooks/useChapters';
 import { Flame, Users, Mic2, ArrowRight } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 
@@ -124,7 +124,8 @@ const About = () => {
                   </p>
                   <p className="text-xs text-muted-foreground mb-2">{c.region}</p>
                   <span className="text-[10px] font-mono text-wildai-mint">
-                    {c.status === 'active' ? 'ACTIVE' : 'LAUNCHING'} · {c.member_count ?? 0}+ members
+                    {c.status === 'active' ? 'ACTIVE' : 'LAUNCHING'}
+                    {formatMemberCount(c.member_count) ? ` · ${formatMemberCount(c.member_count)}` : ''}
                   </span>
                 </Link>
               ))}

@@ -16,7 +16,6 @@ import {
   Info,
   MapPin,
   Mic2,
-  Newspaper,
   Rocket,
   Users,
   Youtube,
@@ -30,7 +29,6 @@ const pages = [
   { to: '/about', label: 'About', icon: Info },
   { to: '/join', label: 'Join the list', icon: Users },
   { to: '/start-a-chapter', label: 'Start a chapter', icon: Rocket },
-  { to: '/press', label: 'Press', icon: Newspaper },
 ];
 
 interface CommandPaletteProps {

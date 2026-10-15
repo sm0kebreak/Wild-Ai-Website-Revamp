@@ -8,6 +8,7 @@ import { ChevronDown, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { pastEventHistory2026 } from '@/data/eventHistory2026';
+import { pastMeetupByDisplayDate } from '@/data/pastMeetups';
 
 const PreviousEvents = () => {
   const pastEvents = [
@@ -195,11 +196,16 @@ const PreviousEvents = () => {
                   <CollapsibleTrigger className="flex items-center justify-between w-full p-4 hover:bg-foreground/5 transition-colors">
                     <div className="text-left">
                       <h3 className="font-bold text-lg">{event.date}</h3>
-                      {'venue' in event && event.venue && (
-                        <p className="text-xs font-mono text-muted-foreground mt-1">
-                          {event.venue}{'attendeeCount' in event && event.attendeeCount ? ` · ${event.attendeeCount} attendees` : ''}
-                        </p>
-                      )}
+                      <p className="text-xs font-mono text-muted-foreground mt-1">
+                        {pastMeetupByDisplayDate(event.date)?.city ?? 'Minneapolis'}
+                        {(('venue' in event && event.venue) || pastMeetupByDisplayDate(event.date)?.venue) &&
+                          ` · ${
+                            ('venue' in event && event.venue) || pastMeetupByDisplayDate(event.date)?.venue
+                          }`}
+                        {'attendeeCount' in event && event.attendeeCount
+                          ? ` · ${event.attendeeCount} attendees`
+                          : ''}
+                      </p>
                     </div>
                     <ChevronDown className="h-5 w-5 transition-transform ui-open:rotate-180" />
                   </CollapsibleTrigger>

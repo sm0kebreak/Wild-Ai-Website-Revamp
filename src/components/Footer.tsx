@@ -2,7 +2,7 @@
 import React from 'react';
 import Logo from '@/components/Logo';
 import { Link } from 'react-router-dom';
-import { Youtube, Mail, Linkedin, Twitter } from 'lucide-react';
+import { Youtube, Mail, Linkedin } from 'lucide-react';
 import EmailCapture from '@/components/EmailCapture';
 import { useChapters } from '@/hooks/useChapters';
 
@@ -33,15 +33,6 @@ const Footer = () => {
             </div>
 
             <div className="flex space-x-4">
-              <a
-                href="https://x.com/wildai_meetup"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Wild AI on X"
-                className="w-10 h-10 rounded-md border border-border bg-background flex items-center justify-center hover:border-primary transition-colors"
-              >
-                <Twitter className="w-5 h-5 text-foreground" />
-              </a>
               <a
                 href="https://www.linkedin.com/company/wild-ai"
                 target="_blank"
@@ -117,11 +108,6 @@ const Footer = () => {
                       className="text-muted-foreground hover:text-foreground transition-colors"
                     >
                       Start a chapter
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/press" className="text-muted-foreground hover:text-foreground transition-colors">
-                      Press
                     </Link>
                   </li>
                   <li>

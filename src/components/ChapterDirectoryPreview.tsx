@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MapPin, ArrowRight } from 'lucide-react';
-import { useChapters } from '@/hooks/useChapters';
+import { formatMemberCount, useChapters } from '@/hooks/useChapters';
 import Reveal from '@/components/motion/Reveal';
 
 /** Home page chapter directory preview: cards for every chapter + "more coming". */
@@ -56,7 +56,7 @@ const ChapterDirectoryPreview = () => {
                     </p>
 
                     <div className="mt-6 flex items-center justify-between gap-4 border-t border-border/50 pt-4">
-                      <span className="kicker">{c.member_count ?? 0}+ members</span>
+                      <span className="kicker">{formatMemberCount(c.member_count) ?? c.tagline}</span>
                       <span className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
                         Go to chapter
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

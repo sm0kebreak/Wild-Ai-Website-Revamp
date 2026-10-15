@@ -48,7 +48,7 @@ const Join = () => {
         <title>Join Wild AI - Get AI meetup invites for your city</title>
         <meta
           name="description"
-          content="Join the Wild AI community: event invites, speaker lineups, and recaps for Minneapolis, San Francisco, and Toronto."
+          content="Get Wild AI event invites for Minneapolis, San Francisco, Toronto, Chicago, and Austin."
         />
         <meta property="og:title" content="Join Wild AI" />
         <meta property="og:type" content="website" />

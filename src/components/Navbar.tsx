@@ -13,6 +13,8 @@ import {
 import ChapterSwitcher from '@/components/ChapterSwitcher';
 import Logo from '@/components/Logo';
 import CommandPalette, { useCommandPalette } from '@/components/CommandPalette';
+import { publicChapters } from '@/data/chapters';
+import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 const navLinks = [
   { to: '/chapters', label: 'Chapters' },
@@ -29,6 +31,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
   const palette = useCommandPalette();
+  const rsvpUrl = rsvpUrlFor(nextMeetupDate());
 
   useEffect(() => {
     const onScroll = () => {
@@ -100,6 +103,14 @@ const Navbar = () => {
                     </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
+                  {publicChapters.map((chapter) => (
+                    <DropdownMenuItem key={chapter.slug} asChild>
+                      <Link to={`/${chapter.slug}`} className="cursor-pointer">
+                        {chapter.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/start-a-chapter" className="cursor-pointer">
                       Start a chapter
@@ -109,9 +120,9 @@ const Navbar = () => {
               </DropdownMenu>
             )}
 
-            <Link to="/join">
-              <Button size={isMobile ? 'sm' : 'default'}>Join</Button>
-            </Link>
+            <a href={rsvpUrl ?? '/#next-event'} target={rsvpUrl ? '_blank' : undefined} rel={rsvpUrl ? 'noopener noreferrer' : undefined}>
+              <Button size={isMobile ? 'sm' : 'default'}>Register</Button>
+            </a>
           </div>
         </div>
 

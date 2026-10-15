@@ -46,7 +46,7 @@ const Events = () => {
         <title>Wild AI Events - Upcoming AI meetups & demo nights</title>
         <meta
           name="description"
-          content="All upcoming and past Wild AI events across Minneapolis, San Francisco, and Toronto. Fire talks, demo nights, and networking."
+          content="Upcoming and past Wild AI events in Minneapolis, San Francisco, Toronto, Chicago, and Austin."
         />
         <meta property="og:title" content="Wild AI Events" />
         <meta property="og:type" content="website" />
@@ -105,7 +105,7 @@ const Events = () => {
             {!isLoading && filtered.length === 0 && !showPastFallback && (
               <p className="text-center text-muted-foreground py-10">
                 {timeFilter === 'upcoming'
-                  ? 'No upcoming events in this city yet - check back soon.'
+                  ? 'Next event coming soon. Get notified below.'
                   : 'No past events for this filter yet.'}
               </p>
             )}
@@ -117,16 +117,15 @@ const Events = () => {
                 <h2 className="section-title text-center pt-4">PAST EVENTS</h2>
               </>
             )}
-            {displayList.map((e, i) => (
-              <Link
-                key={e.id}
-                to={`/events/${e.slug}`}
-                className={`block surface surface-interactive p-6 transition-colors group ${
+            {displayList.map((e, i) => {
+              const meetupHref = isUpcoming(e.event_date) ? e.meetup_url : null;
+              const cardClass = `block surface surface-interactive p-6 transition-colors group ${
                   i === 0 && !showPastFallback && timeFilter === 'upcoming'
                     ? '!border-accent/50 ring-1 ring-accent/20 bg-primary/30'
                     : ''
-                }`}
-              >
+                }`;
+              const body = (
+              <>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex-grow">
                     {i === 0 && !showPastFallback && timeFilter === 'upcoming' && (
@@ -172,8 +171,18 @@ const Events = () => {
                     {isUpcoming(e.event_date) ? 'RSVP' : 'RECAP'} <ArrowRight className="w-4 h-4" />
                   </span>
                 </div>
-              </Link>
-            ))}
+              </>
+              );
+              return meetupHref ? (
+                <a key={e.id} href={meetupHref} target="_blank" rel="noopener noreferrer" className={cardClass}>
+                  {body}
+                </a>
+              ) : (
+                <Link key={e.id} to={`/events/${e.slug}`} className={cardClass}>
+                  {body}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="max-w-xl mx-auto">

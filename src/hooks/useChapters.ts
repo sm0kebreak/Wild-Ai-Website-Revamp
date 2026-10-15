@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { publicChapters, type PublicChapter } from '@/data/chapters';
 import {
   MEETUP_CADENCE,
   MEETUP_VENUE,
-  meetupTitle,
   scheduledMeetups,
   withConfirmedMeetup,
 } from '@/lib/meetupSchedule';
@@ -60,22 +60,53 @@ export interface ChapterEvent {
 
 const HOME_CHAPTER = 'minneapolis';
 
-/** Used when the chapter row cannot be loaded, so the public calendar still has a next meetup. */
-const FALLBACK_HOME_CHAPTER: Chapter = {
-  id: 'minneapolis',
-  slug: HOME_CHAPTER,
-  city: 'Minneapolis',
-  region: 'Minnesota',
-  status: 'active',
-  tagline: null,
-  about_text: null,
-  cadence: MEETUP_CADENCE,
-  venue_name: MEETUP_VENUE.name,
-  venue_address: MEETUP_VENUE.address,
+const toPublicChapter = (chapter: PublicChapter, index: number): Chapter => ({
+  id: chapter.slug,
+  slug: chapter.slug,
+  city: chapter.city,
+  region: chapter.region,
+  status: chapter.status,
+  tagline: chapter.tagline,
+  about_text: chapter.about,
+  cadence: chapter.slug === HOME_CHAPTER ? MEETUP_CADENCE : null,
+  venue_name: chapter.slug === HOME_CHAPTER ? MEETUP_VENUE.name : null,
+  venue_address: chapter.slug === HOME_CHAPTER ? MEETUP_VENUE.address : null,
   venue_notes: null,
   member_count: null,
-  sort_order: 0,
-};
+  sort_order: index,
+});
+
+/** The five public chapters, used when the database is missing a city. */
+const PUBLIC_CHAPTER_RECORDS: Chapter[] = publicChapters.map(toPublicChapter);
+
+/** Hide empty counts so the site never renders "0+ members". */
+export const formatMemberCount = (count?: number | null) =>
+  typeof count === 'number' && count > 0 ? `${count.toLocaleString()}+ members` : null;
+
+/** Used when the chapter row cannot be loaded, so the public calendar still has a next meetup. */
+const FALLBACK_HOME_CHAPTER: Chapter =
+  PUBLIC_CHAPTER_RECORDS.find((chapter) => chapter.slug === HOME_CHAPTER) ?? PUBLIC_CHAPTER_RECORDS[0];
+
+const mergePublicChapters = (remote: Chapter[]): Chapter[] =>
+  PUBLIC_CHAPTER_RECORDS.map((base) => {
+    const match = remote.find((chapter) => chapter.slug === base.slug);
+    if (!match) return base;
+    const memberCount = formatMemberCount(match.member_count) ? match.member_count : null;
+    if (base.slug === HOME_CHAPTER) {
+      return withMeetupVenue({
+        ...base,
+        id: match.id,
+        about_text: match.about_text || base.about_text,
+        member_count: memberCount,
+      });
+    }
+    return {
+      ...base,
+      id: match.id,
+      about_text: match.about_text || base.about_text,
+      member_count: memberCount,
+    };
+  });
 
 const homeChapter = (chapter: Chapter | null | undefined): Chapter =>
   chapter ? withMeetupVenue(chapter) : withMeetupVenue(FALLBACK_HOME_CHAPTER);
@@ -93,9 +124,7 @@ const withMeetupVenue = (chapter: Chapter): Chapter =>
 
 /** Fills months that have no stored event with the standing third-Monday meetup. */
 const withScheduledMeetups = (events: ChapterEvent[], chapter: Chapter): ChapterEvent[] => {
-  const named = events.map((e) =>
-    isUpcoming(e.event_date) ? withConfirmedMeetup({ ...e, title: meetupTitle(e.event_date) }) : e
-  );
+  const named = events.map((e) => (isUpcoming(e.event_date) ? withConfirmedMeetup(e) : e));
   const filled = new Set(named.map((e) => e.event_date.slice(0, 7)));
   const generated = scheduledMeetups(chapter).filter(
     (m) => !filled.has(m.event_date.slice(0, 7))
@@ -114,11 +143,9 @@ export const useChapters = () =>
           .order('sort_order');
         if (error) throw error;
         const chapters = (noEmDash(data) as Chapter[]).map(withMeetupVenue);
-        return chapters.some((chapter) => chapter.slug === HOME_CHAPTER)
-          ? chapters
-          : [homeChapter(null), ...chapters];
+        return mergePublicChapters(chapters);
       } catch {
-        return [homeChapter(null)];
+        return PUBLIC_CHAPTER_RECORDS;
       }
     },
   });
@@ -135,10 +162,15 @@ export const useChapter = (slug: string | undefined) =>
           .eq('slug', slug)
           .maybeSingle();
         if (error) throw error;
-        if (data) return withMeetupVenue(noEmDash(data) as Chapter);
-        return slug === HOME_CHAPTER ? homeChapter(null) : null;
+        const base = PUBLIC_CHAPTER_RECORDS.find((chapter) => chapter.slug === slug);
+        if (data) {
+          const merged = mergePublicChapters([withMeetupVenue(noEmDash(data) as Chapter)]);
+          return merged.find((chapter) => chapter.slug === slug) ?? base ?? null;
+        }
+        return base ?? null;
       } catch (error) {
-        if (slug === HOME_CHAPTER) return homeChapter(null);
+        const base = PUBLIC_CHAPTER_RECORDS.find((chapter) => chapter.slug === slug);
+        if (base) return base;
         throw error;
       }
     },

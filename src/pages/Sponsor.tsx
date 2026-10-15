@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import LogoCarousel from '@/components/LogoCarousel';
-import PastHighlights from '@/components/PastHighlights';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -16,7 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
-import { CheckCircle2, Users, Megaphone, Handshake } from 'lucide-react';
+import { CheckCircle2, Handshake } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 
 const tiers = [
@@ -73,7 +72,7 @@ const Sponsor = () => {
         <title>Sponsor Wild AI - Reach working AI builders</title>
         <meta
           name="description"
-          content="Put your brand in front of hundreds of active AI engineers and founders at Wild AI meetups in Minneapolis, San Francisco, and Toronto."
+          content="Sponsor a Wild AI meetup and meet builders in person. Minneapolis is on the calendar, with chapters opening in San Francisco, Toronto, Chicago, and Austin."
         />
         <meta property="og:title" content="Sponsor Wild AI" />
         <meta property="og:type" content="website" />
@@ -89,21 +88,6 @@ const Sponsor = () => {
           lede="Wild AI rooms are full of people who ship: engineers, founders, and researchers actively building with AI. Sponsors get their attention in person, not in a feed."
         />
         <div className="container mx-auto px-4 pt-14">
-
-          {/* Audience data */}
-          <div className="max-w-4xl mx-auto grid sm:grid-cols-3 gap-4 mb-16">
-            {[
-              { icon: Users, stat: '790+', label: 'members across three chapters' },
-              { icon: Megaphone, stat: '60%+', label: 'of attendees are engineers or founders' },
-              { icon: Handshake, stat: '4+ years', label: 'of consistently packed meetups' },
-            ].map((s) => (
-              <div key={s.label} className="surface p-6 text-center">
-                <s.icon className="w-6 h-6 text-wildai-mint mx-auto mb-2" />
-                <p className="text-3xl font-bold font-mono text-wildai-mint mb-1">{s.stat}</p>
-                <p className="text-xs text-muted-foreground">{s.label}</p>
-              </div>
-            ))}
-          </div>
 
           {/* Why sponsor */}
           <div className="max-w-4xl mx-auto surface p-6 md:p-8 mb-16">
@@ -143,11 +127,6 @@ const Sponsor = () => {
           <div className="max-w-4xl mx-auto mb-16">
             <h2 className="section-title text-center">TRUSTED BY</h2>
             <LogoCarousel />
-          </div>
-
-          <div className="max-w-4xl mx-auto mb-16">
-            <h2 className="section-title text-center">ROOMS WE PACK</h2>
-            <PastHighlights />
           </div>
 
           {/* Lead form */}
