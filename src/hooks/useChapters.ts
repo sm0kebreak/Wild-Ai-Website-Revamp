@@ -60,6 +60,26 @@ export interface ChapterEvent {
 
 const HOME_CHAPTER = 'minneapolis';
 
+/** Used when the chapter row cannot be loaded, so the public calendar still has a next meetup. */
+const FALLBACK_HOME_CHAPTER: Chapter = {
+  id: 'minneapolis',
+  slug: HOME_CHAPTER,
+  city: 'Minneapolis',
+  region: 'Minnesota',
+  status: 'active',
+  tagline: null,
+  about_text: null,
+  cadence: MEETUP_CADENCE,
+  venue_name: MEETUP_VENUE.name,
+  venue_address: MEETUP_VENUE.address,
+  venue_notes: null,
+  member_count: null,
+  sort_order: 0,
+};
+
+const homeChapter = (chapter: Chapter | null | undefined): Chapter =>
+  chapter ? withMeetupVenue(chapter) : withMeetupVenue(FALLBACK_HOME_CHAPTER);
+
 /** The recurring venue lives in code, so every surface agrees on it. */
 const withMeetupVenue = (chapter: Chapter): Chapter =>
   chapter.slug === HOME_CHAPTER
@@ -87,12 +107,19 @@ export const useChapters = () =>
   useQuery({
     queryKey: ['chapters'],
     queryFn: async (): Promise<Chapter[]> => {
-      const { data, error } = await supabase
-        .from('chapters')
-        .select('*')
-        .order('sort_order');
-      if (error) throw error;
-      return (noEmDash(data) as Chapter[]).map(withMeetupVenue);
+      try {
+        const { data, error } = await supabase
+          .from('chapters')
+          .select('*')
+          .order('sort_order');
+        if (error) throw error;
+        const chapters = (noEmDash(data) as Chapter[]).map(withMeetupVenue);
+        return chapters.some((chapter) => chapter.slug === HOME_CHAPTER)
+          ? chapters
+          : [homeChapter(null), ...chapters];
+      } catch {
+        return [homeChapter(null)];
+      }
     },
   });
 
@@ -101,13 +128,19 @@ export const useChapter = (slug: string | undefined) =>
     queryKey: ['chapter', slug],
     enabled: !!slug,
     queryFn: async (): Promise<Chapter | null> => {
-      const { data, error } = await supabase
-        .from('chapters')
-        .select('*')
-        .eq('slug', slug)
-        .maybeSingle();
-      if (error) throw error;
-      return data ? withMeetupVenue(noEmDash(data) as Chapter) : null;
+      try {
+        const { data, error } = await supabase
+          .from('chapters')
+          .select('*')
+          .eq('slug', slug)
+          .maybeSingle();
+        if (error) throw error;
+        if (data) return withMeetupVenue(noEmDash(data) as Chapter);
+        return slug === HOME_CHAPTER ? homeChapter(null) : null;
+      } catch (error) {
+        if (slug === HOME_CHAPTER) return homeChapter(null);
+        throw error;
+      }
     },
   });
 
@@ -131,14 +164,19 @@ export const useChapterEvents = (chapter: Chapter | null | undefined) =>
     queryKey: ['chapter-events', chapter?.id],
     enabled: !!chapter,
     queryFn: async (): Promise<ChapterEvent[]> => {
-      const { data, error } = await supabase
-        .from('chapter_events')
-        .select('*')
-        .eq('chapter_id', chapter!.id)
-        .order('event_date', { ascending: false });
-      if (error) throw error;
-      const events = noEmDash(data) as unknown as ChapterEvent[];
-      return chapter!.slug === HOME_CHAPTER ? withScheduledMeetups(events, chapter!) : events;
+      try {
+        const { data, error } = await supabase
+          .from('chapter_events')
+          .select('*')
+          .eq('chapter_id', chapter!.id)
+          .order('event_date', { ascending: false });
+        if (error) throw error;
+        const events = noEmDash(data) as unknown as ChapterEvent[];
+        return chapter!.slug === HOME_CHAPTER ? withScheduledMeetups(events, chapter!) : events;
+      } catch (error) {
+        if (chapter!.slug === HOME_CHAPTER) return scheduledMeetups(chapter!);
+        throw error;
+      }
     },
   });
 
@@ -147,18 +185,22 @@ export const useAllEvents = () =>
   useQuery({
     queryKey: ['all-chapter-events'],
     queryFn: async (): Promise<ChapterEvent[]> => {
-      const [eventsResult, chaptersResult] = await Promise.all([
-        supabase
-          .from('chapter_events')
-          .select('*, chapter:chapters(*)')
-          .order('event_date', { ascending: false }),
-        supabase.from('chapters').select('*').eq('slug', HOME_CHAPTER).maybeSingle(),
-      ]);
-      if (eventsResult.error) throw eventsResult.error;
+      try {
+        const [eventsResult, chaptersResult] = await Promise.all([
+          supabase
+            .from('chapter_events')
+            .select('*, chapter:chapters(*)')
+            .order('event_date', { ascending: false }),
+          supabase.from('chapters').select('*').eq('slug', HOME_CHAPTER).maybeSingle(),
+        ]);
+        if (eventsResult.error) throw eventsResult.error;
 
-      const events = noEmDash(eventsResult.data) as unknown as ChapterEvent[];
-      const home = noEmDash(chaptersResult.data) as Chapter | null;
-      return home ? withScheduledMeetups(events, withMeetupVenue(home)) : events;
+        const events = noEmDash(eventsResult.data) as unknown as ChapterEvent[];
+        const home = noEmDash(chaptersResult.data) as Chapter | null;
+        return withScheduledMeetups(events, homeChapter(home));
+      } catch {
+        return scheduledMeetups(homeChapter(null));
+      }
     },
   });
 
