@@ -9,7 +9,23 @@ export const MEETUP_VENUE = {
 
 export const MEETUP_START_TIME = '18:00';
 export const MEETUP_END_TIME = '20:00';
-export const MEETUP_CADENCE = 'Third Monday of every month at 6:00 PM';
+export const MEETUP_CADENCE = 'Third Monday of every month at 6:00 PM CT';
+
+/** The next announced Minneapolis meetup. Later months stay on the third-Monday cadence. */
+export const CONFIRMED_MEETUP_DATE = '2026-10-19';
+export const CONFIRMED_MEETUP_URL = 'https://www.meetup.com/wild-ai/events/316500602/';
+
+export const rsvpUrlFor = (dateIso: string) =>
+  dateIso === CONFIRMED_MEETUP_DATE ? CONFIRMED_MEETUP_URL : null;
+
+export const meetupAgenda = [
+  { time: '6:00 PM', label: 'Doors open (CT)' },
+  { time: 'Then', label: 'Live demos from builders' },
+  { time: 'After', label: 'Networking' },
+];
+
+export const meetupBlurb =
+  'Doors open at 6:00 PM CT at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Live demos from builders, then networking.';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const toYmd = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -41,12 +57,6 @@ export const upcomingMeetupDates = (count = 4, from = new Date()): string[] => {
 
 export const nextMeetupDate = (from = new Date()) => upcomingMeetupDates(1, from)[0];
 
-const agenda = [
-  { time: '6:00 PM', label: 'Arrival, mingling, and drinks' },
-  { time: '6:40 PM', label: 'Fire talks - five minutes, no slides' },
-  { time: '7:00 PM', label: 'Open networking' },
-];
-
 /** Recurring meetups rendered alongside anything already stored for the chapter. */
 export const scheduledMeetups = (chapter: Chapter, count = 4): ChapterEvent[] =>
   upcomingMeetupDates(count).map((date) => ({
@@ -56,15 +66,31 @@ export const scheduledMeetups = (chapter: Chapter, count = 4): ChapterEvent[] =>
     title: meetupTitle(date),
     event_date: date,
     start_time: MEETUP_START_TIME,
-    end_time: MEETUP_END_TIME,
+    end_time: null,
     venue_name: MEETUP_VENUE.name,
     venue_address: MEETUP_VENUE.address,
-    description:
-      'Our monthly gathering of Minneapolis AI builders - five-minute fire talks, live demos, and an hour of open networking. Third Monday of every month at 6:00 PM.',
-    agenda,
+    description: meetupBlurb,
+    agenda: meetupAgenda,
     speakers: [],
     recap_url: null,
-    meetup_url: null,
+    meetup_url: rsvpUrlFor(date),
     attendee_count: null,
     chapter,
   }));
+
+/** Public facts for the announced meetup, including when a stored row already exists. */
+export const withConfirmedMeetup = <T extends ChapterEvent>(event: T): T => {
+  if (event.event_date !== CONFIRMED_MEETUP_DATE) return event;
+  return {
+    ...event,
+    title: meetupTitle(event.event_date),
+    start_time: MEETUP_START_TIME,
+    end_time: null,
+    venue_name: MEETUP_VENUE.name,
+    venue_address: MEETUP_VENUE.address,
+    description: meetupBlurb,
+    agenda: meetupAgenda,
+    meetup_url: CONFIRMED_MEETUP_URL,
+    speakers: [],
+  };
+};

@@ -2,8 +2,11 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
+import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 const FinalCtaBand = () => {
+  const rsvpUrl = rsvpUrlFor(nextMeetupDate());
+
   return (
     <section className="py-24 md:py-32">
       <div className="container mx-auto px-4">
@@ -17,7 +20,12 @@ const FinalCtaBand = () => {
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
               Seats are limited and most events fill up. Lock in your spot for the next meetup.
             </p>
-            <a href="#register" className="mt-9 inline-block">
+            <a
+              href={rsvpUrl ?? '#register'}
+              target={rsvpUrl ? '_blank' : undefined}
+              rel={rsvpUrl ? 'noopener noreferrer' : undefined}
+              className="mt-9 inline-block"
+            >
               <Button size="lg" className="group">
                 Register now
                 <ArrowRight className="transition-transform group-hover:translate-x-1" />

@@ -53,7 +53,7 @@ const HeroCountdown = ({ spent }: { spent?: boolean }) => {
 
       <p className="mt-5 font-display text-lg font-semibold md:mt-7 md:text-xl">{meetupTitle(date)}</p>
       <p className="mt-2.5 flex items-center justify-center gap-2 text-[0.9375rem] text-muted-foreground">
-        <CalendarDays className="h-4 w-4" /> {formatDate(date)} · 6:00 PM
+        <CalendarDays className="h-4 w-4" /> {formatDate(date)} · 6:00 PM CT
       </p>
       <p className="hero-compact-hide mt-1.5 flex items-center justify-center gap-2 text-[0.9375rem] text-muted-foreground">
         <MapPin className="h-4 w-4" /> {MEETUP_VENUE.name}

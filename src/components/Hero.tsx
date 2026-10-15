@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { useScrollProgress, ramp } from '@/hooks/useScrollProgress';
 import HeroCountdown from '@/components/HeroCountdown';
+import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 /**
  * Full-viewport opening stage. It is sticky, so the rest of the page
@@ -12,6 +13,7 @@ import HeroCountdown from '@/components/HeroCountdown';
 const Hero = () => {
   /* Stretched past one viewport so the exit never feels rushed. */
   const progress = useScrollProgress(1.25);
+  const rsvpUrl = rsvpUrlFor(nextMeetupDate());
 
   /* Holds still for a beat, then sinks and dissolves. */
   const exit = ramp(progress, 0.04, 0.84);
@@ -82,7 +84,7 @@ const Hero = () => {
               className="rise mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-row md:mt-9"
               style={{ ['--rise-delay' as string]: '820ms' }}
             >
-              <a href="#register">
+              <a href={rsvpUrl ?? '#register'} target={rsvpUrl ? '_blank' : undefined} rel={rsvpUrl ? 'noopener noreferrer' : undefined}>
                 <Button size="lg" className="group w-full px-4 sm:w-auto sm:px-7" tabIndex={spent ? -1 : undefined}>
                   Register now
                   <ArrowRight className="transition-transform group-hover:translate-x-1" />

@@ -106,6 +106,7 @@ const EventDetail = () => {
               {event.start_time && (
                 <span className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-wildai-mint" /> {formatTime(event.start_time)}
+                  {event.chapter?.slug === 'minneapolis' ? ' CT' : ''}
                   {event.end_time ? ` – ${formatTime(event.end_time)}` : ''}
                 </span>
               )}
@@ -180,8 +181,7 @@ const EventDetail = () => {
               <div className="surface p-6 md:p-8">
                 <h2 className="section-title">SPEAKER LINEUP</h2>
                 <p className="text-muted-foreground">
-                  Fire talks are 5 minutes, no slides - the lineup is announced the week of the event.
-                  Want to demo?{' '}
+                  The demo lineup has not been announced yet. Want to demo?{' '}
                   <Link to="/speak" className="text-wildai-mint hover:underline">
                     Submit a demo →
                   </Link>

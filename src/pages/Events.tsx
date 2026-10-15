@@ -146,7 +146,10 @@ const Events = () => {
                       {e.start_time && (
                         <>
                           <span>·</span>
-                          <span>{formatTime(e.start_time)}</span>
+                          <span>
+                            {formatTime(e.start_time)}
+                            {e.chapter?.slug === 'minneapolis' ? ' CT' : ''}
+                          </span>
                         </>
                       )}
                       {e.attendee_count ? (

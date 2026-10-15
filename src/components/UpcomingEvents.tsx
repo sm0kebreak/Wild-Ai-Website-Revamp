@@ -71,6 +71,7 @@ const UpcomingEvents = () => {
                         <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                           <Clock className="h-3.5 w-3.5" />
                           {formatTime(e.start_time)}
+                          {e.chapter?.slug === 'minneapolis' ? ' CT' : ''}
                           {e.end_time ? ` – ${formatTime(e.end_time)}` : ''}
                         </span>
                       )}

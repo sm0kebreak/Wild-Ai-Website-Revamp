@@ -146,8 +146,15 @@ export const eventHistory2026: EventHistoryEntry[] = [
   },
 ];
 
+const localTodayIso = () => {
+  const today = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+};
+
+/** Events that have already happened. September 21, 2026 is history once that day has passed. */
 export const pastEventHistory2026 = eventHistory2026.filter(
-  (event) => event.date < '2026-09-19',
+  (event) => event.date < localTodayIso(),
 );
 
 export const pastSpeakers2026 = pastEventHistory2026.flatMap((event) =>

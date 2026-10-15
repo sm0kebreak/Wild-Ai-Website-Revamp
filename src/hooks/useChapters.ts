@@ -5,6 +5,7 @@ import {
   MEETUP_VENUE,
   meetupTitle,
   scheduledMeetups,
+  withConfirmedMeetup,
 } from '@/lib/meetupSchedule';
 
 /* Site copy avoids em dashes; stored text still has some. */
@@ -73,7 +74,7 @@ const withMeetupVenue = (chapter: Chapter): Chapter =>
 /** Fills months that have no stored event with the standing third-Monday meetup. */
 const withScheduledMeetups = (events: ChapterEvent[], chapter: Chapter): ChapterEvent[] => {
   const named = events.map((e) =>
-    isUpcoming(e.event_date) ? { ...e, title: meetupTitle(e.event_date) } : e
+    isUpcoming(e.event_date) ? withConfirmedMeetup({ ...e, title: meetupTitle(e.event_date) }) : e
   );
   const filled = new Set(named.map((e) => e.event_date.slice(0, 7)));
   const generated = scheduledMeetups(chapter).filter(

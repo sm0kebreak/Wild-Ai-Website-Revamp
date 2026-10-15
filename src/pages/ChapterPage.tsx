@@ -85,7 +85,11 @@ const ChapterPage = () => {
           lede={chapter.tagline}
         >
           {next ? (
-            <a href={`/events/${next.slug}`}>
+            <a
+              href={next.meetup_url ?? `/events/${next.slug}`}
+              target={next.meetup_url ? '_blank' : undefined}
+              rel={next.meetup_url ? 'noopener noreferrer' : undefined}
+            >
               <Button size="lg">RSVP NOW</Button>
             </a>
           ) : (
@@ -115,6 +119,7 @@ const ChapterPage = () => {
                   </p>
                   <p className="text-muted-foreground mb-3 flex items-center gap-2">
                     <Clock className="w-4 h-4" /> {formatTime(next.start_time)}
+                    {chapter.slug === 'minneapolis' ? ' CT' : ''}
                     {next.end_time ? ` – ${formatTime(next.end_time)}` : ''}
                   </p>
                   <p className="font-medium mb-1">{next.venue_name}</p>
@@ -146,9 +151,19 @@ const ChapterPage = () => {
                 <CalendarDays className="w-5 h-5 text-wildai-mint" /> {chapter.cadence ?? 'Monthly'}
               </p>
               <ul className="space-y-3 text-muted-foreground text-sm">
-                <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> 40 minutes of social hour</li>
-                <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> 20 minutes of fire talks - 5 min, no slides</li>
-                <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> An hour of open networking</li>
+                {chapter.slug === 'minneapolis' ? (
+                  <>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Doors open at 6:00 PM CT</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Live demos from builders</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Networking</li>
+                  </>
+                ) : (
+                  <>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Time to settle in</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Live demos from builders</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Networking</li>
+                  </>
+                )}
               </ul>
               <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
                 <Users className="w-4 h-4 text-wildai-mint" />
