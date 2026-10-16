@@ -58,6 +58,7 @@ const App = () => {
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/admin/show-and-tell" element={<Navigate to="/" replace />} />
                 <Route path="/admin/login" element={<Navigate to="/" replace />} />
+                <Route path="/admin/*" element={<Navigate to="/" replace />} />
                 <Route path="/admin" element={<Navigate to="/" replace />} />
                 <Route path="/chapters" element={<Chapters />} />
                 <Route path="/events" element={<Events />} />

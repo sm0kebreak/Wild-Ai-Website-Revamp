@@ -29,6 +29,7 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/admin', heading: /The room where/, redirect: '/' },
   { path: '/admin/login', heading: /The room where/, redirect: '/' },
   { path: '/admin/show-and-tell', heading: /The room where/, redirect: '/' },
+  { path: '/admin/emails', heading: /The room where/, redirect: '/' },
   { path: '/minneapolis', heading: /Next up/ },
   { path: '/san-francisco', heading: /coming soon/ },
   { path: '/toronto', heading: /coming soon/ },
