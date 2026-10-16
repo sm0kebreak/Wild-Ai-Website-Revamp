@@ -313,7 +313,7 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   await page.locator('#description').fill('Builds demos.');
   await page.locator('#building').fill('A demo');
   await page.getByRole('button', { name: 'Submit application' }).click();
-  await expect(page.getByText('Application received')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Application received' })).toBeVisible();
   expect(posted?.form).toBe('speaker');
   expect(posted?.payload?.linkedin_url).toBe('https://x.com/example');
 
