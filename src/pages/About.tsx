@@ -64,6 +64,7 @@ const team: TeamMember[] = [
   {
     name: 'Muhammad Shahid',
     linkedin: 'https://www.linkedin.com/in/muhammad-shahid-moandco/',
+    photo: '/team/muhammad-shahid.jpg',
   },
 ];
 
