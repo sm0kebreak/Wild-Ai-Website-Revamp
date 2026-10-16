@@ -344,9 +344,39 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     'href',
     'https://www.linkedin.com/in/judd-larson/',
   );
-  await expect(page.getByRole('link', { name: /Judd Larson/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Judd Larson/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/judd-larson.jpg',
+  );
+  await expect(page.getByRole('link', { name: /Justin Bosco/ })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/justin14/',
+  );
+  await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveCount(0);
   await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveCount(0);
-  await expect(page.getByText('Organizer', { exact: true })).toHaveCount(7);
+  await expect(page.getByRole('link', { name: /Micah Peoples/ })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/micahpeoples/',
+  );
+  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Muhammad Shahid/ })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/muhammad-shahid-moandco/',
+  );
+  await expect(page.getByRole('link', { name: /Muhammad Shahid/ }).locator('img')).toHaveCount(0);
+  await expect(page.locator('ul.grid > li p.font-display')).toHaveText([
+    'Anushka Bhide',
+    'Ben Long',
+    'Jake Brindley',
+    'Judd Larson',
+    'Justin Bosco',
+    'Kate Kuehl',
+    'Maanas Taneja',
+    'Matthew Osborn',
+    'Micah Peoples',
+    'Muhammad Shahid',
+  ]);
+  await expect(page.getByText('Organizer', { exact: true })).toHaveCount(10);
   await expect(page.locator('body')).not.toContainText(/co-?founder/i);
 
   await openPath(page, '/');

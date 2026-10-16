@@ -37,6 +37,11 @@ const team: TeamMember[] = [
   {
     name: 'Judd Larson',
     linkedin: 'https://www.linkedin.com/in/judd-larson/',
+    photo: '/team/judd-larson.jpg',
+  },
+  {
+    name: 'Justin Bosco',
+    linkedin: 'https://www.linkedin.com/in/justin14/',
   },
   {
     name: 'Kate Kuehl',
@@ -51,6 +56,14 @@ const team: TeamMember[] = [
     name: 'Matthew Osborn',
     linkedin: 'https://www.linkedin.com/in/mattjosborn/',
     photo: '/speakers/matt-josborn.webp',
+  },
+  {
+    name: 'Micah Peoples',
+    linkedin: 'https://www.linkedin.com/in/micahpeoples/',
+  },
+  {
+    name: 'Muhammad Shahid',
+    linkedin: 'https://www.linkedin.com/in/muhammad-shahid-moandco/',
   },
 ];
 
