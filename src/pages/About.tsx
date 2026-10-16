@@ -30,13 +30,13 @@ const team: TeamMember[] = [
     photo: '/speakers/jake-brindley.webp',
   },
   {
-    name: 'Judd Larson',
-    linkedin: 'https://www.linkedin.com/in/judd-larson/',
-  },
-  {
     name: 'Kate Kuehl',
     linkedin: 'https://www.linkedin.com/in/katekuehl/',
     photo: '/speakers/kate-kuehl.webp',
+  },
+  {
+    name: 'Judd Larson',
+    linkedin: 'https://www.linkedin.com/in/judd-larson/',
   },
   {
     name: 'Ben Long',
@@ -44,13 +44,13 @@ const team: TeamMember[] = [
     photo: '/speakers/benjamin-long.webp',
   },
   {
-    name: 'Maanas Taneja',
-    linkedin: 'https://www.linkedin.com/in/maanas-taneja',
-  },
-  {
     name: 'Matthew Osborn',
     linkedin: 'https://www.linkedin.com/in/mattjosborn/',
     photo: '/speakers/matt-josborn.webp',
+  },
+  {
+    name: 'Maanas Taneja',
+    linkedin: 'https://www.linkedin.com/in/maanas-taneja',
   },
 ];
 
