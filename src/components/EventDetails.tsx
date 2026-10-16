@@ -1,32 +1,33 @@
 import React from 'react';
 import { Clock, Users, MessageSquare, Youtube, CalendarDays, MapPin, ArrowUpRight } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
-import { MEETUP_VENUE, meetupTitle, nextMeetupDate } from '@/lib/meetupSchedule';
+import {
+  MEETUP_VENUE,
+  meetupAgenda,
+  meetupFormatCopy,
+  meetupTitle,
+  nextMeetupDate,
+  rsvpUrlFor,
+} from '@/lib/meetupSchedule';
 import { formatDate } from '@/hooks/useChapters';
 
 const expectations = [
-  'Cutting-edge AI discussions',
-  'Connect with local AI professionals',
-  'Share your projects and ideas',
-  'Casual, inclusive environment',
+  '15-minute demos. No slides.',
+  'About 10 minutes to demo, then about 5 minutes of questions and feedback.',
+  'Doors at 6:00, demos at 6:40, networking until 9.',
+  'All ages. Free. Register on Luma.',
 ];
 
-const schedule = [
-  { icon: Clock, time: '6:00 PM', detail: 'Arrival, mingling, and drinks.' },
-  {
-    icon: MessageSquare,
-    time: '6:40 - 7:00 PM',
-    detail: 'Speaker sessions begin (5-minute talks, no slides).',
-  },
-  {
-    icon: Users,
-    time: '7:00 - 8:00 PM',
-    detail: 'Open networking, connecting with speakers and fellow innovators.',
-  },
-];
+const scheduleIcons = [Clock, MessageSquare, Users];
+const schedule = meetupAgenda.map((slot, index) => ({
+  icon: scheduleIcons[index] ?? Clock,
+  time: slot.time,
+  detail: slot.label.endsWith('.') ? slot.label : `${slot.label}.`,
+}));
 
 const EventDetails = () => {
   const nextDate = nextMeetupDate();
+  const rsvpUrl = rsvpUrlFor(nextDate);
 
   return (
     <section id="event" className="py-14 md:py-20">
@@ -45,9 +46,7 @@ const EventDetails = () => {
               <p className="font-display text-3xl font-semibold text-foreground">
                 {formatDate(nextDate)}
               </p>
-              <p className="mt-1 text-muted-foreground">
-                6:00 PM - third Monday of every month
-              </p>
+              <p className="mt-1 text-muted-foreground">{meetupFormatCopy}</p>
 
               <div className="mt-6 flex items-start gap-3 border-t border-border/60 pt-6">
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" />
@@ -57,6 +56,18 @@ const EventDetails = () => {
                   <p className="text-sm text-muted-foreground">{MEETUP_VENUE.cityState}</p>
                 </div>
               </div>
+
+              {rsvpUrl && (
+                <a
+                  href={rsvpUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent"
+                >
+                  RSVP on Luma
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </a>
+              )}
 
               <div className="mt-6 border-t border-border/60 pt-6">
                 <p className="kicker mb-4">What to expect</p>

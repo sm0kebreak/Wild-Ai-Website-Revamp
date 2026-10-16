@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useCountdown } from '@/hooks/useCountdown';
-import { MEETUP_START_TIME, nextMeetupDate } from '@/lib/meetupSchedule';
+import { MEETUP_START_TIME, meetupFormatCopy, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 /** Animated two-digit cell - the digit slides when its value changes. */
 const Digit = ({ value, label }: { value: number; label: string }) => (
@@ -21,7 +20,9 @@ const Digit = ({ value, label }: { value: number; label: string }) => (
 );
 
 const ScarcityCountdown = () => {
-  const diff = useCountdown(new Date(`${nextMeetupDate()}T${MEETUP_START_TIME}:00`));
+  const nextDate = nextMeetupDate();
+  const rsvpUrl = rsvpUrlFor(nextDate);
+  const diff = useCountdown(new Date(`${nextDate}T${MEETUP_START_TIME}:00`));
 
   const tiles = diff
     ? [
@@ -65,19 +66,20 @@ const ScarcityCountdown = () => {
 
             <div className="md:border-l md:border-border md:pl-10">
               <p className="text-[0.9375rem] text-muted-foreground leading-relaxed max-w-md">
-                RSVP and we&apos;ll email you event details, the speaker lineup, and a reminder the
-                day before.
+                RSVP on Luma. {meetupFormatCopy}
               </p>
               <p className="mt-3 inline-flex chip chip-ember">Most events fill up - RSVP early</p>
             </div>
 
-            <Link
-              to="/join"
+            <a
+              href={rsvpUrl ?? '/join'}
+              target={rsvpUrl ? '_blank' : undefined}
+              rel={rsvpUrl ? 'noopener noreferrer' : undefined}
               className="group inline-flex items-center gap-2 self-start rounded-full border border-accent/30 bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent/20 md:self-auto"
             >
               RSVP
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            </a>
           </div>
         </div>
       </div>

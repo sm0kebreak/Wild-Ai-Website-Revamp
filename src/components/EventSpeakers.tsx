@@ -46,7 +46,7 @@ const EventSpeakers = ({ eventDate, emptyMessage }: Props) => {
         {emptyMessage || (
           <p className="text-muted-foreground">
             Speaker lineup coming soon. Want to speak?{' '}
-            <a href="/#speak" className="text-wildai-mint hover:underline">Apply here</a>.
+            <a href="/speak" className="text-wildai-mint hover:underline">Apply here</a>.
           </p>
         )}
       </div>

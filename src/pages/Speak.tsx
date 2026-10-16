@@ -3,37 +3,42 @@ import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SpeakerForm from '@/components/SpeakerForm';
-import PastSpeakers from '@/components/PastSpeakers';
-import { Link } from 'react-router-dom';
 import { Mic2, Clock, Sparkles } from 'lucide-react';
 import PageHero from '@/components/PageHero';
+import { DEMO_SIGNUP, LUMA_CALENDAR_URL } from '@/lib/meetupSchedule';
+
+const OCTOBER_LUMA = 'https://luma.com/50wo8gm8';
 
 const faqs = [
   {
-    q: 'What are fire talks?',
-    a: 'Five minutes, no slides, one demo or one idea that made you sweat a little. If your talk needs 40 minutes and a laser pointer, this is not the stage.',
+    q: 'What is the format?',
+    a: '15-minute demos. No slides. About 10 minutes to demo what you built, then about 5 minutes of questions and feedback from the audience.',
   },
   {
-    q: 'Who should submit?',
-    a: 'Engineers, founders, researchers, designers - anyone building or shipping with AI. First-time speakers are explicitly welcome; we coach you before you go on.',
+    q: 'Who can come, and what does it cost?',
+    a: 'All ages. Free.',
   },
   {
-    q: 'What do speakers get?',
-    a: 'A spotlight in front of local AI builders, a recap feature on our channels, warm intros to sponsors and organizers, and (usually) free pizza.',
+    q: 'How do I register?',
+    a: 'Register on Luma.',
   },
   {
-    q: 'When will I hear back?',
-    a: 'We review submissions weekly. If we can slot you into an upcoming event, an organizer will reach out within two weeks.',
+    q: 'How do I demo?',
+    a: DEMO_SIGNUP,
+  },
+  {
+    q: 'How do I sponsor?',
+    a: 'Sponsorship is $500 per event. Use the contact form on the sponsor page.',
   },
 ];
 
 const Speak = () => (
   <div className="flex flex-col min-h-screen">
     <Helmet>
-      <title>Speak at Wild AI - Submit a fire talk or demo</title>
+      <title>Speak at Wild AI - Sign up to demo</title>
       <meta
         name="description"
-        content="Demo your AI project at a Wild AI meetup. Five-minute fire talks, no slides, real builders in the room. Submit your talk for Minneapolis, San Francisco, or Toronto."
+        content="Sign up to demo at Wild AI. 15 minutes on the mic, no slides: about 10 minutes to demo, then about 5 minutes of questions and feedback. All ages. Free."
       />
       <meta property="og:title" content="Speak at Wild AI" />
       <meta property="og:type" content="website" />
@@ -43,10 +48,10 @@ const Speak = () => (
 
     <main className="pb-20 flex-grow">
       <PageHero
-        eyebrow="Fire talks"
+        eyebrow="Demos"
         icon={Mic2}
         title={<>Demo at <span>Wild AI</span>.</>}
-        lede="Fire talks are the heart of every meetup: five minutes, no slides, real work on the table. Submit yours - every city, every level of experience."
+        lede={DEMO_SIGNUP}
       />
       <div className="container mx-auto px-4 pt-14">
 
@@ -74,15 +79,15 @@ const Speak = () => (
             <ul className="space-y-4 text-muted-foreground">
               <li className="flex items-start">
                 <Clock className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                5 minutes on stage, hard stop
+                15 minutes on the mic. No slides.
               </li>
               <li className="flex items-start">
                 <Clock className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                A quick prep call with the chapter organizers
+                About 10 minutes to demo what you built, then about 5 minutes of questions and feedback from the audience.
               </li>
               <li className="flex items-start">
                 <Clock className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                A room of builders who ask great questions
+                Doors at 6:00, demos at 6:40, networking until 9. All ages. Free.
               </li>
             </ul>
           </div>
@@ -97,15 +102,6 @@ const Speak = () => (
           <SpeakerForm />
         </div>
 
-        {/* Past speakers */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <h2 className="section-title text-center">PAST SPEAKERS</h2>
-          <p className="text-center text-muted-foreground mb-8">
-            The people who have stepped up to the mic so far.
-          </p>
-          <PastSpeakers />
-        </div>
-
         {/* FAQ */}
         <div className="max-w-2xl mx-auto">
           <h2 className="section-title text-center">FAQ</h2>
@@ -113,7 +109,26 @@ const Speak = () => (
             {faqs.map((f) => (
               <details key={f.q} className="surface p-5">
                 <summary className="font-bold font-mono cursor-pointer text-sm">{f.q}</summary>
-                <p className="text-muted-foreground text-sm mt-3">{f.a}</p>
+                {f.q === 'How do I register?' ? (
+                  <p className="text-muted-foreground text-sm mt-3">
+                    Register on Luma. The October 19, 2026 meetup is at{' '}
+                    <a href={OCTOBER_LUMA} className="text-wildai-mint hover:underline" target="_blank" rel="noopener noreferrer">
+                      {OCTOBER_LUMA}
+                    </a>
+                    . Other nights, and the calendar, use{' '}
+                    <a href={LUMA_CALENDAR_URL} className="text-wildai-mint hover:underline" target="_blank" rel="noopener noreferrer">
+                      {LUMA_CALENDAR_URL}
+                    </a>
+                    .
+                  </p>
+                ) : f.q === 'How do I sponsor?' ? (
+                  <p className="text-muted-foreground text-sm mt-3">
+                    Sponsorship is $500 per event. Use the contact form on the{' '}
+                    <a href="/sponsor" className="text-wildai-mint hover:underline">sponsor page</a>.
+                  </p>
+                ) : (
+                  <p className="text-muted-foreground text-sm mt-3">{f.a}</p>
+                )}
               </details>
             ))}
           </div>

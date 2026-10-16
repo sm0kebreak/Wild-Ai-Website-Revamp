@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 declare global {
   interface Window {
@@ -93,14 +94,26 @@ const RsvpForm = () => {
     };
   }, [toast]);
   
+  const rsvpUrl = rsvpUrlFor(nextMeetupDate());
+
   return (
     <>
       <div className="glass flex h-full flex-col p-6 md:p-8">
         <p className="kicker">Reserve a seat</p>
         <h3 className="mt-3 font-display text-xl font-semibold">Register for the meetup</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Save your spot and we&apos;ll send the lineup plus a reminder before doors open.
+          RSVP for the next meetup on Luma. This form adds you to the mailing list for reminders.
         </p>
+        {rsvpUrl && (
+          <a
+            href={rsvpUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex text-sm font-semibold text-accent hover:underline"
+          >
+            RSVP on Luma
+          </a>
+        )}
 
         {/* HubSpot renders its own themed form, so it gets a deliberate plate. */}
         <div className="glass-plate mt-6 flex-grow overflow-hidden p-2">

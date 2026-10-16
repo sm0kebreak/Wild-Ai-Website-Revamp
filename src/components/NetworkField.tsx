@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useChapters } from '@/hooks/useChapters';
+import { formatMemberCount, useChapters } from '@/hooks/useChapters';
 
 interface NetworkFieldProps {
   compact?: boolean;
@@ -20,9 +20,11 @@ const NetworkField = ({ compact = false }: NetworkFieldProps) => {
         <span>{nodes.length} communities</span>
       </div>
       <div className="network-field__list">
-        {nodes.slice(0, 3).map((chapter, index) => (
+        {nodes.map((chapter, index) => {
+          const members = formatMemberCount(chapter.member_count);
+          return (
           <Link key={chapter.id} to={`/${chapter.slug}`} className="network-field__node">
-            <span className="network-field__index">0{index + 1}</span>
+            <span className="network-field__index">{String(index + 1).padStart(2, '0')}</span>
             <span className="network-field__copy">
               <span className="network-field__city">{chapter.city}</span>
               <span className="network-field__status">
@@ -31,13 +33,14 @@ const NetworkField = ({ compact = false }: NetworkFieldProps) => {
                     chapter.status === 'active' ? 'bg-accent' : 'bg-ember'
                   }`}
                 />
-                {chapter.status === 'active' ? 'Active' : 'Launching'} ·{' '}
-                {chapter.member_count ?? 0}+ members
+                {chapter.status === 'active' ? 'Active' : 'Launching'}
+                {members ? ` · ${members}` : ''}
               </span>
             </span>
             <span aria-hidden="true">→</span>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

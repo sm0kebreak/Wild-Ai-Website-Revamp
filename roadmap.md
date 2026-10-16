@@ -28,7 +28,7 @@ Source: wild-ai-page-inventory.xlsx (full scope, DB-backed, placeholder content)
 - [x] Join, footer signup, sponsor form, and chapter application all write to the database (verified end to end, test rows removed)
 
 ## Phase 5 — Later / blocked on user
-- [ ] Secrets RESEND_API_KEY, ADMIN_PASSWORD, POSTMARK_SERVER_TOKEN, POSTMARK_FROM_EMAIL — user declined secure form twice; re-open only on request
+- [x] Public forms store JSON in the private leads blob. Mail provider keys are not used.
 - [ ] Replace placeholder content (press mentions, media kit zip, sponsor pricing, press@wildai.us) with real assets
 - [ ] Blog expansion per spreadsheet (existing /blog kept)
 

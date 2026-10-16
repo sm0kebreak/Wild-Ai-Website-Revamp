@@ -10,9 +10,11 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import ChapterSwitcher from '@/components/ChapterSwitcher';
 import Logo from '@/components/Logo';
 import CommandPalette, { useCommandPalette } from '@/components/CommandPalette';
+import { publicChapters } from '@/data/chapters';
+import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
+import { prefersNativeScroll } from '@/hooks/useScrollProgress';
 
 const navLinks = [
   { to: '/chapters', label: 'Chapters' },
@@ -29,16 +31,27 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
   const palette = useCommandPalette();
+  const rsvpUrl = rsvpUrlFor(nextMeetupDate());
 
   useEffect(() => {
+    let frame = 0;
     const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? window.scrollY / max : 0);
-      setScrolled(window.scrollY > 12);
+      const next = window.scrollY > 12;
+      setScrolled((prev) => (prev === next ? prev : next));
+      if (prefersNativeScroll()) return;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        setProgress(max > 0 ? window.scrollY / max : 0);
+      });
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   return (
@@ -48,13 +61,11 @@ const Navbar = () => {
           scrolled ? 'border-border bg-background/85 backdrop-blur-xl' : 'border-transparent bg-transparent'
         }`}
       >
-        <div className="container mx-auto px-4 h-16 flex justify-between items-center gap-4">
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <Link to="/" className="flex items-center">
-<Logo className="h-7 md:h-8" data-nav-logo="" />
+        <div className="container mx-auto flex h-16 min-w-0 items-center justify-between gap-3 px-4">
+          <div className="flex min-w-0 items-center gap-4">
+            <Link to="/" className="flex min-w-0 items-center">
+              <Logo className="h-7 max-w-[9.5rem] md:h-8 md:max-w-none" data-nav-logo="" />
             </Link>
-            <span className="hidden md:block h-5 w-px bg-border" />
-            {!isMobile && <ChapterSwitcher />}
           </div>
 
           <nav className="hidden lg:flex items-center gap-8" aria-label="Primary navigation">
@@ -70,7 +81,7 @@ const Navbar = () => {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
               onClick={() => palette.setOpen(true)}
@@ -100,6 +111,14 @@ const Navbar = () => {
                     </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
+                  {publicChapters.map((chapter) => (
+                    <DropdownMenuItem key={chapter.slug} asChild>
+                      <Link to={`/${chapter.slug}`} className="cursor-pointer">
+                        {chapter.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/start-a-chapter" className="cursor-pointer">
                       Start a chapter
@@ -109,9 +128,11 @@ const Navbar = () => {
               </DropdownMenu>
             )}
 
-            <Link to="/join">
-              <Button size={isMobile ? 'sm' : 'default'}>Join</Button>
-            </Link>
+            <Button asChild size={isMobile ? 'sm' : 'default'} className="min-h-11 px-4 md:min-h-10">
+              <a href={rsvpUrl} target="_blank" rel="noopener noreferrer">
+                Register
+              </a>
+            </Button>
           </div>
         </div>
 

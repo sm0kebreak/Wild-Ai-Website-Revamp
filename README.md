@@ -60,6 +60,14 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Form submissions on `wild-ai-condensed-preview`
+
+Sponsor, speaker/demo, email signup, Show & Tell, and chapter applications POST `/api/lead` only. The server writes private JSON with `put(..., { access: 'private' })` into the existing Vercel Blob store `wild-ai-leads` at `leads/<form>/<timestamp>-<suffix>.json`. Success is that write. The response is `{ ok: true, id: pathname }` and `id` is not a public URL. `GET /api/lead` returns 405. Email is not sent. Contact stays `mailto:jake@wildai.us`. Forms do not upload headshots. A social link on those forms is a LinkedIn or X URL only. `/admin` and `/admin/*` redirect to `/`.
+
+`BLOB_READ_WRITE_TOKEN` is already connected on **wild-ai-condensed-preview** and is server-side only. No new Blob key is required.
+
+Jake reads submissions while signed in to the Vercel dashboard: **wild-ai-condensed-preview** → Storage → Blob → **wild-ai-leads**. A server process that has that environment variable can read the same private objects. Unauthenticated requests cannot list or fetch them.
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/c51e2f24-5158-4bb0-bbb7-52860d96b318) and click on Share -> Publish.

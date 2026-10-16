@@ -17,18 +17,24 @@ import {
 } from 'lucide-react';
 import {
   useAllEvents,
+  archiveChapterEvents,
   isUpcoming,
   formatDate,
   formatTime,
 } from '@/hooks/useChapters';
 import { getEventHistoryByDate } from '@/data/eventHistory2026';
+import { rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
+import { publicChapters } from '@/data/chapters';
+import { pastEventByDate } from '@/data/speakerArchive';
+import { SpeakerFace } from '@/components/SpeakerRow';
 
 const EventDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: events, isLoading } = useAllEvents();
-  const event = (events ?? []).find((e) => e.slug === slug);
+  const archived = archiveChapterEvents().find((item) => item.slug === slug);
+  const event = (events ?? []).find((e) => e.slug === slug) ?? archived;
 
-  if (isLoading) {
+  if (isLoading && !event) {
     return (
       <div className="flex flex-col min-h-screen">
         <Navbar />
@@ -46,6 +52,7 @@ const EventDetail = () => {
   if (!event) return <NotFound />;
 
   const upcoming = isUpcoming(event.event_date);
+  const linkedinRecapUrl = pastEventByDate(event.event_date)?.linkedinRecapUrl;
   const verifiedHistory = getEventHistoryByDate(event.event_date);
   const displayedSpeakers = (event.speakers ?? []).length > 0
     ? event.speakers
@@ -54,6 +61,7 @@ const EventDetail = () => {
         company: speaker.role,
         topic: speaker.topic,
       }));
+  const clockLabel = standingMeetupTime(event.event_date);
   const all = (events ?? [])
     .filter((e) => isUpcoming(e.event_date) && e.id !== event.id)
     .sort((a, b) => a.event_date.localeCompare(b.event_date));
@@ -89,12 +97,16 @@ const EventDetail = () => {
           <div className="hero-grain" aria-hidden="true" />
           <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-4xl">
-            <Link
-              to={`/${event.chapter?.slug ?? 'chapters'}`}
-              className="signal-label mb-5 hover:text-foreground transition-colors"
-            >
-              WILD AI {event.chapter?.city.toUpperCase()}
-            </Link>
+            {publicChapters.some((chapter) => chapter.slug === event.chapter?.slug) ? (
+              <Link
+                to={`/${event.chapter?.slug}`}
+                className="signal-label mb-5 hover:text-foreground transition-colors"
+              >
+                WILD AI {event.chapter?.city.toUpperCase()}
+              </Link>
+            ) : (
+              <p className="signal-label mb-5">WILD AI {event.chapter?.city.toUpperCase()}</p>
+            )}
             <h1 className="page-hero__title mb-5">
               <span>{lead}</span>
               {rest}
@@ -104,9 +116,17 @@ const EventDetail = () => {
                 <CalendarDays className="w-4 h-4 text-wildai-mint" /> {formatDate(event.event_date)}
               </span>
               {event.start_time && (
-                <span className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-wildai-mint" /> {formatTime(event.start_time)}
-                  {event.end_time ? ` – ${formatTime(event.end_time)}` : ''}
+                <span className="flex items-start gap-2">
+                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-wildai-mint" />
+                  <span>
+                  {clockLabel ?? (
+                    <>
+                      {formatTime(event.start_time)}
+                      {event.chapter?.slug === 'minneapolis' ? ' CT' : ''}
+                      {event.end_time ? ` – ${formatTime(event.end_time)}` : ''}
+                    </>
+                  )}
+                  </span>
                 </span>
               )}
               {event.venue_name && (
@@ -117,13 +137,11 @@ const EventDetail = () => {
             </div>
             {upcoming ? (
               <div className="flex flex-col sm:flex-row gap-3">
-                {event.meetup_url && (
-                  <a href={event.meetup_url} target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" >
-                      RSVP NOW
-                    </Button>
-                  </a>
-                )}
+                <a href={rsvpUrlFor(event.event_date)} target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" >
+                    RSVP NOW
+                  </Button>
+                </a>
                 <a href={gcalUrl} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="lg">
                     <CalendarDays className="w-4 h-4 mr-2" /> ADD TO CALENDAR
@@ -142,10 +160,24 @@ const EventDetail = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-10">
             {/* Description */}
+            {(event.description || linkedinRecapUrl) && (
             <div className="surface p-6 md:p-8">
               <h2 className="section-title">ABOUT THIS EVENT</h2>
-              <p className="text-muted-foreground leading-relaxed">{event.description}</p>
+              {event.description && (
+                <p className="text-muted-foreground leading-relaxed">{event.description}</p>
+              )}
+              {linkedinRecapUrl && (
+                <a
+                  href={linkedinRecapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex min-h-11 items-center text-sm font-medium text-accent hover:underline"
+                >
+                  Read the full recap on LinkedIn
+                </a>
+              )}
             </div>
+            )}
 
             {/* Agenda */}
             {(event.agenda ?? []).length > 0 && (
@@ -154,7 +186,7 @@ const EventDetail = () => {
                 <ul className="space-y-4">
                   {(event.agenda ?? []).map((a, i) => (
                     <li key={i} className="flex items-start gap-4">
-                      <span className="text-wildai-mint font-mono text-sm w-20 flex-shrink-0">{a.time}</span>
+                      <span className="text-wildai-mint font-mono text-sm w-24 flex-shrink-0">{a.time}</span>
                       <span className="text-muted-foreground">{a.label}</span>
                     </li>
                   ))}
@@ -167,21 +199,44 @@ const EventDetail = () => {
               <div className="surface p-6 md:p-8">
                 <h2 className="section-title">SPEAKER LINEUP</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {displayedSpeakers.map((s, i) => (
-                    <div key={i} className="rounded-lg border border-border/60 bg-foreground/[0.03] p-4">
-                      <p className="font-bold font-mono">{s.name}</p>
-                      {s.company && <p className="text-sm text-wildai-mint">{s.company}</p>}
-                      {s.topic && <p className="text-sm text-muted-foreground mt-1">{s.topic}</p>}
-                    </div>
-                  ))}
+                  {displayedSpeakers.map((s, i) => {
+                    const linkedin = 'linkedin' in s ? s.linkedin : undefined;
+                    const photo = 'photo_url' in s ? s.photo_url : undefined;
+                    const identity = (
+                      <span className="flex items-center gap-3">
+                        <SpeakerFace
+                          speaker={{ id: s.name, name: s.name, photo, companies: [] }}
+                          className="h-10 w-10 text-xs"
+                        />
+                        <span className="font-bold font-mono">{s.name}</span>
+                      </span>
+                    );
+                    return (
+                      <div key={`${s.name}-${i}`} className="rounded-lg border border-border/60 bg-foreground/[0.03] p-4">
+                        {linkedin ? (
+                          <a
+                            href={linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex rounded-full hover:text-accent"
+                          >
+                            {identity}
+                          </a>
+                        ) : (
+                          identity
+                        )}
+                        {s.company && <p className="mt-2 text-sm text-wildai-mint">{s.company}</p>}
+                        {s.topic && <p className="mt-1 text-sm text-muted-foreground">{s.topic}</p>}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ) : (
               <div className="surface p-6 md:p-8">
                 <h2 className="section-title">SPEAKER LINEUP</h2>
                 <p className="text-muted-foreground">
-                  Fire talks are 5 minutes, no slides - the lineup is announced the week of the event.
-                  Want to demo?{' '}
+                  The demo lineup has not been announced yet. Want to demo?{' '}
                   <Link to="/speak" className="text-wildai-mint hover:underline">
                     Submit a demo →
                   </Link>

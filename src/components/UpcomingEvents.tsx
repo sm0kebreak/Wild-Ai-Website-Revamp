@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, MapPin, ArrowRight, Clock } from 'lucide-react';
 import { useAllEvents, isUpcoming, formatDate, formatTime } from '@/hooks/useChapters';
+import { standingMeetupTime } from '@/lib/meetupSchedule';
 import SpotlightCard from '@/components/motion/SpotlightCard';
 import Reveal from '@/components/motion/Reveal';
 
@@ -70,8 +71,13 @@ const UpcomingEvents = () => {
                       {e.start_time && (
                         <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                           <Clock className="h-3.5 w-3.5" />
-                          {formatTime(e.start_time)}
-                          {e.end_time ? ` – ${formatTime(e.end_time)}` : ''}
+                          {standingMeetupTime(e.event_date) ?? (
+                            <>
+                              {formatTime(e.start_time)}
+                              {e.chapter?.slug === 'minneapolis' ? ' CT' : ''}
+                              {e.end_time ? ` – ${formatTime(e.end_time)}` : ''}
+                            </>
+                          )}
                         </span>
                       )}
                     </div>

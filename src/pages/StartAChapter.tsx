@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { supabase } from '@/integrations/supabase/client';
+import { submitLead } from '@/lib/submitLead';
 import { useChapters } from '@/hooks/useChapters';
 import { CheckCircle2, Rocket, Users, Map } from 'lucide-react';
 import PageHero from '@/components/PageHero';
@@ -23,17 +23,20 @@ const StartAChapter = () => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-    const { error: err } = await supabase.from('chapter_applications').insert({
-      city: form.city,
-      name: form.name,
-      email: form.email,
-      background: form.background || null,
-      message: form.message || null,
-    });
-    if (err) {
-      setError('Something went wrong - please try again in a moment.');
-    } else {
+    try {
+      await submitLead({
+        form: 'chapter',
+        name: form.name,
+        email: form.email,
+        payload: {
+          city: form.city,
+          background: form.background || null,
+          message: form.message || null,
+        },
+      });
       setSubmitted(true);
+    } catch {
+      setError('Something went wrong - please try again in a moment.');
     }
     setSubmitting(false);
   };
@@ -66,7 +69,7 @@ const StartAChapter = () => {
             <div className="surface p-6 md:p-8">
               <h2 className="text-xl font-display font-semibold text-wildai-mint mb-4">WHAT YOU GET</h2>
               <ul className="space-y-4 text-muted-foreground">
-                <li className="flex items-start"><Users className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />A proven format: fire talks, demo nights, real networking</li>
+                <li className="flex items-start"><Users className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />A proven format: 15-minute demos, no slides, then networking</li>
                 <li className="flex items-start"><Map className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />Brand, event templates, and a page on this site for your city</li>
                 <li className="flex items-start"><Users className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />A network of organizers who've done it before, on call</li>
               </ul>
@@ -122,7 +125,7 @@ const StartAChapter = () => {
                 <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
                 <p className="font-bold mb-2">Application received.</p>
                 <p className="text-sm text-muted-foreground">
-                  We review applications weekly and will reach out about next steps.
+                  Jake has your application and will follow up.
                 </p>
               </div>
             ) : (

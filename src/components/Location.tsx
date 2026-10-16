@@ -23,8 +23,8 @@ const Location = () => {
                   </div>
                   <div className="flex items-center">
                     <ExternalLink className="w-5 h-5 text-wildai-mint mr-2" />
-                    <a href="https://www.meetup.com/wild-ai/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-wildai-mint transition-colors">
-                      Wild AI Meetup Page
+                    <a href="https://luma.com/wildai" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-wildai-mint transition-colors">
+                      Wild AI on Luma
                     </a>
                   </div>
                 </div>

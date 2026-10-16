@@ -24,7 +24,7 @@ const mentions = [
 
 const facts = [
   ['Founded', '2021, Minneapolis'],
-  ['Format', '5-minute fire talks + open networking, monthly'],
+  ['Format', '15-minute demos, no slides, monthly on third Mondays. All ages. Free.'],
   ['Chapters', 'Minneapolis (active), San Francisco & Toronto (launching 2026)'],
   ['Community', '790+ members across chapters'],
   ['Typical attendance', '80–120 builders per event'],
@@ -73,8 +73,9 @@ const Press = () => (
           <h2 className="section-title">BOILERPLATE</h2>
           <blockquote className="border-l-2 border-wildai-mint pl-4 text-muted-foreground leading-relaxed">
             Wild AI is a community-run meetup network for people who build with AI. Founded in
-            Minneapolis in 2021, its events pair rapid-fire five-minute demos ("fire talks") with
-            hours of open networking - no vendor keynotes, no slide decks. With active and
+            Minneapolis in 2021, its events are 15-minute demos with no slides: about 10 minutes
+            to show the work, then about 5 minutes of questions and feedback, then networking.
+            All ages and free. With active and
             launching chapters across North America, Wild AI is where local AI scenes actually
             happen.
           </blockquote>

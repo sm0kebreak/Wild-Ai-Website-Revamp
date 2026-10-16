@@ -1,7 +1,7 @@
 // Wild AI past events - seeded from the public Meetup archive
 // Source: https://www.meetup.com/wild-ai/events/?type=past
 // NOTE: Speaker names are intentionally NOT included. Meetup's public listings
-// describe the speaker FORMAT (e.g., fire talks, demo nights) but do not
+// describe the speaker FORMAT (for example, short talks, demo nights) but do not
 // publicly list individual speaker names. Do not fabricate them.
 
 export type WildAiEvent = {
@@ -23,7 +23,7 @@ export type WildAiEvent = {
   };
 };
 
-const fireTalkNotes =
+const archiveTalkNotes =
   "No slides - concise, high-level introductions. Speakers share who they are, what they're working on, and why it matters in five minutes or less, setting the stage for the networking hour.";
 
 export const wildAiEvents: WildAiEvent[] = [
@@ -39,7 +39,7 @@ export const wildAiEvents: WildAiEvent[] = [
     meetupUrl: "https://www.meetup.com/wild-ai/events/314668845/",
     attendeeCount: 41,
     description:
-      "3rd Monday Monthly at Improving. 40 minutes of social, 20 minutes of fire talks by passionate innovators, and an hour of networking after.",
+      "3rd Monday Monthly at Improving. 40 minutes of social, 20 minutes of short talks by passionate innovators, and an hour of networking after.",
     speakerInfo: {
       hasSpeakerDetails: true,
       format: "Demo Night - 4 short-form demos",
@@ -59,11 +59,11 @@ export const wildAiEvents: WildAiEvent[] = [
     meetupUrl: "https://www.meetup.com/wild-ai/events/314184693/",
     attendeeCount: 32,
     description:
-      "3rd Monday Monthly at Improving. Social, fire talks, and an hour of open networking with speakers and fellow innovators.",
+      "3rd Monday Monthly at Improving. Social, short talks, and an hour of open networking with speakers and fellow innovators.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks (5 min, no slides)",
-      notes: fireTalkNotes,
+      format: "Short talks (5 min, no slides)",
+      notes: archiveTalkNotes,
     },
   },
   {
@@ -78,11 +78,11 @@ export const wildAiEvents: WildAiEvent[] = [
     meetupUrl: "https://www.meetup.com/wild-ai/events/313611884/",
     attendeeCount: 28,
     description:
-      "3rd Monday Monthly at HeadFlyer Brewing. Social, fire talks, and an hour of networking.",
+      "3rd Monday Monthly at HeadFlyer Brewing. Social, short talks, and an hour of networking.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks (5 min, no slides)",
-      notes: fireTalkNotes,
+      format: "Short talks (5 min, no slides)",
+      notes: archiveTalkNotes,
     },
   },
   {
@@ -100,8 +100,8 @@ export const wildAiEvents: WildAiEvent[] = [
       "3rd Monday Monthly at HeadFlyer Brewing. Tame the raw potential of AI alongside fellow innovators.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks (5 min, no slides)",
-      notes: fireTalkNotes,
+      format: "Short talks (5 min, no slides)",
+      notes: archiveTalkNotes,
     },
   },
   {
@@ -116,11 +116,11 @@ export const wildAiEvents: WildAiEvent[] = [
     meetupUrl: "https://www.meetup.com/wild-ai/events/312804335/",
     attendeeCount: 21,
     description:
-      "3rd Monday Monthly at HeadFlyer Brewing. Social, fire talks, and networking.",
+      "3rd Monday Monthly at HeadFlyer Brewing. Social, short talks, and networking.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks (5 min, no slides)",
-      notes: fireTalkNotes,
+      format: "Short talks (5 min, no slides)",
+      notes: archiveTalkNotes,
     },
   },
   {
@@ -135,11 +135,11 @@ export const wildAiEvents: WildAiEvent[] = [
     meetupUrl: "https://www.meetup.com/wild-ai/events/312280323/",
     attendeeCount: 47,
     description:
-      "3rd Monday Monthly at HeadFlyer Brewing. A year-end gathering with fire talks and open networking.",
+      "3rd Monday Monthly at HeadFlyer Brewing. A year-end gathering with short talks and open networking.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks (5 min, no slides)",
-      notes: fireTalkNotes,
+      format: "Short talks (5 min, no slides)",
+      notes: archiveTalkNotes,
     },
   },
   {
@@ -154,11 +154,11 @@ export const wildAiEvents: WildAiEvent[] = [
     meetupUrl: "https://www.meetup.com/wild-ai/events/311953036/",
     attendeeCount: 27,
     description:
-      "Networking mixer paired with an AI innovations showcase. Social, fire talks, and an hour of networking.",
+      "Networking mixer paired with an AI innovations showcase. Social, short talks, and an hour of networking.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks + innovations showcase",
-      notes: fireTalkNotes,
+      format: "Short talks + innovations showcase",
+      notes: archiveTalkNotes,
     },
   },
   {
@@ -176,8 +176,8 @@ export const wildAiEvents: WildAiEvent[] = [
       "Networking mixer with an AI innovations showcase from local builders and researchers.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks + innovations showcase",
-      notes: fireTalkNotes,
+      format: "Short talks + innovations showcase",
+      notes: archiveTalkNotes,
     },
   },
   {
@@ -192,11 +192,11 @@ export const wildAiEvents: WildAiEvent[] = [
     meetupUrl: "https://www.meetup.com/wild-ai/events/310599488/",
     attendeeCount: 52,
     description:
-      "Networking mixer with an AI innovations showcase. Drinks, fire talks, and conversations across the local AI community.",
+      "Networking mixer with an AI innovations showcase. Drinks, short talks, and conversations across the local AI community.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks + innovations showcase",
-      notes: fireTalkNotes,
+      format: "Short talks + innovations showcase",
+      notes: archiveTalkNotes,
     },
   },
   {
@@ -214,8 +214,8 @@ export const wildAiEvents: WildAiEvent[] = [
       "One of the largest Wild AI gatherings to date - networking mixer with an AI innovations showcase.",
     speakerInfo: {
       hasSpeakerDetails: true,
-      format: "Fire talks + innovations showcase",
-      notes: fireTalkNotes,
+      format: "Short talks + innovations showcase",
+      notes: archiveTalkNotes,
     },
   },
 ];
