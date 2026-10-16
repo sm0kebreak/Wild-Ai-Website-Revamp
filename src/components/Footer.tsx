@@ -2,7 +2,7 @@
 import React from 'react';
 import Logo from '@/components/Logo';
 import { Link } from 'react-router-dom';
-import { Youtube, Mail, Linkedin } from 'lucide-react';
+import { Youtube, Mail, Linkedin, Instagram } from 'lucide-react';
 import EmailCapture from '@/components/EmailCapture';
 import { useChapters } from '@/hooks/useChapters';
 
@@ -31,8 +31,6 @@ const Footer = () => {
               />
             </div>
 
-            {/* TODO: Instagram. No verified Minneapolis Wild AI meetup account was found.
-                @wildaiapp belongs to a different company (wild.ai). Do not guess a handle. */}
             <div className="flex space-x-4">
               <a
                 href="https://www.linkedin.com/company/wild-ai"
@@ -79,6 +77,15 @@ const Footer = () => {
                 className="w-10 h-10 rounded-md border border-border bg-background flex items-center justify-center hover:border-primary transition-colors"
               >
                 <Youtube className="w-5 h-5 text-foreground" />
+              </a>
+              <a
+                href="https://www.instagram.com/wildai.us/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Wild AI on Instagram, @wildai.us"
+                className="w-10 h-10 rounded-md border border-border bg-background flex items-center justify-center hover:border-primary transition-colors"
+              >
+                <Instagram className="w-5 h-5 text-foreground" />
               </a>
               <a
                 href="mailto:jake@wildai.us"

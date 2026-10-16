@@ -27,9 +27,11 @@ const team: TeamMember[] = [
   {
     name: 'Jake Brindley',
     linkedin: 'https://www.linkedin.com/in/jacob-brindley-452a44264/',
+    photo: '/speakers/jake-brindley.webp',
   },
   {
     name: 'Judd Larson',
+    linkedin: 'https://www.linkedin.com/in/judd-larson/',
   },
   {
     name: 'Kate Kuehl',
@@ -137,11 +139,7 @@ const About = () => {
                       </span>
                     )}
                     <p className="mt-3 font-display font-semibold leading-tight">{person.name}</p>
-                    {person.linkedin ? (
-                      <p className="mt-1 text-xs text-wildai-mint">LinkedIn</p>
-                    ) : (
-                      <p className="mt-1 text-xs text-muted-foreground">Photo and LinkedIn coming</p>
-                    )}
+                    <p className="mt-1 text-xs text-muted-foreground">Organizer</p>
                   </>
                 );
                 return (

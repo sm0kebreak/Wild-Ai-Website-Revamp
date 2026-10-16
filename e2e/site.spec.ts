@@ -330,8 +330,18 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     'href',
     'https://www.linkedin.com/in/jacob-brindley-452a44264/',
   );
-  await expect(page.getByRole('link', { name: /Judd Larson/ })).toHaveCount(0);
-  await expect(page.getByText('Judd Larson')).toBeVisible();
+  await expect(page.getByRole('link', { name: /Jake Brindley/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/speakers/jake-brindley.webp',
+  );
+  await expect(page.getByRole('link', { name: /Judd Larson/ })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/judd-larson/',
+  );
+  await expect(page.getByRole('link', { name: /Judd Larson/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByText('Organizer', { exact: true })).toHaveCount(7);
+  await expect(page.locator('body')).not.toContainText(/co-?founder/i);
 
   await openPath(page, '/');
   const meetupLinks = page.locator('footer').getByRole('link', { name: 'Wild AI on Meetup' });
@@ -341,6 +351,9 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   const lumaLinks = page.locator('footer').getByRole('link', { name: 'Wild AI on Luma' });
   await expect(lumaLinks.first()).toHaveAttribute('href', 'https://luma.com/wildai');
   await expect(lumaLinks.nth(1)).toHaveAttribute('href', 'https://luma.com/wildai');
+  const instagram = page.locator('footer').getByRole('link', { name: /Wild AI on Instagram/ });
+  await expect(instagram).toHaveCount(1);
+  await expect(instagram).toHaveAttribute('href', 'https://www.instagram.com/wildai.us/');
 });
 
 test('anchors scroll to the named section', async ({ page }) => {
