@@ -60,6 +60,27 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Form email on `wild-ai-condensed-preview`
+
+Sponsor, speaker/demo, email signup, Show & Tell, and chapter applications POST `/api/lead`. Each submission is stored as private JSON in the Vercel Blob store `wild-ai-leads` at `leads/<form>/<timestamp>-<suffix>.json`. Contact stays a `mailto:jake@wildai.us` link.
+
+The same request emails **jake@wildai.us**. The person who filled out the form does not get a confirmation from this API. Until the keys below exist, storage still succeeds and the response is `emailed: false`.
+
+Set one provider on the Vercel project **wild-ai-condensed-preview**. Use the Production environment for the live preview, and Preview as well if preview deployments should send mail. Save the variables, then redeploy so the functions pick them up.
+
+Resend is used when `RESEND_API_KEY` is set:
+
+- `RESEND_API_KEY` — required for this provider
+- `RESEND_FROM_EMAIL` — optional verified sender. When it is unset, the from address is `Wild AI <onboarding@resend.dev>`, which Resend only delivers in limited test cases.
+
+Postmark is used when `RESEND_API_KEY` is unset:
+
+- `POSTMARK_SERVER_TOKEN` — required
+- `POSTMARK_FROM_EMAIL` — required verified sender
+- `POSTMARK_MESSAGE_STREAM` — optional, defaults to `outbound`
+
+This repo does not create the Resend or Postmark account. Blob storage uses the store already linked to the project and does not depend on these email keys.
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/c51e2f24-5158-4bb0-bbb7-52860d96b318) and click on Share -> Publish.

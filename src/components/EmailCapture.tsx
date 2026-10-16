@@ -69,7 +69,7 @@ const EmailCapture = ({
       <div className={`surface ${compact ? 'p-6' : 'p-10'} text-center`}>
         <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
         <p className="font-mono font-bold text-wildai-mint">YOU'RE ON THE LIST</p>
-        <p className="text-sm text-muted-foreground mt-2">Watch your inbox for the next event.</p>
+        <p className="text-sm text-muted-foreground mt-2">Jake has this address for event invites.</p>
       </div>
     );
   }

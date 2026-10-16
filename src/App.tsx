@@ -15,9 +15,6 @@ import GopherAIConference from "./pages/GopherAIConference";
 import ShowAndTell from "./pages/ShowAndTell";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
-import AdminShowAndTell from "./pages/AdminShowAndTell";
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
 import Location from "./pages/Location";
 import Chapters from "./pages/Chapters";
 import ChapterPage from "./pages/ChapterPage";
@@ -59,9 +56,9 @@ const App = () => {
                 <Route path="/afterparty" element={<Navigate to="/" replace />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/admin/show-and-tell" element={<AdminShowAndTell />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/show-and-tell" element={<Navigate to="/" replace />} />
+                <Route path="/admin/login" element={<Navigate to="/" replace />} />
+                <Route path="/admin" element={<Navigate to="/" replace />} />
                 <Route path="/chapters" element={<Chapters />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/events/:slug" element={<EventDetail />} />

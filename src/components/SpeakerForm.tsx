@@ -66,7 +66,7 @@ const SpeakerForm = () => {
         },
       );
       setDone(true);
-      toast.success(result.emailed ? 'Application submitted. The organizers were emailed.' : 'Application submitted!');
+      toast.success(result.emailed ? 'Application received. Jake was notified.' : 'Application received.');
     } catch (err) {
       console.error(err);
       toast.error(err instanceof Error ? err.message : 'Submission failed');
@@ -81,7 +81,7 @@ const SpeakerForm = () => {
         <CheckCircle2 className="w-14 h-14 text-accent mb-4" />
         <h3 className="font-display text-xl font-semibold mb-3">Application received</h3>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Thanks for applying to speak at Wild AI. The team has your application and will review it shortly.
+          Jake has your application and will review it.
         </p>
       </div>
     );

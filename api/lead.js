@@ -1,5 +1,24 @@
 import { put } from '@vercel/blob';
 
+// Public forms POST here. JSON is stored in the private Vercel Blob store
+// `wild-ai-leads` at leads/<form>/<timestamp>-<suffix>.json.
+//
+// Email goes only to jake@wildai.us, and only after keys exist on the Vercel
+// project wild-ai-condensed-preview. Missing keys leave emailed:false and
+// still store the submission. The submitter does not get a confirmation.
+//
+// Resend (preferred when present):
+//   RESEND_API_KEY          required for this provider
+//   RESEND_FROM_EMAIL       optional verified sender; otherwise
+//                           Wild AI <onboarding@resend.dev>
+// Postmark (used when RESEND_API_KEY is unset):
+//   POSTMARK_SERVER_TOKEN   required
+//   POSTMARK_FROM_EMAIL     required verified sender
+//   POSTMARK_MESSAGE_STREAM optional, default outbound
+//
+// Set those on Production (and Preview if preview deploys should send mail).
+// A new deployment is required after they are saved.
+
 const FORMS = new Set(['sponsor', 'speaker', 'email', 'show-and-tell', 'chapter']);
 const NOTIFY_TO = 'jake@wildai.us';
 

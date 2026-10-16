@@ -188,14 +188,6 @@ const Footer = () => {
 
         <div className="mt-8 border-t border-border/50 pt-4 text-center text-xs text-muted-foreground">
           <p>© 2026 Wild AI Meetup. Events in the United States and Canada. Canadian chapters follow PIPEDA for subscriber data.</p>
-          <p className="mt-2">
-            <Link
-              to="/admin/login"
-              className="text-muted-foreground transition-colors hover:text-accent"
-            >
-              Admin
-            </Link>
-          </p>
         </div>
       </div>
     </footer>

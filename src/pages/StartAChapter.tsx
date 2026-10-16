@@ -135,7 +135,7 @@ const StartAChapter = () => {
                 <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
                 <p className="font-bold mb-2">Application received.</p>
                 <p className="text-sm text-muted-foreground">
-                  We review applications weekly and will reach out about next steps.
+                  Jake has your application and will follow up.
                 </p>
               </div>
             ) : (

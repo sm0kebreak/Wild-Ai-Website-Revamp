@@ -26,7 +26,9 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/events/may-2026', heading: /MAY 2026/ },
   { path: '/events/gopher-ai-demo-night', heading: /DEMO NIGHT/ },
   { path: '/events/gopher-ai-conference', heading: /DEMO NIGHT/ },
-  { path: '/admin/login', heading: /ADMIN ACCESS/ },
+  { path: '/admin', heading: /The room where/, redirect: '/' },
+  { path: '/admin/login', heading: /The room where/, redirect: '/' },
+  { path: '/admin/show-and-tell', heading: /The room where/, redirect: '/' },
   { path: '/minneapolis', heading: /Next up/ },
   { path: '/san-francisco', heading: /coming soon/ },
   { path: '/toronto', heading: /coming soon/ },
@@ -354,6 +356,7 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   const instagram = page.locator('footer').getByRole('link', { name: /Wild AI on Instagram/ });
   await expect(instagram).toHaveCount(1);
   await expect(instagram).toHaveAttribute('href', 'https://www.instagram.com/wildai.us/');
+  await expect(page.locator('footer').getByRole('link', { name: 'Admin' })).toHaveCount(0);
 });
 
 test('anchors scroll to the named section', async ({ page }) => {
@@ -392,7 +395,7 @@ test('forms validate, and a mocked sponsor submit succeeds', async ({ page }) =>
   await openPath(page, '/sponsor');
   await page.getByRole('button', { name: 'REQUEST SPONSOR INFO' }).click();
   await expect(page.locator('#sponsor-company')).toHaveJSProperty('validity.valid', false);
-  await expect(page.getByText("we'll be in touch shortly")).toHaveCount(0);
+  await expect(page.getByText('Jake has your request')).toHaveCount(0);
 
   await page.unroute(/supabase\.co/);
   await page.route(/supabase\.co/, async (route) => {
@@ -413,16 +416,12 @@ test('forms validate, and a mocked sponsor submit succeeds', async ({ page }) =>
   await page.locator('#sponsor-name').fill('Ada Lovelace');
   await page.locator('#sponsor-email').fill('ada@acme.ai');
   await page.getByRole('button', { name: 'REQUEST SPONSOR INFO' }).click();
-  await expect(page.getByText("we'll be in touch shortly")).toBeVisible();
+  await expect(page.getByText('Jake has your request')).toBeVisible();
 
   await openPath(page, '/events/march-2026');
   const showForm = page.locator('form').filter({ has: page.locator('#sat-name') });
   await showForm.getByRole('button', { name: 'Reserve My Spot' }).click();
   await expect(page.getByText('Please fill in all fields', { exact: true })).toBeVisible();
-
-  await openPath(page, '/admin/login');
-  await page.getByRole('button', { name: 'Sign In' }).click();
-  await expect(page.getByRole('heading', { name: 'ADMIN ACCESS' })).toBeVisible();
 });
 
 test('photo gallery opens and past events expand', async ({ page }) => {

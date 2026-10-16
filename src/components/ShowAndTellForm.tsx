@@ -70,7 +70,7 @@ const ShowAndTellForm = () => {
       );
 
       setSubmitted(true);
-      toast({ title: "You're in!", description: "We'll save a spot for your Show & Tell." });
+      toast({ title: "You're in!", description: "Jake has your Show & Tell signup." });
     } catch (err) {
       console.error('Submission error:', err);
       toast({ title: "Something went wrong", description: "Please try again.", variant: "destructive" });
@@ -84,7 +84,7 @@ const ShowAndTellForm = () => {
       <div className="p-6 md:p-8 surface text-center">
         <CheckCircle className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
         <h3 className="text-xl font-display font-semibold mb-2">YOU'RE IN!</h3>
-        <p className="text-muted-foreground">We'll have a spot ready for your Show & Tell. See you March 16th!</p>
+        <p className="text-muted-foreground">Jake has your Show & Tell signup.</p>
       </div>
     );
   }

@@ -100,7 +100,7 @@ const Sponsor = () => {
             {submitted ? (
               <div className="surface p-6 md:p-8 text-center">
                 <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
-                <p className="font-bold">Thanks - we'll be in touch shortly.</p>
+                <p className="font-bold">Thanks. Jake has your request and will follow up.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="surface p-6 md:p-8 space-y-4">

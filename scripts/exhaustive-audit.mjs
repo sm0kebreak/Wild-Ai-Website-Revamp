@@ -17,7 +17,6 @@ const allRoutes = [
   '/past-events', '/blog', '/show-and-tell', '/location', '/locations',
   '/events/february-2026', '/events/march-2026', '/events/april-2026', '/events/may-2026',
   '/events/gopher-ai-demo-night', '/events/gopher-ai-conference',
-  '/admin/login', '/admin', '/admin/show-and-tell',
   '/minneapolis', '/san-francisco', '/toronto', '/chicago', '/austin',
   '/events/msp-october-2026', '/events/msp-november-2026', '/events/msp-december-2026',
   ...archiveDates.map((date) => `/events/archive-${date}`),
