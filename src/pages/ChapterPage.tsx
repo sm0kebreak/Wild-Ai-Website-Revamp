@@ -237,9 +237,11 @@ const ChapterPage = () => {
                     <h3 className="font-display font-semibold group-hover:text-wildai-mint transition-colors">
                       {e.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{e.description}</p>
+                    {e.description && (
+                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{e.description}</p>
+                    )}
                     <span className="mt-3 inline-flex items-center gap-1 text-xs text-wildai-mint">
-                      VIEW RECAP <ArrowRight className="w-3 h-3" />
+                      {e.description ? 'VIEW RECAP' : 'VIEW EVENT'} <ArrowRight className="w-3 h-3" />
                     </span>
                   </Link>
                 ))}

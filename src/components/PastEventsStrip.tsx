@@ -40,6 +40,43 @@ const AvatarStack = ({
   );
 };
 
+const Recap = ({ text, href }: { text: string; href?: string }) => {
+  const parts = text.split(/(https?:\/\/\S+)/g);
+  return (
+    <div className="pb-2 pt-1">
+      <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+        {parts.map((part, index) => {
+          const match = part.match(/^(https?:\/\/.*?)([.,)]*)$/);
+          if (!match) return <span key={index}>{part}</span>;
+          return (
+            <span key={index}>
+              <a
+                href={match[1]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-accent hover:underline"
+              >
+                {match[1]}
+              </a>
+              {match[2]}
+            </span>
+          );
+        })}
+      </p>
+      {href && (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-accent hover:underline"
+        >
+          Read the full recap on LinkedIn
+        </a>
+      )}
+    </div>
+  );
+};
+
 const PastEventsStrip = ({
   limit,
   detailed = false,
@@ -119,6 +156,7 @@ const PastEventsStrip = ({
                       )}
                     </div>
                   )}
+                  {event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
                   {stacks && open && (
                     <div className="mt-2 border-t border-border/70 pt-2.5">
                       <SpeakerRow speakers={event.speakers} detailed />

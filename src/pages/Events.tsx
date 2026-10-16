@@ -174,7 +174,7 @@ const Events = () => {
                     )}
                   </div>
                   <span className="inline-flex items-center gap-1 text-sm text-wildai-mint group-hover:gap-2 transition-all whitespace-nowrap">
-                    {isUpcoming(e.event_date) ? 'RSVP' : 'RECAP'} <ArrowRight className="w-4 h-4" />
+                    {isUpcoming(e.event_date) ? 'RSVP' : e.description ? 'RECAP' : 'DETAILS'} <ArrowRight className="w-4 h-4" />
                   </span>
                 </div>
               </>

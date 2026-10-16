@@ -17,6 +17,10 @@ export type PastEventRecord = {
   venue?: string;
   youtubeEmbedId?: string;
   speakers: LineupSpeaker[];
+  /** Plain recap, only when a LinkedIn post in the recap file covers this night. */
+  recap?: string;
+  linkedinRecapUrl?: string;
+  attendeeCount?: number;
 };
 
 type Person = Omit<LineupSpeaker, 'role'>;
@@ -101,24 +105,24 @@ const people = {
   },
   mattOsborn: {
     id: 'matt-osborn',
-    name: 'Matt Osborn',
+    name: 'Matthew Osborn',
     linkedin: 'https://www.linkedin.com/in/mattjosborn/',
     photo: '/speakers/matt-josborn.webp',
     companies: ['Skail'],
   },
   abhishekA: {
     id: 'abhishek-a',
-    name: 'Abhishek A.',
+    name: 'Abhishek Adil',
     linkedin: 'https://www.linkedin.com/in/abhishek-a-95328613b/',
     photo: '/speakers/abhishek-a.webp',
-    companies: [],
+    companies: ['Adile Diagnostic'],
   },
   samuelGoff: {
     id: 'samuel-goff',
     name: 'Samuel Goff',
     linkedin: 'https://www.linkedin.com/in/samuel-goff-15359612/',
     photo: '/speakers/samuel-goff.webp',
-    companies: [],
+    companies: ['Crucible Energy'],
   },
   benjaminLong: {
     id: 'benjamin-long',
@@ -554,6 +558,10 @@ export const pastEvents: PastEventRecord[] = [
       line(people.jesterDapperDan, 'Altruistic Intelligence'),
       line(people.sethKinneman),
     ],
+    attendeeCount: 66,
+    linkedinRecapUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7508238715874365440/',
+    recap:
+      'On September 21, 2026, 66 people came to Wild AI at Dangerous Man Brewing in Minneapolis. Matthew Rein showed an interpretability tool for voice AI that captures audio between people and AI and between AI agents, plus visualizations of what it found. Jester Dapper Dan showed an operating system he built from his own experience running events. Seth Kinneman demoed token economics, spinning GPUs up and down, and why more GPUs does not always help.',
   },
   {
     id: '2026-08-17',
@@ -567,6 +575,10 @@ export const pastEvents: PastEventRecord[] = [
       line(people.gabrielKrieshok, 'Ovicounter AI'),
       line(people.franciscoArechiga),
     ],
+    attendeeCount: 52,
+    linkedinRecapUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7495465291540275201/',
+    recap:
+      'On August 17, 2026, 52 people came to Wild AI at Dangerous Man Brewing in Minneapolis. Justin Trantham (FlowDevs) demoed FlowRMM live, an in-house tool that connects a PC fleet through MCP to a central AI agent. Gabriel Krieshok demoed Ovicounter AI, which counts mosquito eggs from a phone photo, and is working with researchers at the University of Lisbon. Francisco Arechiga showed AI-made educational games for individual kids, and where LLMs still struggle with word logic, scenario logic, and math.',
   },
   {
     id: '2026-08-05',
@@ -581,6 +593,9 @@ export const pastEvents: PastEventRecord[] = [
       line(people.lukasValine, 'Attentio'),
       line(people.jacobBrindley, 'Attentio'),
     ],
+    linkedinRecapUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7491200335777017857/',
+    recap:
+      'The first Wild AI San Francisco meetup was August 5, 2026 at Frontier Tower. Arsalan Zafar, a cofounder of Deep Render (acquired by InterDigital), walked through test-time training, including the equations and a recipe for improving models at test time. Joe Fioti (Luminal) spoke about pushing inference toward hardware limits with accelerated compilers, and Lukas Valine (Attentio) showed an IDE that visualizes transformer architectures in real time. Maanas Taneja was the MC and produced the night with Purab Shingvi.',
   },
   {
     id: '2026-07-20',
@@ -730,6 +745,9 @@ export const pastEvents: PastEventRecord[] = [
       line(people.alexBangs),
       line(people.davidMontecalvo),
     ],
+    linkedinRecapUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7373777826132480000/',
+    recap:
+      'On September 15, 2025, Wild AI met at HeadFlyer Brewing in Minneapolis. The post thanks people for coming and links out to a longer write-up. It also points to the October 20 meetup and asks for help with the livestream.',
   },
   {
     id: '2025-08-18',
@@ -755,17 +773,24 @@ export const pastEvents: PastEventRecord[] = [
       line(people.weldonMakori, 'Custom AI Studio'),
       line(people.ianBicking, 'Memory Atlas'),
     ],
+    linkedinRecapUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7353520498636410881/',
+    recap:
+      'On July 21, 2025, Wild AI met at HeadFlyer Brewing in Minneapolis, the first event at that venue. The post calls it the biggest meetup so far. Benjamin Long (Simplify AI Solutions), Weldon Makori M. (Custom AI Studio), and Ian Bicking (Memory Atlas) spoke. The next meetup announced was August 18.',
   },
   {
-    id: '2025-06-16',
-    date: '2025-06-16',
-    displayDate: 'June 16, 2025',
+    id: '2025-06-19',
+    date: '2025-06-19',
+    displayDate: 'June 19, 2025',
     city: 'Minneapolis',
+    venue: 'Day Block Brewing',
     speakers: [
       line(people.mattOsborn, 'Skail'),
-      line(people.abhishekA),
-      line(people.samuelGoff),
+      line(people.abhishekA, 'Adile Diagnostic'),
+      line(people.samuelGoff, 'Crucible Energy'),
     ],
+    linkedinRecapUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7341870434138628096/',
+    recap:
+      'On June 19, 2025, Wild AI met at Day Block Brewing in Minneapolis. Matthew Osborn (Skail), Abhishek Adil (Adile Diagnostic), and Samuel Goff (Crucible Energy) spoke. The post thanks BETA and notes the group was five events in.',
   },
   {
     id: '2025-05-15',
@@ -778,6 +803,9 @@ export const pastEvents: PastEventRecord[] = [
       line(people.vivekBhide),
       line(people.markCollier, 'UMN Morris'),
     ],
+    linkedinRecapUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7330639074707288065/',
+    recap:
+      'On May 15, 2025, Wild AI met at Day Block Brewing in Minneapolis. A note posted on May 20 reports a strong turnout and many new faces. It also says a job board had been added on wildai.us.',
   },
   {
     id: '2025-04-17',
@@ -805,6 +833,9 @@ export const pastEvents: PastEventRecord[] = [
       line(people.joelHuber),
       line(people.lukasValine),
     ],
+    linkedinRecapUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7308861841047269376/',
+    recap:
+      'The first Wild AI was March 20, 2025 at Day Block Brewing in Minneapolis, and the room was packed. Speakers were Victor Hofstetter, Serhii Zatsarynin, Joel Huber, and Lukas Valine. A follow-up post shares a highlights video: https://lnkd.in/gi8N84rj. The next meetup was April 17 at 6 PM at Day Block.',
   },
 ];
 

@@ -166,9 +166,7 @@ export const archiveChapterEvents = (): ChapterEvent[] =>
       end_time: null,
       venue_name: event.venue ?? null,
       venue_address: null,
-      description: event.venue
-        ? `Wild AI in ${event.city} at ${event.venue}.`
-        : `Wild AI in ${event.city}.`,
+      description: event.recap ?? null,
       agenda: [],
       speakers: event.speakers.map((speaker) => ({
         name: speaker.name,
@@ -179,7 +177,7 @@ export const archiveChapterEvents = (): ChapterEvent[] =>
         ? `https://www.youtube.com/watch?v=${event.youtubeEmbedId}`
         : null,
       meetup_url: null,
-      attendee_count: null,
+      attendee_count: event.attendeeCount ?? null,
       chapter,
     };
   });

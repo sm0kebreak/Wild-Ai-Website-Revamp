@@ -25,6 +25,7 @@ import {
 import { getEventHistoryByDate } from '@/data/eventHistory2026';
 import { rsvpUrlFor } from '@/lib/meetupSchedule';
 import { publicChapters } from '@/data/chapters';
+import { pastEventByDate } from '@/data/speakerArchive';
 
 const EventDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -50,6 +51,7 @@ const EventDetail = () => {
   if (!event) return <NotFound />;
 
   const upcoming = isUpcoming(event.event_date);
+  const linkedinRecapUrl = pastEventByDate(event.event_date)?.linkedinRecapUrl;
   const verifiedHistory = getEventHistoryByDate(event.event_date);
   const displayedSpeakers = (event.speakers ?? []).length > 0
     ? event.speakers
@@ -149,10 +151,24 @@ const EventDetail = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-10">
             {/* Description */}
+            {(event.description || linkedinRecapUrl) && (
             <div className="surface p-6 md:p-8">
               <h2 className="section-title">ABOUT THIS EVENT</h2>
-              <p className="text-muted-foreground leading-relaxed">{event.description}</p>
+              {event.description && (
+                <p className="text-muted-foreground leading-relaxed">{event.description}</p>
+              )}
+              {linkedinRecapUrl && (
+                <a
+                  href={linkedinRecapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex min-h-11 items-center text-sm font-medium text-accent hover:underline"
+                >
+                  Read the full recap on LinkedIn
+                </a>
+              )}
             </div>
+            )}
 
             {/* Agenda */}
             {(event.agenda ?? []).length > 0 && (
