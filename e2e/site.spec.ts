@@ -486,9 +486,51 @@ test('photo gallery opens and past events expand', async ({ page }) => {
 
   await september.locator('svg').click();
   await expect(september).toHaveAttribute('aria-expanded', 'true');
-  await expect(august).toHaveAttribute('aria-expanded', 'false');
+  await expect(august).toHaveAttribute('aria-expanded', 'true');
   await expect(past.locator('#past-event-2026-09-21')).toContainText('Matthew Rein');
-  await expect(past.locator('#past-event-2026-08-17')).toHaveCount(0);
+  await expect(past.locator('#past-event-2026-08-17')).toContainText('Justin Trantham');
+});
+
+test('past event chevrons open only the clicked night', async ({ page }) => {
+  await openPath(page, '/');
+  const past = page.locator('#past-events');
+  const nights = [
+    { id: '2026-09-21', date: 'September 21, 2026', speaker: 'Matthew Rein', absent: 'Justin Trantham' },
+    { id: '2026-08-17', date: 'August 17, 2026', speaker: 'Justin Trantham', absent: 'Matthew Rein' },
+  ];
+
+  for (const night of nights) {
+    const row = past.locator(`li[data-event-id="${night.id}"]`);
+    const chevron = row.getByRole('button', { name: new RegExp(night.date) });
+    const hit = await chevron.evaluate((button) => {
+      button.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
+      const svg = button.querySelector('svg');
+      const rect = (svg ?? button).getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const target = document.elementFromPoint(x, y)?.closest('button[data-event-id]');
+      const date = button.closest('li')?.querySelector('p')?.textContent?.trim() ?? '';
+      return { id: target?.getAttribute('data-event-id') ?? null, date };
+    });
+    expect(hit.id, night.date).toBe(night.id);
+    expect(hit.date).toBe(night.date);
+
+    await chevron.locator('svg').click();
+    const panel = row.locator(`#past-event-${night.id}`);
+    await expect(chevron).toHaveAttribute('aria-expanded', 'true');
+    await expect(panel).toBeVisible();
+    await expect(panel).toHaveAttribute('data-night', night.date);
+    await expect(panel).toContainText(night.speaker);
+    await expect(panel).not.toContainText(night.absent);
+  }
+
+  const september = past.locator('li[data-event-id="2026-09-21"]');
+  const august = past.locator('li[data-event-id="2026-08-17"]');
+  await september.getByRole('button').click();
+  await expect(september.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
+  await expect(september.locator('#past-event-2026-09-21')).toHaveCount(0);
+  await expect(august.getByRole('button')).toHaveAttribute('aria-expanded', 'true');
+  await expect(august.locator('#past-event-2026-08-17')).toContainText('Justin Trantham');
 });
 
 test('primary navigation reaches every section', async ({ page }, testInfo) => {

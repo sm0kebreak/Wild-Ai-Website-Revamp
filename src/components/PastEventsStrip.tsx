@@ -5,15 +5,7 @@ import { pastMeetups, type PastMeetup } from '@/data/pastMeetups';
 import SpeakerRow, { SpeakerFace } from '@/components/SpeakerRow';
 import type { LineupSpeaker } from '@/data/speakerArchive';
 
-const AvatarStack = ({
-  speakers,
-  open,
-  label,
-}: {
-  speakers: LineupSpeaker[];
-  open: boolean;
-  label: string;
-}) => {
+const AvatarStack = ({ speakers }: { speakers: LineupSpeaker[] }) => {
   const shown = speakers.slice(0, 4);
   const extra = speakers.length - shown.length;
 
@@ -22,20 +14,13 @@ const AvatarStack = ({
       <span className="flex -space-x-2">
         {shown.map((speaker) => (
           <SpeakerFace
-            key={speaker.id}
+            key={`${speaker.id}-${speaker.name}`}
             speaker={speaker}
             className="h-8 w-8 ring-2 ring-card"
           />
         ))}
       </span>
       {extra > 0 && <span className="text-xs font-medium text-muted-foreground">+{extra}</span>}
-      <ChevronDown
-        className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`}
-        aria-hidden="true"
-      />
-      <span className="sr-only">
-        {open ? 'Hide' : 'Show'} speakers for {label}: {speakers.map((speaker) => speaker.name).join(', ')}
-      </span>
     </span>
   );
 };
@@ -81,41 +66,44 @@ const pastEventPanelId = (id: string) => `past-event-${id}`;
 
 const PastEventRow = ({
   event,
-  open,
   stacks,
   detailed,
-  onToggle,
 }: {
   event: PastMeetup;
-  open: boolean;
   stacks: boolean;
   detailed: boolean;
-  onToggle: (id: string) => void;
 }) => {
+  const [open, setOpen] = useState(false);
   const panelId = pastEventPanelId(event.id);
   return (
-    <li className="relative border-b border-border px-4 py-1.5 last:border-b-0">
+    <li data-event-id={event.id} className="relative isolate border-b border-border px-4 py-1.5 last:border-b-0">
       {stacks ? (
-        <button
-          type="button"
-          data-event-id={event.id}
-          aria-expanded={open}
-          aria-controls={panelId}
-          onClick={(click) => {
-            click.stopPropagation();
-            onToggle(click.currentTarget.dataset.eventId || event.id);
-          }}
-          className="relative flex min-h-11 w-full items-center justify-between gap-3 rounded-lg py-1 text-left hover:bg-secondary/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-        >
-          <div className="min-w-0 text-left">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <div className="min-w-0 py-1 text-left">
             <p className="truncate font-medium">{event.displayDate}</p>
             <p className="truncate text-sm text-muted-foreground">
               {event.city}
               {event.venue ? ` · ${event.venue}` : ''}
             </p>
           </div>
-          <AvatarStack speakers={event.speakers} open={open} label={event.displayDate} />
-        </button>
+          <div className="flex items-center gap-2">
+            <AvatarStack speakers={event.speakers} />
+            <button
+              type="button"
+              data-event-id={event.id}
+              aria-expanded={open}
+              aria-controls={panelId}
+              aria-label={`${open ? 'Hide' : 'Show'} speakers for ${event.displayDate}`}
+              onClick={() => setOpen((value) => !value)}
+              className="relative z-10 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-secondary/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <ChevronDown
+                className={`h-4 w-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`}
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        </div>
       ) : (
         <div className="flex items-center justify-between gap-3 py-1">
           <div className="min-w-0 text-left">
@@ -139,7 +127,7 @@ const PastEventRow = ({
       )}
       {event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
       {stacks && open && (
-        <div id={panelId} className="mt-2 border-t border-border/70 pt-2.5">
+        <div id={panelId} data-night={event.displayDate} className="mt-2 border-t border-border/70 pt-2.5">
           <SpeakerRow speakers={event.speakers} detailed />
         </div>
       )}
@@ -162,8 +150,6 @@ const PastEventsStrip = ({
   stacks?: boolean;
 }) => {
   const events = typeof limit === 'number' ? pastMeetups.slice(0, limit) : pastMeetups;
-  const [openId, setOpenId] = useState<string | null>(null);
-  const toggle = (id: string) => setOpenId((current) => (current === id ? null : id));
 
   return (
     <section id="past-events" className={stacks ? 'py-6 md:py-8' : 'py-12 md:py-16'}>
@@ -195,14 +181,7 @@ const PastEventsStrip = ({
           )}
           <ul>
             {events.map((event) => (
-              <PastEventRow
-                key={event.id}
-                event={event}
-                open={openId === event.id}
-                stacks={stacks}
-                detailed={detailed}
-                onToggle={toggle}
-              />
+              <PastEventRow key={event.id} event={event} stacks={stacks} detailed={detailed} />
             ))}
           </ul>
         </div>
