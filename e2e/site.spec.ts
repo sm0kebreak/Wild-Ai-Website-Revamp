@@ -477,30 +477,67 @@ test('photo gallery opens and past events expand', async ({ page }) => {
   const past = page.locator('#past-events');
   const august = past.getByRole('button', { name: /August 17, 2026/ });
   const september = past.getByRole('button', { name: /September 21, 2026/ });
+  const augustRecap = 'https://www.linkedin.com/feed/update/urn:li:activity:7495465291540275201/';
+  const septemberRecap = 'https://www.linkedin.com/feed/update/urn:li:activity:7508238715874365440/';
+
+  for (const name of ['Erika Kvikstad', 'Matthew Rein', 'Justin Trantham', 'Arsalan Zafar']) {
+    await expect(past.getByText(name)).toHaveCount(0);
+  }
+  await expect(past.getByRole('link', { name: 'Read the full recap on LinkedIn' })).toHaveCount(0);
 
   await august.locator('svg').click();
   await expect(august).toHaveAttribute('aria-expanded', 'true');
   await expect(september).toHaveAttribute('aria-expanded', 'false');
   await expect(past.locator('#past-event-2026-08-17')).toContainText('Justin Trantham');
+  await expect(past.locator('#past-event-2026-08-17').getByRole('link', { name: 'Read the full recap on LinkedIn' })).toHaveAttribute(
+    'href',
+    augustRecap,
+  );
   await expect(past.locator('#past-event-2026-09-21')).toHaveCount(0);
+  await expect(past.getByText('Matthew Rein')).toHaveCount(0);
+  await expect(past.getByText('Erika Kvikstad')).toHaveCount(0);
 
   await september.locator('svg').click();
   await expect(september).toHaveAttribute('aria-expanded', 'true');
   await expect(august).toHaveAttribute('aria-expanded', 'true');
   await expect(past.locator('#past-event-2026-09-21')).toContainText('Matthew Rein');
+  await expect(past.locator('#past-event-2026-09-21').getByRole('link', { name: 'Read the full recap on LinkedIn' })).toHaveAttribute(
+    'href',
+    septemberRecap,
+  );
   await expect(past.locator('#past-event-2026-08-17')).toContainText('Justin Trantham');
+  await expect(past.locator('#past-event-2026-09-21')).not.toContainText('Justin Trantham');
+  await expect(past.locator('#past-event-2026-08-17')).not.toContainText('Matthew Rein');
 });
 
 test('past event chevrons open only the clicked night', async ({ page }) => {
   await openPath(page, '/');
   const past = page.locator('#past-events');
   const nights = [
-    { id: '2026-09-21', date: 'September 21, 2026', speaker: 'Matthew Rein', absent: 'Justin Trantham' },
-    { id: '2026-08-17', date: 'August 17, 2026', speaker: 'Justin Trantham', absent: 'Matthew Rein' },
+    {
+      id: '2026-09-21',
+      date: 'September 21, 2026',
+      speaker: 'Matthew Rein',
+      absent: 'Justin Trantham',
+      recap: 'https://www.linkedin.com/feed/update/urn:li:activity:7508238715874365440/',
+    },
+    {
+      id: '2026-08-17',
+      date: 'August 17, 2026',
+      speaker: 'Justin Trantham',
+      absent: 'Matthew Rein',
+      recap: 'https://www.linkedin.com/feed/update/urn:li:activity:7495465291540275201/',
+    },
   ];
+
+  await expect(past.getByText('Matthew Rein')).toHaveCount(0);
+  await expect(past.getByText('Justin Trantham')).toHaveCount(0);
+  await expect(past.getByRole('link', { name: 'Read the full recap on LinkedIn' })).toHaveCount(0);
 
   for (const night of nights) {
     const row = past.locator(`li[data-event-id="${night.id}"]`);
+    await expect(row.getByText(night.speaker)).toHaveCount(0);
+    await expect(row.getByRole('link', { name: 'Read the full recap on LinkedIn' })).toHaveCount(0);
     const chevron = row.getByRole('button', { name: new RegExp(night.date) });
     const hit = await chevron.evaluate((button) => {
       button.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
@@ -522,6 +559,8 @@ test('past event chevrons open only the clicked night', async ({ page }) => {
     await expect(panel).toHaveAttribute('data-night', night.date);
     await expect(panel).toContainText(night.speaker);
     await expect(panel).not.toContainText(night.absent);
+    await expect(panel.getByRole('link', { name: 'Read the full recap on LinkedIn' })).toHaveAttribute('href', night.recap);
+    await expect(row).not.toContainText(night.absent);
   }
 
   const september = past.locator('li[data-event-id="2026-09-21"]');
@@ -529,8 +568,11 @@ test('past event chevrons open only the clicked night', async ({ page }) => {
   await september.getByRole('button').click();
   await expect(september.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
   await expect(september.locator('#past-event-2026-09-21')).toHaveCount(0);
+  await expect(september.getByText('Matthew Rein')).toHaveCount(0);
+  await expect(september.getByRole('link', { name: 'Read the full recap on LinkedIn' })).toHaveCount(0);
   await expect(august.getByRole('button')).toHaveAttribute('aria-expanded', 'true');
   await expect(august.locator('#past-event-2026-08-17')).toContainText('Justin Trantham');
+  await expect(august.getByRole('link', { name: 'Read the full recap on LinkedIn' })).toHaveCount(1);
 });
 
 test('primary navigation reaches every section', async ({ page }, testInfo) => {

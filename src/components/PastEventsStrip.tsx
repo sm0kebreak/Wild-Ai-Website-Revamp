@@ -87,7 +87,7 @@ const PastEventRow = ({
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <AvatarStack speakers={event.speakers} />
+            {open && <AvatarStack speakers={event.speakers} />}
             <button
               type="button"
               data-event-id={event.id}
@@ -125,12 +125,13 @@ const PastEventRow = ({
           )}
         </div>
       )}
-      {event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
       {stacks && open && (
         <div id={panelId} data-night={event.displayDate} className="mt-2 border-t border-border/70 pt-2.5">
+          {event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
           <SpeakerRow speakers={event.speakers} detailed />
         </div>
       )}
+      {!stacks && event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
       {!stacks && (
         <div className="mt-2.5">
           <SpeakerRow speakers={event.speakers} detailed={detailed} />

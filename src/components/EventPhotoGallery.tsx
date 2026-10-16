@@ -40,7 +40,6 @@ const EventPhotoGallery = () => {
       <div className="container mx-auto px-4">
         <div className="mb-3 flex items-end justify-between gap-4">
           <div>
-            <p className="eyebrow mb-2">The room</p>
             <h2 className="font-display text-xl font-semibold tracking-tight md:text-2xl">Photos</h2>
           </div>
         </div>
