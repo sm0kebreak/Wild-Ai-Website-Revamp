@@ -306,7 +306,7 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({ ok: true, id: 'test', emailed: false }),
+      body: JSON.stringify({ ok: true, id: 'test' }),
     });
   });
   await page.locator('#name').fill('Test Builder');
@@ -443,7 +443,7 @@ test('forms validate, and a mocked sponsor submit succeeds', async ({ page }) =>
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({ ok: true, id: 'test', emailed: false }),
+      body: JSON.stringify({ ok: true, id: 'test' }),
     });
   });
   await page.locator('#sponsor-company').fill('Acme AI');
