@@ -25,9 +25,18 @@ const team: TeamMember[] = [
     photo: '/speakers/anushka-b.webp',
   },
   {
+    name: 'Ben Long',
+    linkedin: 'https://www.linkedin.com/in/benjamin-long-31165616b/',
+    photo: '/speakers/benjamin-long.webp',
+  },
+  {
     name: 'Jake Brindley',
     linkedin: 'https://www.linkedin.com/in/jacob-brindley-452a44264/',
     photo: '/speakers/jake-brindley.webp',
+  },
+  {
+    name: 'Judd Larson',
+    linkedin: 'https://www.linkedin.com/in/judd-larson/',
   },
   {
     name: 'Kate Kuehl',
@@ -35,22 +44,13 @@ const team: TeamMember[] = [
     photo: '/speakers/kate-kuehl.webp',
   },
   {
-    name: 'Judd Larson',
-    linkedin: 'https://www.linkedin.com/in/judd-larson/',
-  },
-  {
-    name: 'Ben Long',
-    linkedin: 'https://www.linkedin.com/in/benjamin-long-31165616b/',
-    photo: '/speakers/benjamin-long.webp',
+    name: 'Maanas Taneja',
+    linkedin: 'https://www.linkedin.com/in/maanas-taneja',
   },
   {
     name: 'Matthew Osborn',
     linkedin: 'https://www.linkedin.com/in/mattjosborn/',
     photo: '/speakers/matt-josborn.webp',
-  },
-  {
-    name: 'Maanas Taneja',
-    linkedin: 'https://www.linkedin.com/in/maanas-taneja',
   },
 ];
 
