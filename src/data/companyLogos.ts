@@ -2,8 +2,10 @@ export interface CompanyLogo {
   name: string;
   logo?: string;
   url?: string;
-  /** 'dark-bg': light art on an opaque dark box. 'light-ink': light art on transparency. 'plain': a single-color mark drawn in bone. */
+  /** 'dark-bg': light art on an opaque dark box. 'light-ink': light art on transparency. 'plain': a single-color mark. */
   tone?: 'dark-bg' | 'deep-bg' | 'light-ink' | 'plain';
+  /** Light-on-transparent marks sit on a dark tile so the ink stays visible. */
+  tile?: 'light' | 'dark';
 }
 
 /** Logos already on the site before the speaker-company pass. */
@@ -19,6 +21,7 @@ const existingLogos: CompanyLogo[] = [
 }, {
   name: 'Attentio',
   tone: 'light-ink',
+  tile: 'dark',
   logo: '/lovable-uploads/attentio-logo.png',
   url: 'http://attentio.ai/'
 }, {
@@ -82,6 +85,7 @@ const existingLogos: CompanyLogo[] = [
 }, {
   name: 'Gullview Tech',
   tone: 'light-ink',
+  tile: 'dark',
   logo: '/lovable-uploads/gullview-logo.png?v=2',
   url: 'https://www.gullviewtech.com/'
 }, {
@@ -103,11 +107,13 @@ const existingLogos: CompanyLogo[] = [
 }, {
   name: 'Monkey Island',
   tone: 'light-ink',
+  tile: 'dark',
   logo: '/lovable-uploads/monkeyisland-logo.png?v=2',
   url: 'https://www.monkeyislandventures.com/'
 }, {
   name: 'Ovul',
   tone: 'light-ink',
+  tile: 'dark',
   logo: '/lovable-uploads/ovul-logo.png',
   url: 'https://ovul.ai/'
 }, {
@@ -189,39 +195,39 @@ const existingLogos: CompanyLogo[] = [
  * A logo is used when a real mark was available. Otherwise the carousel draws a wordmark.
  */
 export const speakerStageLogos: CompanyLogo[] = [
-  { name: '3M', logo: '/lovable-uploads/3m-logo.svg', url: 'https://www.3m.com/', tone: 'plain' },
-  { name: 'Agora', url: 'https://www.agora.io/' },
+  { name: '3M', logo: '/logos/3m.svg', url: 'https://www.3m.com/' },
+  { name: 'Agora', logo: '/logos/agora.webp', url: 'https://www.agora.io/' },
   { name: 'Altruistic Intelligence' },
-  { name: 'CareSupport' },
-  { name: 'ChatLPO' },
-  { name: 'Chickensoft' },
-  { name: 'Cloudflare', logo: '/lovable-uploads/cloudflare-logo.svg', url: 'https://www.cloudflare.com/', tone: 'plain' },
-  { name: 'Custom AI Studio' },
+  { name: 'CareSupport', logo: '/logos/caresupport.webp', url: 'https://caresupport.com/' },
+  { name: 'ChatLPO', logo: '/logos/chatlpo.svg', url: 'https://chatlpo.com/' },
+  { name: 'Chickensoft', logo: '/logos/chickensoft.png', url: 'https://chickensoft.games/' },
+  { name: 'Cloudflare', logo: '/logos/cloudflare.svg', url: 'https://www.cloudflare.com/' },
+  { name: 'Custom AI Studio', logo: '/logos/custom-ai-studio.png', url: 'https://www.customaistudio.io/' },
   { name: 'Deep Render' },
-  { name: 'Famelia' },
-  { name: 'Invene' },
-  { name: 'Luminal' },
-  { name: 'Mayo Clinic', logo: '/lovable-uploads/mayo-clinic-logo.svg', url: 'https://www.mayoclinic.org/', tone: 'plain' },
+  { name: 'Famelia', logo: '/logos/famelia.svg', url: 'https://famelia.app/' },
+  { name: 'Invene', logo: '/logos/invene.png', url: 'https://www.invene.com/' },
+  { name: 'Luminal', logo: '/logos/luminal.svg', url: 'https://luminal.com/' },
+  { name: 'Mayo Clinic', logo: '/logos/mayo-clinic.svg', url: 'https://www.mayoclinic.org/' },
   { name: 'Memory Atlas' },
-  { name: 'NASA', logo: '/lovable-uploads/nasa-logo.svg', url: 'https://www.nasa.gov/', tone: 'plain' },
-  { name: 'Nerdery', url: 'https://www.nerdery.com/' },
-  { name: 'Omega Point' },
+  { name: 'NASA', logo: '/logos/nasa.svg', url: 'https://www.nasa.gov/' },
+  { name: 'Nerdery', logo: '/logos/nerdery.svg', url: 'https://www.nerdery.com/' },
+  { name: 'Omega Point', logo: '/logos/omega-point.png', url: 'https://www.ompnt.com/' },
   { name: 'Onni Health' },
-  { name: 'Optum', url: 'https://www.optum.com/' },
+  { name: 'Optum', logo: '/logos/optum.svg', url: 'https://www.optum.com/' },
   { name: 'Ovicounter AI' },
   { name: 'Parallax' },
   { name: 'Quickly' },
   { name: 'Quinoa', logo: '/lovable-uploads/quinoa-logo.png', url: 'https://quinoa.health' },
   { name: 'Rosenblatt AI' },
   { name: 'Satori' },
-  { name: 'Simple Lead AI', url: 'https://siimplelead.com/' },
-  { name: 'smallest.ai', url: 'https://smallest.ai/' },
+  { name: 'Simple Lead AI', logo: '/logos/simple-lead.png', url: 'https://siimplelead.com/' },
+  { name: 'smallest.ai', logo: '/logos/smallest.png', url: 'https://smallest.ai/' },
   { name: 'Talkition' },
-  { name: 'Target', logo: '/lovable-uploads/target-logo.svg', url: 'https://www.target.com/', tone: 'plain' },
-  { name: 'Tortus' },
-  { name: 'UW-River Falls', url: 'https://www.uwrf.edu/' },
-  { name: 'VelociTx' },
-  { name: 'Very Good Ventures', url: 'https://verygood.ventures/' },
+  { name: 'Target', logo: '/logos/target.png', url: 'https://www.target.com/' },
+  { name: 'Tortus', logo: '/logos/tortus.png', url: 'https://tortus.ai/' },
+  { name: 'UW-River Falls', logo: '/logos/uwrf.png', url: 'https://www.uwrf.edu/' },
+  { name: 'VelociTx', logo: '/logos/velocitx.png', url: 'https://velocitx.com/' },
+  { name: 'Very Good Ventures', logo: '/logos/very-good-ventures.svg', url: 'https://verygood.ventures/' },
   { name: 'Wrapped' },
 ];
 

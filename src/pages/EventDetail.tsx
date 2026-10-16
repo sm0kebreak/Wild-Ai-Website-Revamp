@@ -17,18 +17,21 @@ import {
 } from 'lucide-react';
 import {
   useAllEvents,
+  archiveChapterEvents,
   isUpcoming,
   formatDate,
   formatTime,
 } from '@/hooks/useChapters';
 import { getEventHistoryByDate } from '@/data/eventHistory2026';
+import { publicChapters } from '@/data/chapters';
 
 const EventDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: events, isLoading } = useAllEvents();
-  const event = (events ?? []).find((e) => e.slug === slug);
+  const archived = archiveChapterEvents().find((item) => item.slug === slug);
+  const event = (events ?? []).find((e) => e.slug === slug) ?? archived;
 
-  if (isLoading) {
+  if (isLoading && !event) {
     return (
       <div className="flex flex-col min-h-screen">
         <Navbar />
@@ -89,12 +92,16 @@ const EventDetail = () => {
           <div className="hero-grain" aria-hidden="true" />
           <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-4xl">
-            <Link
-              to={`/${event.chapter?.slug ?? 'chapters'}`}
-              className="signal-label mb-5 hover:text-foreground transition-colors"
-            >
-              WILD AI {event.chapter?.city.toUpperCase()}
-            </Link>
+            {publicChapters.some((chapter) => chapter.slug === event.chapter?.slug) ? (
+              <Link
+                to={`/${event.chapter?.slug}`}
+                className="signal-label mb-5 hover:text-foreground transition-colors"
+              >
+                WILD AI {event.chapter?.city.toUpperCase()}
+              </Link>
+            ) : (
+              <p className="signal-label mb-5">WILD AI {event.chapter?.city.toUpperCase()}</p>
+            )}
             <h1 className="page-hero__title mb-5">
               <span>{lead}</span>
               {rest}

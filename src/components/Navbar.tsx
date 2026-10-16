@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import ChapterSwitcher from '@/components/ChapterSwitcher';
 import Logo from '@/components/Logo';
 import CommandPalette, { useCommandPalette } from '@/components/CommandPalette';
 import { publicChapters } from '@/data/chapters';
@@ -56,8 +55,6 @@ const Navbar = () => {
             <Link to="/" className="flex min-w-0 items-center">
               <Logo className="h-7 max-w-[9.5rem] md:h-8 md:max-w-none" data-nav-logo="" />
             </Link>
-            <span className="hidden md:block h-5 w-px bg-border" />
-            {!isMobile && <ChapterSwitcher />}
           </div>
 
           <nav className="hidden lg:flex items-center gap-8" aria-label="Primary navigation">

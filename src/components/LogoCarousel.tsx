@@ -5,31 +5,28 @@ import { logos, type CompanyLogo } from '@/data/companyLogos';
 import { speakerCompanyCount } from '@/data/speakerArchive';
 
 const LogoMark = ({ company }: { company: CompanyLogo }) => {
+  const darkTile = company.tile === 'dark';
   const mark = company.logo ? (
     <img
       src={company.logo}
       alt={company.name}
       loading="lazy"
       draggable={false}
-      className={
-        'max-h-7 w-auto max-w-full object-contain md:max-h-10' +
-        (company.tone === 'plain' ? ' brightness-0 invert' : '')
-      }
-      style={
-        company.tone === 'plain'
-          ? undefined
-          : { filter: 'url(#logo-mono' + (company.tone ? '-' + company.tone : '') + ')' }
-      }
+      className="max-h-12 w-auto max-w-full object-contain md:max-h-14"
     />
   ) : (
-    <span className="max-w-[9.5rem] text-center font-display text-[0.7rem] font-semibold leading-tight text-foreground/80 md:max-w-[11rem] md:text-sm">
+    <span
+      className={`max-w-[9.5rem] text-center font-display text-sm font-semibold leading-tight md:text-base ${
+        darkTile ? 'text-[#f4f1ea]' : 'text-neutral-800'
+      }`}
+    >
       {company.name}
     </span>
   );
 
   const className =
-    'logo-mark group flex h-12 flex-shrink-0 items-center justify-center md:h-14 ' +
-    (company.logo ? 'w-28 px-3 md:w-44 md:px-5' : 'w-auto px-4 md:px-5');
+    'logo-mark group flex h-20 w-40 flex-shrink-0 items-center justify-center rounded-xl px-4 md:h-24 md:w-52 md:px-5 ' +
+    (darkTile ? 'bg-[#1c2422]' : 'bg-[#f4f1ea]');
 
   if (!company.url) {
     return (
@@ -59,39 +56,6 @@ const LogoCarousel = () => {
 
   return (
     <section id="companies" className="py-4 md:py-6">
-      {/* Dark ink becomes light, white backgrounds drop out; works for opaque and transparent logos. */}
-      <svg aria-hidden="true" className="absolute h-0 w-0">
-        <filter id="logo-mono" colorInterpolationFilters="sRGB">
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0.93  0 0 0 0 0.96  0 0 0 0 0.95  -0.34 -1.144 -0.1155 0 1.36"
-            result="knock"
-          />
-          <feComposite in="knock" in2="SourceAlpha" operator="in" />
-        </filter>
-        <filter id="logo-mono-dark-bg" colorInterpolationFilters="sRGB">
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0.93  0 0 0 0 0.96  0 0 0 0 0.95  0.5315 1.788 0.1805 0 -0.7"
-            result="knock"
-          />
-          <feComposite in="knock" in2="SourceAlpha" operator="in" />
-        </filter>
-        <filter id="logo-mono-light-ink" colorInterpolationFilters="sRGB">
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0.93  0 0 0 0 0.96  0 0 0 0 0.95  0.2126 0.7152 0.0722 0 0"
-            result="knock"
-          />
-          <feComposite in="knock" in2="SourceAlpha" operator="in" />
-        </filter>
-        <filter id="logo-mono-deep-bg" colorInterpolationFilters="sRGB">
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0.93  0 0 0 0 0.96  0 0 0 0 0.95  1.7 5.72 0.58 0 -0.35"
-          />
-        </filter>
-      </svg>
       <div className="container mx-auto px-4">
         <Reveal>
           <div className="glass overflow-hidden">

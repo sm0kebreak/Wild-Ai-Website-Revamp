@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { CalendarDays, MapPin, ArrowRight, CalendarPlus } from 'lucide-react';
-import { useChapters, useAllEvents, isUpcoming, formatDate, formatTime } from '@/hooks/useChapters';
+import { useChapters, useAllEvents, archiveChapterEvents, isUpcoming, formatDate, formatTime } from '@/hooks/useChapters';
 import PageHero from '@/components/PageHero';
 
 const Events = () => {
@@ -22,10 +22,15 @@ const Events = () => {
   const [cityFilter, setCityFilter] = useState<string>('all');
   const [timeFilter, setTimeFilter] = useState<'upcoming' | 'past'>('upcoming');
 
+  const archive = archiveChapterEvents().filter((event) =>
+    cityFilter === 'all' ? true : event.chapter?.slug === cityFilter,
+  );
+  const archiveDates = new Set(archive.map((event) => event.event_date));
   const sorted = (events ?? [])
     .filter((e) => (cityFilter === 'all' ? true : e.chapter?.slug === cityFilter))
+    .filter((e) => !archiveDates.has(e.event_date))
     .sort((a, b) => b.event_date.localeCompare(a.event_date));
-  const filtered = sorted
+  const filtered = (timeFilter === 'past' ? [...sorted.filter((e) => !isUpcoming(e.event_date)), ...archive] : sorted)
     .filter((e) => (timeFilter === 'upcoming' ? isUpcoming(e.event_date) : !isUpcoming(e.event_date)))
     /* Upcoming reads soonest-first; past stays newest-first. */
     .sort((a, b) =>
@@ -101,8 +106,8 @@ const Events = () => {
 
           {/* Event list */}
           <div className="max-w-3xl mx-auto space-y-4 mb-16">
-            {isLoading && <div className="surface p-6 h-28 animate-pulse" />}
-            {!isLoading && filtered.length === 0 && !showPastFallback && (
+            {isLoading && timeFilter === 'upcoming' && <div className="surface p-6 h-28 animate-pulse" />}
+            {!(isLoading && timeFilter === 'upcoming') && filtered.length === 0 && !showPastFallback && (
               <p className="text-center text-muted-foreground py-10">
                 {timeFilter === 'upcoming'
                   ? 'Next event coming soon. Get notified below.'

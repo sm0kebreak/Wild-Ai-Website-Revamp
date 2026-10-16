@@ -1,30 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
-import { eventPhotoGroups, type EventPhoto, type EventPhotoGroup } from '@/data/eventPhotos';
+import { eventPhotoGroups, type EventPhotoGroup } from '@/data/eventPhotos';
 
 const chipLabel = (group: EventPhotoGroup) => {
   const date = new Date(`${group.date}T00:00:00`);
   const month = date.toLocaleDateString('en-US', { month: 'short' });
   return `${month} ${date.getDate()} · ${group.city}`;
-};
-
-const Credit = ({ photo }: { photo: EventPhoto }) => {
-  if (!photo.credit) return null;
-  const label = `Via ${photo.credit.name}`;
-  if (!photo.credit.url) {
-    return <p className="text-sm text-muted-foreground">{label}</p>;
-  }
-  return (
-    <a
-      href={photo.credit.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-sm font-medium text-accent hover:underline"
-    >
-      {label}
-    </a>
-  );
 };
 
 const EventPhotoGallery = () => {
@@ -61,9 +43,6 @@ const EventPhotoGallery = () => {
             <p className="eyebrow mb-2">The room</p>
             <h2 className="font-display text-xl font-semibold tracking-tight md:text-2xl">Photos</h2>
           </div>
-          <p className="text-sm text-muted-foreground">
-            {group.displayDate} · {group.city}
-          </p>
         </div>
 
         <div className="city-pills mb-3" role="tablist" aria-label="Choose a night">
@@ -88,8 +67,6 @@ const EventPhotoGallery = () => {
           })}
         </div>
 
-        <p className="mb-3 text-sm text-muted-foreground">{group.event}</p>
-
         <ul
           className="flex snap-x gap-2 overflow-x-auto pb-1 md:grid md:auto-rows-[7.25rem] md:grid-flow-dense md:grid-cols-6 md:gap-2 md:overflow-visible"
           aria-label={`Photos from ${group.event}`}
@@ -104,10 +81,8 @@ const EventPhotoGallery = () => {
                 <button
                   type="button"
                   onClick={() => open(photoIndex)}
-                  className="flex h-full w-max max-w-[16rem] flex-col overflow-hidden rounded-xl border border-border bg-card text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:w-full md:max-w-none md:min-h-0"
-                  aria-label={`${group.event}, ${group.displayDate}, ${group.city}. ${photo.caption}${
-                    photo.credit ? `. Via ${photo.credit.name}` : ''
-                  }`}
+                  className="block h-full w-max max-w-[16rem] overflow-hidden rounded-xl border border-border bg-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:w-full md:max-w-none md:min-h-0"
+                  aria-label={`Open photo ${photoIndex + 1}`}
                 >
                   <img
                     src={photo.src}
@@ -118,11 +93,8 @@ const EventPhotoGallery = () => {
                     height={photo.height}
                     loading="lazy"
                     decoding="async"
-                    className="h-32 w-auto max-w-none object-cover md:h-full md:min-h-0 md:w-full md:flex-1"
+                    className="h-32 w-auto max-w-none object-cover md:h-full md:min-h-0 md:w-full"
                   />
-                  <span className="line-clamp-2 w-0 min-w-full px-2 py-1.5 text-xs font-medium leading-snug text-foreground">
-                    {photo.caption}
-                  </span>
                 </button>
               </li>
             );
@@ -134,24 +106,21 @@ const EventPhotoGallery = () => {
         <DialogContent className="max-w-3xl gap-3 border-border bg-card p-3 sm:p-4">
           {active && (
             <>
-              <DialogTitle className="pr-8 font-display text-base leading-snug">{active.caption}</DialogTitle>
-              <DialogDescription>
-                {group.event}. {group.displayDate}. {group.city}.
-              </DialogDescription>
+              <DialogTitle className="sr-only">
+                Photo {index !== null ? index + 1 : 1} of {group.photos.length}
+              </DialogTitle>
+              <DialogDescription className="sr-only">Photograph from a Wild AI night.</DialogDescription>
               <img
                 src={active.fullSrc}
-                alt={active.alt}
+                alt=""
                 width={active.width}
                 height={active.height}
                 className="max-h-[70vh] w-full rounded-lg object-contain"
               />
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <Credit photo={active} />
-                  <p className="text-xs text-muted-foreground">
-                    {index !== null ? index + 1 : 0} of {group.photos.length}
-                  </p>
-                </div>
+              <div className="flex items-center justify-end gap-3">
+                <p className="sr-only">
+                  {index !== null ? index + 1 : 0} of {group.photos.length}
+                </p>
                 <div className="flex gap-2">
                   <button
                     type="button"

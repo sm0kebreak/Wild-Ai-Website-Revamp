@@ -4,9 +4,11 @@ import { publicChapters, type PublicChapter } from '@/data/chapters';
 import {
   MEETUP_CADENCE,
   MEETUP_VENUE,
+  meetupTitle,
   scheduledMeetups,
   withConfirmedMeetup,
 } from '@/lib/meetupSchedule';
+import { pastEvents } from '@/data/speakerArchive';
 
 /* Site copy avoids em dashes; stored text still has some. */
 const noEmDash = <T,>(value: T): T =>
@@ -122,6 +124,72 @@ const withMeetupVenue = (chapter: Chapter): Chapter =>
       }
     : chapter;
 
+const CITY_SLUG: Record<string, string> = {
+  Minneapolis: 'minneapolis',
+  'San Francisco': 'san-francisco',
+  Rochester: 'rochester',
+};
+
+const archiveChapter = (city: string): Chapter => {
+  const slug = CITY_SLUG[city] ?? city.toLowerCase().replace(/\s+/g, '-');
+  const known = PUBLIC_CHAPTER_RECORDS.find((chapter) => chapter.slug === slug);
+  if (known) return known;
+  return {
+    id: slug,
+    slug,
+    city,
+    region: null,
+    status: 'active',
+    tagline: null,
+    about_text: null,
+    cadence: null,
+    venue_name: null,
+    venue_address: null,
+    venue_notes: null,
+    member_count: null,
+    sort_order: 99,
+  };
+};
+
+/** The 21 archived nights, including speakers, independent of the database. */
+export const archiveChapterEvents = (): ChapterEvent[] =>
+  pastEvents.map((event) => {
+    const chapter = archiveChapter(event.city);
+    return {
+      id: `archive-${event.date}`,
+      chapter_id: chapter.id,
+      slug: `archive-${event.date}`,
+      title: meetupTitle(event.date),
+      event_date: event.date,
+      start_time: null,
+      end_time: null,
+      venue_name: event.venue ?? null,
+      venue_address: null,
+      description: event.venue
+        ? `Wild AI in ${event.city} at ${event.venue}.`
+        : `Wild AI in ${event.city}.`,
+      agenda: [],
+      speakers: event.speakers.map((speaker) => ({
+        name: speaker.name,
+        company: speaker.role,
+        photo_url: speaker.photo,
+      })),
+      recap_url: event.youtubeEmbedId
+        ? `https://www.youtube.com/watch?v=${event.youtubeEmbedId}`
+        : null,
+      meetup_url: null,
+      attendee_count: null,
+      chapter,
+    };
+  });
+
+/** Archive nights win on a shared date so the Past filter lists the real lineup. */
+const withArchive = (events: ChapterEvent[]): ChapterEvent[] => {
+  const archived = archiveChapterEvents();
+  const dates = new Set(archived.map((event) => event.event_date));
+  return [...events.filter((event) => !dates.has(event.event_date)), ...archived];
+};
+
 /** Fills months that have no stored event with the standing third-Monday meetup. */
 const withScheduledMeetups = (events: ChapterEvent[], chapter: Chapter): ChapterEvent[] => {
   const named = events.map((e) => (isUpcoming(e.event_date) ? withConfirmedMeetup(e) : e));
@@ -229,9 +297,9 @@ export const useAllEvents = () =>
 
         const events = noEmDash(eventsResult.data) as unknown as ChapterEvent[];
         const home = noEmDash(chaptersResult.data) as Chapter | null;
-        return withScheduledMeetups(events, homeChapter(home));
+        return withArchive(withScheduledMeetups(events, homeChapter(home)));
       } catch {
-        return scheduledMeetups(homeChapter(null));
+        return withArchive(scheduledMeetups(homeChapter(null)));
       }
     },
   });

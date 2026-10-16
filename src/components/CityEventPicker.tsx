@@ -1,17 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import EmailCapture from '@/components/EmailCapture';
-import { publicChapters, type PublicChapter } from '@/data/chapters';
 import { formatDate } from '@/hooks/useChapters';
-import {
-  MEETUP_VENUE,
-  confirmedMeetupDates,
-  meetupSlug,
-  meetupTitle,
-  rsvpUrlFor,
-} from '@/lib/meetupSchedule';
+import { MEETUP_VENUE, meetupSlug, meetupTitle, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 import { upcomingLineups } from '@/data/speakerArchive';
 import SpeakerRow from '@/components/SpeakerRow';
 
@@ -24,144 +16,59 @@ const dateParts = (dateIso: string) => {
   };
 };
 
-const MeetupCard = ({ dateIso, featured }: { dateIso: string; featured?: boolean }) => {
+/** The next Minneapolis meetup, with no city switcher. */
+const CityEventPicker = () => {
+  const dateIso = nextMeetupDate();
   const parts = dateParts(dateIso);
   const rsvpUrl = rsvpUrlFor(dateIso);
   const lineup = upcomingLineups[dateIso];
 
   return (
-    <article
-      className={`event-card ${featured ? 'event-card-featured' : ''}`}
-    >
-      <div className="event-card__date" aria-hidden="true">
-        <span>{parts.month}</span>
-        <strong>{parts.day}</strong>
-        <span>{parts.weekday}</span>
-      </div>
-      <div className="min-w-0 flex-1">
-        <h3 className="font-display text-lg font-semibold leading-tight">
-          {meetupTitle(dateIso)}
-        </h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {formatDate(dateIso)} · 6:00 PM CT
-        </p>
-        {lineup && (
-          <div className="mt-2">
-            <SpeakerRow speakers={lineup} />
-          </div>
-        )}
-        <p className="mt-2 flex min-w-0 items-start gap-2 text-sm">
-          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-          <span className="min-w-0">
-            <span className="block font-medium text-foreground">{MEETUP_VENUE.name}</span>
-            <span className="block text-muted-foreground">{MEETUP_VENUE.street}</span>
-          </span>
-        </p>
-      </div>
-      <div className="flex w-full min-w-0 max-w-full flex-col gap-2 sm:w-auto sm:items-end">
-        {rsvpUrl && (
-          <a href={rsvpUrl} target="_blank" rel="noopener noreferrer" className="w-full min-w-0 max-w-full sm:w-auto">
-            <Button className="w-full max-w-full sm:w-auto">
-              Register
-              <ArrowUpRight />
-            </Button>
-          </a>
-        )}
-        <Link
-          to={`/events/${meetupSlug(dateIso)}`}
-          className="text-center text-sm font-medium text-accent hover:underline sm:text-right"
-        >
-          Event details
-        </Link>
-      </div>
-    </article>
-  );
-};
-
-const LaterMeetup = ({ dateIso }: { dateIso: string }) => {
-  const rsvpUrl = rsvpUrlFor(dateIso);
-  const short = new Date(`${dateIso}T00:00:00`).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-  });
-  return (
-    <a
-      href={rsvpUrl ?? `/events/${meetupSlug(dateIso)}`}
-      target={rsvpUrl ? '_blank' : undefined}
-      rel={rsvpUrl ? 'noopener noreferrer' : undefined}
-      aria-label={`Register for ${formatDate(dateIso)}, 6:00 PM CT at ${MEETUP_VENUE.name}`}
-      className="flex min-h-11 min-w-0 max-w-full items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-2 transition-colors hover:border-accent/40"
-    >
-      <span className="min-w-0">
-        <span className="block font-medium leading-tight">{short}</span>
-        <span className="mt-0.5 block truncate text-xs text-muted-foreground">6 PM CT</span>
-      </span>
-      <span className="shrink-0 text-sm font-semibold text-accent">Register</span>
-    </a>
-  );
-};
-
-const ComingSoon = ({ chapter }: { chapter: PublicChapter }) => (
-  <div className="event-card event-card-featured items-stretch">
-    <div className="min-w-0 flex-1">
-      <p className="kicker text-accent">Next event</p>
-      <h3 className="mt-2 font-display text-2xl font-semibold">Coming soon</h3>
-      <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
-        {chapter.city} does not have a date on the calendar yet. Get notified when it does.
-      </p>
-    </div>
-    <div className="w-full sm:max-w-sm">
-      <EmailCapture
-        source="notify"
-        cityRequested={chapter.slug}
-        title="Get notified"
-        description={`One email when ${chapter.city} sets a date.`}
-        compact
-      />
-    </div>
-  </div>
-);
-
-/** City selector. The card always matches the city that is selected. */
-const CityEventPicker = () => {
-  const [slug, setSlug] = useState('minneapolis');
-  const chapter = publicChapters.find((item) => item.slug === slug) ?? publicChapters[0];
-  const dates = chapter.slug === 'minneapolis' ? confirmedMeetupDates() : [];
-  const [next, ...later] = dates;
-
-  return (
     <div id="next-event" className="min-w-0 max-w-full">
-      <div className="city-pills" role="tablist" aria-label="Choose a city">
-        {publicChapters.map((item) => {
-          const selected = item.slug === chapter.slug;
-          return (
-            <button
-              key={item.slug}
-              type="button"
-              role="tab"
-              aria-selected={selected}
-              onClick={() => setSlug(item.slug)}
-              className="city-pill"
-              data-selected={selected}
-            >
-              {item.label}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-4" role="tabpanel">
-        {next ? <MeetupCard dateIso={next} featured /> : <ComingSoon chapter={chapter} />}
-        {later.length > 0 && (
-          <ul className="mt-2 grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-2">
-            {later.map((dateIso) => (
-              <li key={dateIso} className="min-w-0">
-                <LaterMeetup dateIso={dateIso} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <p className="kicker mb-3">Next event · Minneapolis</p>
+      <article className="event-card event-card-featured">
+        <div className="event-card__date" aria-hidden="true">
+          <span>{parts.month}</span>
+          <strong>{parts.day}</strong>
+          <span>{parts.weekday}</span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <h2 className="font-display text-xl font-semibold leading-tight md:text-2xl">
+            {meetupTitle(dateIso)}
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {formatDate(dateIso)} · 6:00 PM CT
+          </p>
+          {lineup && (
+            <div className="mt-2">
+              <SpeakerRow speakers={lineup} />
+            </div>
+          )}
+          <p className="mt-2 flex min-w-0 items-start gap-2 text-sm">
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+            <span className="min-w-0">
+              <span className="block font-medium text-foreground">{MEETUP_VENUE.name}</span>
+              <span className="block text-muted-foreground">{MEETUP_VENUE.street}</span>
+            </span>
+          </p>
+        </div>
+        <div className="flex w-full min-w-0 max-w-full flex-col gap-2 sm:w-auto sm:items-end">
+          {rsvpUrl && (
+            <a href={rsvpUrl} target="_blank" rel="noopener noreferrer" className="w-full min-w-0 max-w-full sm:w-auto">
+              <Button className="w-full max-w-full sm:w-auto">
+                Register
+                <ArrowUpRight />
+              </Button>
+            </a>
+          )}
+          <Link
+            to={`/events/${meetupSlug(dateIso)}`}
+            className="text-center text-sm font-medium text-accent hover:underline sm:text-right"
+          >
+            Event details
+          </Link>
+        </div>
+      </article>
     </div>
   );
 };
