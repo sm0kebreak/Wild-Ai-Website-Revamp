@@ -28,7 +28,7 @@ const LogoMark = ({ company }: { company: CompanyLogo }) => {
   );
 
   const className =
-    'logo-mark group flex h-14 flex-shrink-0 items-center justify-center md:h-20 ' +
+    'logo-mark group flex h-12 flex-shrink-0 items-center justify-center md:h-14 ' +
     (company.logo ? 'w-28 px-3 md:w-44 md:px-5' : 'w-auto px-4 md:px-5');
 
   if (!company.url) {
@@ -58,7 +58,7 @@ const LogoCarousel = () => {
   const rows = [logos.slice(0, half), logos.slice(half)];
 
   return (
-    <section id="companies" className="pb-10 md:pb-14">
+    <section id="companies" className="py-4 md:py-6">
       {/* Dark ink becomes light, white backgrounds drop out; works for opaque and transparent logos. */}
       <svg aria-hidden="true" className="absolute h-0 w-0">
         <filter id="logo-mono" colorInterpolationFilters="sRGB">

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { LineupSpeaker } from '@/data/speakerArchive';
+import { cn } from '@/lib/utils';
 
 const speakerInitials = (name: string) => {
   const parts = name
@@ -11,13 +12,21 @@ const speakerInitials = (name: string) => {
   return (first + last).toUpperCase();
 };
 
-const Face = ({ speaker }: { speaker: LineupSpeaker }) => {
+export const SpeakerFace = ({
+  speaker,
+  className,
+}: {
+  speaker: LineupSpeaker;
+  className?: string;
+}) => {
   if (speaker.photo) {
     return (
       <img
         src={speaker.photo}
         alt=""
-        className="h-7 w-7 shrink-0 rounded-full object-cover"
+        loading="lazy"
+        decoding="async"
+        className={cn('h-7 w-7 shrink-0 rounded-full object-cover', className)}
       />
     );
   }
@@ -25,7 +34,10 @@ const Face = ({ speaker }: { speaker: LineupSpeaker }) => {
   return (
     <span
       aria-hidden="true"
-      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary text-[0.625rem] font-semibold tracking-wide text-foreground"
+      className={cn(
+        'flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary text-[0.625rem] font-semibold tracking-wide text-foreground',
+        className,
+      )}
     >
       {speakerInitials(speaker.name)}
     </span>
@@ -35,7 +47,7 @@ const Face = ({ speaker }: { speaker: LineupSpeaker }) => {
 const SpeakerChip = ({ speaker, detailed }: { speaker: LineupSpeaker; detailed?: boolean }) => {
   const body = (
     <>
-      <Face speaker={speaker} />
+      <SpeakerFace speaker={speaker} />
       <span className="min-w-0">
         <span className="block text-sm font-medium leading-tight">{speaker.name}</span>
         {detailed && speaker.role && (

@@ -39,22 +39,22 @@ const MeetupCard = ({ dateIso, featured }: { dateIso: string; featured?: boolean
         <span>{parts.weekday}</span>
       </div>
       <div className="min-w-0 flex-1">
-        <h3 className="font-display text-lg font-semibold leading-tight md:text-xl">
+        <h3 className="font-display text-lg font-semibold leading-tight">
           {meetupTitle(dateIso)}
         </h3>
-        <p className="mt-1 text-sm text-muted-foreground">{formatDate(dateIso)}</p>
-        <p className="mt-1 text-sm text-muted-foreground">6:00 PM CT</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {formatDate(dateIso)} · 6:00 PM CT
+        </p>
         {lineup && (
-          <div className="mt-3">
-            <p className="kicker mb-2">Speaking</p>
+          <div className="mt-2">
             <SpeakerRow speakers={lineup} />
           </div>
         )}
-        <p className="mt-3 flex items-start gap-2 text-sm">
+        <p className="mt-2 flex items-start gap-2 text-sm">
           <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
           <span>
-            <span className="block font-medium text-foreground">{MEETUP_VENUE.name}</span>
-            <span className="text-muted-foreground">{MEETUP_VENUE.street}</span>
+            <span className="font-medium text-foreground">{MEETUP_VENUE.name}</span>
+            <span className="text-muted-foreground"> · {MEETUP_VENUE.street}</span>
           </span>
         </p>
       </div>
@@ -80,18 +80,21 @@ const MeetupCard = ({ dateIso, featured }: { dateIso: string; featured?: boolean
 
 const LaterMeetup = ({ dateIso }: { dateIso: string }) => {
   const rsvpUrl = rsvpUrlFor(dateIso);
+  const short = new Date(`${dateIso}T00:00:00`).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
   return (
     <a
       href={rsvpUrl ?? `/events/${meetupSlug(dateIso)}`}
       target={rsvpUrl ? '_blank' : undefined}
       rel={rsvpUrl ? 'noopener noreferrer' : undefined}
-      className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-accent/40"
+      aria-label={`Register for ${formatDate(dateIso)}, 6:00 PM CT at ${MEETUP_VENUE.name}`}
+      className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-2 transition-colors hover:border-accent/40"
     >
       <span className="min-w-0">
-        <span className="block font-medium">{formatDate(dateIso)}</span>
-        <span className="mt-0.5 block truncate text-sm text-muted-foreground">
-          6:00 PM CT · {MEETUP_VENUE.name}
-        </span>
+        <span className="block font-medium leading-tight">{short}</span>
+        <span className="mt-0.5 block truncate text-xs text-muted-foreground">6 PM CT</span>
       </span>
       <span className="shrink-0 text-sm font-semibold text-accent">Register</span>
     </a>
@@ -150,9 +153,9 @@ const CityEventPicker = () => {
       <div className="mt-4" role="tabpanel">
         {next ? <MeetupCard dateIso={next} featured /> : <ComingSoon chapter={chapter} />}
         {later.length > 0 && (
-          <ul className="mt-3 space-y-2">
+          <ul className="mt-2 grid grid-cols-2 gap-2">
             {later.map((dateIso) => (
-              <li key={dateIso}>
+              <li key={dateIso} className="min-w-0 flex-1">
                 <LaterMeetup dateIso={dateIso} />
               </li>
             ))}

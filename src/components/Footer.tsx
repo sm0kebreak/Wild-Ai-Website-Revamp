@@ -10,20 +10,19 @@ const Footer = () => {
   const { data: chapters } = useChapters();
 
   return (
-    <footer className="site-footer border-t border-border bg-secondary/40 py-12 md:py-16">
+    <footer className="site-footer border-t border-border bg-secondary/40 py-8 md:py-10">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-[1.2fr_.8fr] gap-12 max-w-6xl mx-auto">
+        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1.15fr_.85fr] md:gap-10">
           <div>
-            <div className="flex items-center mb-6">
+            <div className="mb-4 flex items-center">
 <Logo className="h-8" />
             </div>
 
-            <p className="text-muted-foreground mb-6 max-w-md">
-              The AI meetup for people who ship. Fire talks, demo nights, and real networking -
-              city by city across North America.
+            <p className="mb-4 max-w-md text-muted-foreground">
+              A meetup for people who build with AI. Minneapolis first, now more cities.
             </p>
 
-            <div className="mb-8 max-w-sm">
+            <div className="mb-5 max-w-sm">
               <EmailCapture
                 source="footer"
                 title="STAY IN THE LOOP"
@@ -62,7 +61,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="mb-6 grid grid-cols-2 gap-4">
               <div>
                 <h4 className="signal-label mb-4">Chapters</h4>
                 <ul className="space-y-2">
@@ -140,18 +139,14 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-border/50 mt-12 pt-8 text-center text-sm text-muted-foreground">
-          <p>© 2026 Wild AI Meetup. All rights reserved.</p>
-          <p className="mt-2 text-xs">
-            Events held in the United States and Canada. Canadian chapters comply with PIPEDA
-            for subscriber data.
-          </p>
+        <div className="mt-8 border-t border-border/50 pt-4 text-center text-xs text-muted-foreground">
+          <p>© 2026 Wild AI Meetup. Events in the United States and Canada. Canadian chapters follow PIPEDA for subscriber data.</p>
           <p className="mt-2">
             <Link
               to="/admin/login"
-              className="text-muted-foreground/60 hover:text-wildai-mint transition-colors text-xs"
+              className="text-muted-foreground transition-colors hover:text-accent"
             >
-              Admin Login
+              Admin
             </Link>
           </p>
         </div>

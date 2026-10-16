@@ -1,92 +1,37 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
 import CityEventPicker from '@/components/CityEventPicker';
-import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
+import { heroBackdrop } from '@/data/eventPhotos';
 
-const actions = [
-  {
-    key: 'register',
-    title: 'Register',
-    detail: 'Minneapolis on Meetup',
-    external: true,
-  },
-  {
-    key: 'demo',
-    title: 'Sign up to demo',
-    detail: 'Five minutes on the mic',
-    to: '/speak',
-  },
-  {
-    key: 'sponsor',
-    title: 'Sponsor',
-    detail: 'Reach the room',
-    to: '/sponsor',
-  },
-] as const;
-
-/**
- * Opening band: the headline, the city selector, and the three ways in.
- * The event card lives in the selector so the city and the date stay together.
- */
+/** Opening: a short line, then the next event for the city you pick. */
 const Hero = () => {
-  const rsvpUrl = rsvpUrlFor(nextMeetupDate());
-
   return (
     <section className="hero-stage" aria-label="Wild AI">
+      <img
+        src={heroBackdrop.src}
+        srcSet={heroBackdrop.srcSet}
+        sizes="100vw"
+        alt=""
+        width={heroBackdrop.width}
+        height={heroBackdrop.height}
+        decoding="async"
+        fetchPriority="high"
+        className="hero-photo"
+      />
       <div className="hero-wash" aria-hidden="true" />
 
       <div className="container relative mx-auto px-4">
-        <div className="max-w-2xl">
-          <p className="kicker">Wild AI</p>
-          <h1 className="display-title mt-4">
-            The room where
-            <span className="block text-gradient">AI builders</span>
-            show their work.
-          </h1>
-          <p className="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground md:mt-5 md:text-lg">
-            Short demos, then the room. Minneapolis meets every third Monday.
-          </p>
-        </div>
-
-        <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
-          {actions.map((action) => {
-            const className = 'action-link';
-            const body = (
-              <>
-                <span className="min-w-0">
-                  <span className="block font-display text-sm font-semibold leading-tight text-foreground sm:text-base">
-                    {action.title}
-                  </span>
-                  <span className="mt-0.5 hidden text-sm text-muted-foreground sm:block">{action.detail}</span>
-                </span>
-                <ArrowUpRight className="hidden h-4 w-4 shrink-0 text-accent sm:block" />
-              </>
-            );
-
-            if (action.key === 'register') {
-              return (
-                <a
-                  key={action.key}
-                  href={rsvpUrl ?? '#next-event'}
-                  target={rsvpUrl ? '_blank' : undefined}
-                  rel={rsvpUrl ? 'noopener noreferrer' : undefined}
-                  className={className}
-                >
-                  {body}
-                </a>
-              );
-            }
-
-            return (
-              <Link key={action.key} to={action.to} className={className}>
-                {body}
-              </Link>
-            );
-          })}
-        </div>
-
-        <div className="mt-6 md:mt-8">
+        <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-10">
+          <div className="max-w-xl pt-1 lg:pt-3">
+            <p className="kicker">Wild AI</p>
+            <h1 className="mt-2 font-display text-[1.85rem] font-bold leading-[1.02] tracking-[-0.035em] sm:text-5xl lg:text-[3.15rem]">
+              The room where
+              <span className="block text-gradient">AI builders</span>
+              show their work.
+            </h1>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Short demos, then the room. Born in Minneapolis. Meeting in more cities.
+            </p>
+          </div>
           <CityEventPicker />
         </div>
       </div>
