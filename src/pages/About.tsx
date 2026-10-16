@@ -58,7 +58,7 @@ const team: TeamMember[] = [
     photo: '/speakers/matt-josborn.webp',
   },
   {
-    name: 'Micah Peoples',
+    name: 'Micah P.',
     linkedin: 'https://www.linkedin.com/in/micahpeoples/',
   },
   {

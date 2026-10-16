@@ -354,11 +354,11 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   );
   await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveCount(0);
   await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: /Micah Peoples/ })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: /Micah P\./ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/micahpeoples/',
   );
-  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Micah P\./ }).locator('img')).toHaveCount(0);
   await expect(page.getByRole('link', { name: /Muhammad Shahid/ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/muhammad-shahid-moandco/',
@@ -373,7 +373,7 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     'Kate Kuehl',
     'Maanas Taneja',
     'Matthew Osborn',
-    'Micah Peoples',
+    'Micah P.',
     'Muhammad Shahid',
   ]);
   await expect(page.getByText('Organizer', { exact: true })).toHaveCount(10);
