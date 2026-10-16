@@ -61,10 +61,6 @@ const team: TeamMember[] = [
     name: 'Micah P.',
     linkedin: 'https://www.linkedin.com/in/micahpeoples/',
   },
-  {
-    name: 'Muhammad Shahid',
-    linkedin: 'https://www.linkedin.com/in/muhammad-shahid-moandco/',
-  },
 ];
 
 const initials = (name: string) =>
