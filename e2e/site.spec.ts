@@ -474,9 +474,21 @@ test('photo gallery opens and past events expand', async ({ page }) => {
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toHaveCount(0);
 
-  const pastToggle = page.locator('#past-events button').first();
-  await pastToggle.click();
-  await expect(pastToggle).toHaveAttribute('aria-expanded', 'true');
+  const past = page.locator('#past-events');
+  const august = past.getByRole('button', { name: /August 17, 2026/ });
+  const september = past.getByRole('button', { name: /September 21, 2026/ });
+
+  await august.locator('svg').click();
+  await expect(august).toHaveAttribute('aria-expanded', 'true');
+  await expect(september).toHaveAttribute('aria-expanded', 'false');
+  await expect(past.locator('#past-event-2026-08-17')).toContainText('Justin Trantham');
+  await expect(past.locator('#past-event-2026-09-21')).toHaveCount(0);
+
+  await september.locator('svg').click();
+  await expect(september).toHaveAttribute('aria-expanded', 'true');
+  await expect(august).toHaveAttribute('aria-expanded', 'false');
+  await expect(past.locator('#past-event-2026-09-21')).toContainText('Matthew Rein');
+  await expect(past.locator('#past-event-2026-08-17')).toHaveCount(0);
 });
 
 test('primary navigation reaches every section', async ({ page }, testInfo) => {

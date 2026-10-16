@@ -18,7 +18,7 @@ const AvatarStack = ({
   const extra = speakers.length - shown.length;
 
   return (
-    <span className="inline-flex items-center gap-2">
+    <span className="inline-flex shrink-0 items-center gap-2">
       <span className="flex -space-x-2">
         {shown.map((speaker) => (
           <SpeakerFace
@@ -77,6 +77,81 @@ const Recap = ({ text, href }: { text: string; href?: string }) => {
   );
 };
 
+const pastEventPanelId = (id: string) => `past-event-${id}`;
+
+const PastEventRow = ({
+  event,
+  open,
+  stacks,
+  detailed,
+  onToggle,
+}: {
+  event: PastMeetup;
+  open: boolean;
+  stacks: boolean;
+  detailed: boolean;
+  onToggle: (id: string) => void;
+}) => {
+  const panelId = pastEventPanelId(event.id);
+  return (
+    <li className="relative border-b border-border px-4 py-1.5 last:border-b-0">
+      {stacks ? (
+        <button
+          type="button"
+          data-event-id={event.id}
+          aria-expanded={open}
+          aria-controls={panelId}
+          onClick={(click) => {
+            click.stopPropagation();
+            onToggle(click.currentTarget.dataset.eventId || event.id);
+          }}
+          className="relative flex min-h-11 w-full items-center justify-between gap-3 rounded-lg py-1 text-left hover:bg-secondary/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <div className="min-w-0 text-left">
+            <p className="truncate font-medium">{event.displayDate}</p>
+            <p className="truncate text-sm text-muted-foreground">
+              {event.city}
+              {event.venue ? ` · ${event.venue}` : ''}
+            </p>
+          </div>
+          <AvatarStack speakers={event.speakers} open={open} label={event.displayDate} />
+        </button>
+      ) : (
+        <div className="flex items-center justify-between gap-3 py-1">
+          <div className="min-w-0 text-left">
+            <p className="truncate font-medium">{event.displayDate}</p>
+            <p className="truncate text-sm text-muted-foreground">
+              {event.city}
+              {event.venue ? ` · ${event.venue}` : ''}
+            </p>
+          </div>
+          {detailed && event.youtubeEmbedId && (
+            <a
+              href={`https://www.youtube.com/watch?v=${event.youtubeEmbedId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 text-sm font-medium text-accent hover:underline"
+            >
+              Recording
+            </a>
+          )}
+        </div>
+      )}
+      {event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
+      {stacks && open && (
+        <div id={panelId} className="mt-2 border-t border-border/70 pt-2.5">
+          <SpeakerRow speakers={event.speakers} detailed />
+        </div>
+      )}
+      {!stacks && (
+        <div className="mt-2.5">
+          <SpeakerRow speakers={event.speakers} detailed={detailed} />
+        </div>
+      )}
+    </li>
+  );
+};
+
 const PastEventsStrip = ({
   limit,
   detailed = false,
@@ -88,6 +163,7 @@ const PastEventsStrip = ({
 }) => {
   const events = typeof limit === 'number' ? pastMeetups.slice(0, limit) : pastMeetups;
   const [openId, setOpenId] = useState<string | null>(null);
+  const toggle = (id: string) => setOpenId((current) => (current === id ? null : id));
 
   return (
     <section id="past-events" className={stacks ? 'py-6 md:py-8' : 'py-12 md:py-16'}>
@@ -118,62 +194,16 @@ const PastEventsStrip = ({
             </div>
           )}
           <ul>
-            {events.map((event) => {
-              const open = openId === event.id;
-              const summary = (
-                <>
-                  <div className="min-w-0 text-left">
-                    <p className="truncate font-medium">{event.displayDate}</p>
-                    <p className="truncate text-sm text-muted-foreground">
-                      {event.city}
-                      {event.venue ? ` · ${event.venue}` : ''}
-                    </p>
-                  </div>
-                  {stacks && (
-                    <AvatarStack speakers={event.speakers} open={open} label={event.displayDate} />
-                  )}
-                </>
-              );
-              return (
-                <li key={event.id} className="border-b border-border px-4 py-1.5 last:border-b-0">
-                  {stacks ? (
-                    <button
-                      type="button"
-                      aria-expanded={open}
-                      onClick={() => setOpenId(open ? null : event.id)}
-                      className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg py-1 text-left hover:bg-secondary/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                    >
-                      {summary}
-                    </button>
-                  ) : (
-                    <div className="flex items-center justify-between gap-3 py-1">
-                      {summary}
-                      {detailed && event.youtubeEmbedId && (
-                        <a
-                          href={`https://www.youtube.com/watch?v=${event.youtubeEmbedId}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="shrink-0 text-sm font-medium text-accent hover:underline"
-                        >
-                          Recording
-                        </a>
-                      )}
-                    </div>
-                  )}
-                  {event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
-                  {stacks && open && (
-                    <div className="mt-2 border-t border-border/70 pt-2.5">
-                      <SpeakerRow speakers={event.speakers} detailed />
-                    </div>
-                  )}
-                  {!stacks && (
-                    <div className="mt-2.5">
-                      <SpeakerRow speakers={event.speakers} detailed={detailed} />
-                    </div>
-                  )}
-                </li>
-              );
-            })}
+            {events.map((event) => (
+              <PastEventRow
+                key={event.id}
+                event={event}
+                open={openId === event.id}
+                stacks={stacks}
+                detailed={detailed}
+                onToggle={toggle}
+              />
+            ))}
           </ul>
         </div>
       </div>
