@@ -2,24 +2,10 @@ import { put } from '@vercel/blob';
 
 // Public forms POST here. JSON is stored in the private Vercel Blob store
 // `wild-ai-leads` at leads/<form>/<timestamp>-<suffix>.json.
-// The response is { ok: true, id: pathname, emailed }. pathname is not a public URL.
-// BLOB_READ_WRITE_TOKEN stays on the server.
-//
-// The same record is emailed to jake@wildai.us when a provider key is set.
-// Missing keys, or a provider error, leave emailed false and still store the
-// submission. The page does not tell the visitor that an email was sent.
-//
-// Resend (used when RESEND_API_KEY is set):
-//   RESEND_API_KEY          required for this provider
-//   RESEND_FROM_EMAIL       optional verified sender; otherwise
-//                           Wild AI <onboarding@resend.dev>
-// Postmark (used when RESEND_API_KEY is unset):
-//   POSTMARK_SERVER_TOKEN   required
-//   POSTMARK_FROM_EMAIL     required verified sender
-//   POSTMARK_MESSAGE_STREAM optional, default outbound
+// Email is not sent. The response is { ok: true, id: pathname } only.
+// pathname is not a public URL. BLOB_READ_WRITE_TOKEN stays on the server.
 
 const FORMS = new Set(['sponsor', 'speaker', 'email', 'show-and-tell', 'chapter']);
-const NOTIFY_TO = 'jake@wildai.us';
 const IMAGE_KEYS = new Set([
   'image',
   'image_base64',
@@ -84,63 +70,6 @@ function cleanPayload(value) {
   return payload;
 }
 
-function textOf(record) {
-  return [
-    `Form: ${record.form}`,
-    `Name: ${record.name || '(none)'}`,
-    `Email: ${record.email}`,
-    '',
-    JSON.stringify(record.payload, null, 2),
-  ].join('\n');
-}
-
-async function notify(record) {
-  const subject = `Wild AI ${record.form}: ${record.name || record.email}`;
-  const text = textOf(record);
-  const resendKey = process.env.RESEND_API_KEY?.trim();
-  if (resendKey) {
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: process.env.RESEND_FROM_EMAIL?.trim() || 'Wild AI <onboarding@resend.dev>',
-        to: [NOTIFY_TO],
-        subject,
-        text,
-      }),
-    });
-    if (!response.ok) throw new Error(`Resend ${response.status}`);
-    return 'resend';
-  }
-
-  const postmarkToken = process.env.POSTMARK_SERVER_TOKEN?.trim();
-  const postmarkFrom = process.env.POSTMARK_FROM_EMAIL?.trim();
-  if (postmarkToken && postmarkFrom) {
-    const response = await fetch('https://api.postmarkapp.com/email', {
-      method: 'POST',
-      headers: {
-        'X-Postmark-Server-Token': postmarkToken,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        From: postmarkFrom,
-        To: NOTIFY_TO,
-        Subject: subject,
-        TextBody: text,
-        MessageStream: process.env.POSTMARK_MESSAGE_STREAM?.trim() || 'outbound',
-      }),
-    });
-    if (!response.ok) throw new Error(`Postmark ${response.status}`);
-    return 'postmark';
-  }
-
-  return null;
-}
-
 export async function POST(request) {
   let body;
   try {
@@ -176,32 +105,18 @@ export async function POST(request) {
     receivedAt: new Date().toISOString(),
   };
 
-  let emailed = false;
-  let emailChannel = null;
   try {
-    emailChannel = await notify(record);
-    emailed = Boolean(emailChannel);
-  } catch {
-    emailed = false;
-    emailChannel = null;
-  }
-
-  try {
-    const stored = await put(
-      `leads/${form}/${Date.now()}.json`,
-      JSON.stringify({ ...record, emailed, emailChannel }),
-      {
-        access: 'private',
-        contentType: 'application/json',
-        addRandomSuffix: true,
-        token,
-      },
-    );
+    const stored = await put(`leads/${form}/${Date.now()}.json`, JSON.stringify(record), {
+      access: 'private',
+      contentType: 'application/json',
+      addRandomSuffix: true,
+      token,
+    });
     const id = stored.pathname;
     if (typeof id !== 'string' || !id.startsWith('leads/') || id.includes('://')) {
       return json({ error: 'Could not store the submission' }, 500);
     }
-    return json({ ok: true, id, emailed });
+    return json({ ok: true, id });
   } catch {
     return json({ error: 'Could not store the submission' }, 500);
   }
