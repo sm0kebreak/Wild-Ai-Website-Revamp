@@ -214,9 +214,56 @@
     border-color: hsl(var(--accent) / 0.45);
   }
 
+  .logo-mark {
+    --logo-h: 2.5rem;
+  }
+  .logo-mark[data-fit='icon'] {
+    --logo-h: 3rem;
+  }
+  .logo-mark[data-fit='word'],
+  .logo-mark[data-fit='wide'] {
+    --logo-h: 2.125rem;
+  }
   .logo-mark img {
+    height: var(--logo-h);
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
     opacity: 0.55;
     transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .logo-rail {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: auto;
+    overscroll-behavior-x: contain;
+    touch-action: auto;
+    scrollbar-width: none;
+    cursor: grab;
+  }
+  .logo-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .logo-rail.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+  @media (min-width: 768px) {
+    .logo-mark {
+      --logo-h: 3.25rem;
+    }
+    .logo-mark[data-fit='icon'] {
+      --logo-h: 3.75rem;
+    }
+    .logo-mark[data-fit='word'],
+    .logo-mark[data-fit='wide'] {
+      --logo-h: 2.875rem;
+    }
+  }
+  @media (pointer: coarse) {
+    .logo-rail {
+      cursor: auto;
+    }
   }
   .logo-mark:hover img,
   .logo-mark:focus-visible img {
