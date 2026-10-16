@@ -66,7 +66,7 @@ const SpeakerForm = () => {
         },
       );
       setDone(true);
-      toast.success(result.emailed ? 'Application received. Jake was notified.' : 'Application received.');
+      toast.success(result.emailed ? 'Jake was notified.' : 'Jake has your application.');
     } catch (err) {
       console.error(err);
       toast.error(err instanceof Error ? err.message : 'Submission failed');
