@@ -51,10 +51,10 @@ const Navbar = () => {
           scrolled ? 'border-border bg-background/85 backdrop-blur-xl' : 'border-transparent bg-transparent'
         }`}
       >
-        <div className="container mx-auto px-4 h-16 flex justify-between items-center gap-4">
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <Link to="/" className="flex items-center">
-<Logo className="h-7 md:h-8" data-nav-logo="" />
+        <div className="container mx-auto flex h-16 min-w-0 items-center justify-between gap-3 px-4">
+          <div className="flex min-w-0 items-center gap-4">
+            <Link to="/" className="flex min-w-0 items-center">
+              <Logo className="h-7 max-w-[9.5rem] md:h-8 md:max-w-none" data-nav-logo="" />
             </Link>
             <span className="hidden md:block h-5 w-px bg-border" />
             {!isMobile && <ChapterSwitcher />}
@@ -73,7 +73,7 @@ const Navbar = () => {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
               onClick={() => palette.setOpen(true)}

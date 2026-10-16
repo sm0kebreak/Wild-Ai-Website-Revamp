@@ -50,18 +50,18 @@ const MeetupCard = ({ dateIso, featured }: { dateIso: string; featured?: boolean
             <SpeakerRow speakers={lineup} />
           </div>
         )}
-        <p className="mt-2 flex items-start gap-2 text-sm">
+        <p className="mt-2 flex min-w-0 items-start gap-2 text-sm">
           <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-          <span>
-            <span className="font-medium text-foreground">{MEETUP_VENUE.name}</span>
-            <span className="text-muted-foreground"> · {MEETUP_VENUE.street}</span>
+          <span className="min-w-0">
+            <span className="block font-medium text-foreground">{MEETUP_VENUE.name}</span>
+            <span className="block text-muted-foreground">{MEETUP_VENUE.street}</span>
           </span>
         </p>
       </div>
-      <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:items-end">
+      <div className="flex w-full min-w-0 max-w-full flex-col gap-2 sm:w-auto sm:items-end">
         {rsvpUrl && (
-          <a href={rsvpUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-            <Button className="w-full sm:w-auto">
+          <a href={rsvpUrl} target="_blank" rel="noopener noreferrer" className="w-full min-w-0 max-w-full sm:w-auto">
+            <Button className="w-full max-w-full sm:w-auto">
               Register
               <ArrowUpRight />
             </Button>
@@ -90,7 +90,7 @@ const LaterMeetup = ({ dateIso }: { dateIso: string }) => {
       target={rsvpUrl ? '_blank' : undefined}
       rel={rsvpUrl ? 'noopener noreferrer' : undefined}
       aria-label={`Register for ${formatDate(dateIso)}, 6:00 PM CT at ${MEETUP_VENUE.name}`}
-      className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-2 transition-colors hover:border-accent/40"
+      className="flex min-h-11 min-w-0 max-w-full items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-2 transition-colors hover:border-accent/40"
     >
       <span className="min-w-0">
         <span className="block font-medium leading-tight">{short}</span>
@@ -130,7 +130,7 @@ const CityEventPicker = () => {
   const [next, ...later] = dates;
 
   return (
-    <div id="next-event">
+    <div id="next-event" className="min-w-0 max-w-full">
       <div className="city-pills" role="tablist" aria-label="Choose a city">
         {publicChapters.map((item) => {
           const selected = item.slug === chapter.slug;
@@ -153,9 +153,9 @@ const CityEventPicker = () => {
       <div className="mt-4" role="tabpanel">
         {next ? <MeetupCard dateIso={next} featured /> : <ComingSoon chapter={chapter} />}
         {later.length > 0 && (
-          <ul className="mt-2 grid grid-cols-2 gap-2">
+          <ul className="mt-2 grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-2">
             {later.map((dateIso) => (
-              <li key={dateIso} className="min-w-0 flex-1">
+              <li key={dateIso} className="min-w-0">
                 <LaterMeetup dateIso={dateIso} />
               </li>
             ))}
