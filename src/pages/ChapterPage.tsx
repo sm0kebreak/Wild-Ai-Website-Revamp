@@ -27,6 +27,9 @@ import {
   formatDate,
   formatTime,
 } from '@/hooks/useChapters';
+import { DEMO_SIGNUP, meetupAgenda, rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
+import { upcomingLineups } from '@/data/speakerArchive';
+import SpeakerRow from '@/components/SpeakerRow';
 
 const ChapterPage = () => {
   const { city } = useParams<{ city: string }>();
@@ -39,6 +42,8 @@ const ChapterPage = () => {
   const sorted = (events ?? []).slice().sort((a, b) => b.event_date.localeCompare(a.event_date));
   const next = sorted.filter((e) => isUpcoming(e.event_date)).pop();
   const past = sorted.filter((e) => !isUpcoming(e.event_date));
+  const nextLineup = next ? upcomingLineups[next.event_date] : undefined;
+  const nextClock = next ? standingMeetupTime(next.event_date) : null;
 
   if (isLoading || !chapter) {
     return (
@@ -61,7 +66,7 @@ const ChapterPage = () => {
         <title>Wild AI {chapter.city} - AI meetup & demo nights</title>
         <meta
           name="description"
-          content={`Wild AI ${chapter.city}: ${chapter.tagline ?? 'monthly AI meetups with fire talks and networking'}. See the next event and RSVP.`}
+          content={`Wild AI ${chapter.city}: ${chapter.tagline ?? 'monthly AI meetups with 15-minute demos and networking'}. All ages. Free. See the next event and RSVP.`}
         />
         <meta property="og:title" content={`Wild AI ${chapter.city}`} />
         <meta property="og:type" content="website" />
@@ -79,22 +84,24 @@ const ChapterPage = () => {
                 Next up: <span>{formatDate(next.event_date)}</span>
               </>
             ) : (
-              chapter.tagline ?? <span>{chapter.city}</span>
+              <>
+                Next event <span>coming soon</span>
+              </>
             )
           }
           lede={chapter.tagline}
         >
           {next ? (
             <a
-              href={next.meetup_url ?? `/events/${next.slug}`}
-              target={next.meetup_url ? '_blank' : undefined}
-              rel={next.meetup_url ? 'noopener noreferrer' : undefined}
+              href={rsvpUrlFor(next.event_date)}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <Button size="lg">RSVP NOW</Button>
+              <Button size="lg">Register</Button>
             </a>
           ) : (
             <a href="#chapter-signup">
-              <Button size="lg">GET LAUNCH UPDATES</Button>
+              <Button size="lg">Get notified</Button>
             </a>
           )}
           <Link to="/chapters">
@@ -106,7 +113,7 @@ const ChapterPage = () => {
 
         {/* Next event + cadence */}
         <section className="container mx-auto px-4 mb-14 pt-12 md:pt-16">
-          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+          <div className={`max-w-4xl mx-auto grid gap-8 ${chapter.cadence ? 'md:grid-cols-2' : ''}`}>
             <div className="p-6 surface">
               <h2 className="font-mono text-[0.625rem] uppercase tracking-[0.2em] text-accent mb-5">NEXT EVENT</h2>
               {next ? (
@@ -117,13 +124,25 @@ const ChapterPage = () => {
                   <p className="text-muted-foreground mb-3 flex items-center gap-2">
                     <CalendarDays className="w-4 h-4" /> {formatDate(next.event_date)}
                   </p>
-                  <p className="text-muted-foreground mb-3 flex items-center gap-2">
-                    <Clock className="w-4 h-4" /> {formatTime(next.start_time)}
-                    {chapter.slug === 'minneapolis' ? ' CT' : ''}
-                    {next.end_time ? ` – ${formatTime(next.end_time)}` : ''}
+                  <p className="text-muted-foreground mb-3 flex items-start gap-2">
+                    <Clock className="mt-0.5 h-4 w-4 shrink-0" />
+                    <span className="min-w-0">
+                      {nextClock ?? (
+                        <>
+                          {formatTime(next.start_time)}
+                          {chapter.slug === 'minneapolis' ? ' CT' : ''}
+                          {next.end_time ? ` – ${formatTime(next.end_time)}` : ''}
+                        </>
+                      )}
+                    </span>
                   </p>
                   <p className="font-medium mb-1">{next.venue_name}</p>
                   <p className="text-muted-foreground mb-4">{next.venue_address}</p>
+                  {nextLineup && nextLineup.length > 0 && (
+                    <div className="mb-4">
+                      <SpeakerRow speakers={nextLineup} detailed />
+                    </div>
+                  )}
                   <a href={`/events/${next.slug}`}>
                     <Button >
                       EVENT DETAILS <ArrowRight className="w-4 h-4 ml-1" />
@@ -132,44 +151,41 @@ const ChapterPage = () => {
                 </>
               ) : (
                 <>
-                  <p className="text-lg font-bold text-wildai-mint mb-2">Dates announced at launch</p>
+                  <p className="text-lg font-semibold mb-2">Next event coming soon</p>
                   <p className="text-muted-foreground mb-4">
-                    We're locking in the venue and the first fire-talk lineup. Subscribe below and
-                    you'll be first to know.
+                    {chapter.city} does not have a date yet. Get notified and you will hear it first.
                   </p>
-                  {chapter.cadence && (
-                    <p className="text-sm text-muted-foreground flex items-center gap-2">
-                      <CalendarDays className="w-4 h-4" /> Planned cadence: {chapter.cadence}
-                    </p>
-                  )}
                 </>
               )}
             </div>
-            <div className="bg-primary/25 p-6 surface">
+            {chapter.cadence ? <div className="bg-primary/25 p-6 surface">
               <h2 className="font-mono text-[0.625rem] uppercase tracking-[0.2em] text-accent mb-5">THE CADENCE</h2>
               <p className="text-lg mb-3 flex items-center gap-2">
-                <CalendarDays className="w-5 h-5 text-wildai-mint" /> {chapter.cadence ?? 'Monthly'}
+                <CalendarDays className="w-5 h-5 text-wildai-mint" /> {chapter.cadence}
               </p>
               <ul className="space-y-3 text-muted-foreground text-sm">
                 {chapter.slug === 'minneapolis' ? (
-                  <>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Doors open at 6:00 PM CT</li>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Live demos from builders</li>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Networking</li>
-                  </>
+                  meetupAgenda.map((item) => (
+                    <li key={item.time} className="flex items-start">
+                      <span className="text-wildai-mint mr-2">→</span>
+                      {item.time} · {item.label}
+                    </li>
+                  ))
                 ) : (
                   <>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Time to settle in</li>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Live demos from builders</li>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Networking</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> 15-minute demos, no slides</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> About 10 minutes to demo, then about 5 minutes of questions and feedback</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> All ages. Free.</li>
                   </>
                 )}
               </ul>
-              <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
-                <Users className="w-4 h-4 text-wildai-mint" />
-                {chapter.member_count ?? 0}+ members and growing
-              </div>
-            </div>
+              {chapter.member_count && chapter.member_count > 0 ? (
+                <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
+                  <Users className="w-4 h-4 text-wildai-mint" />
+                  {chapter.member_count.toLocaleString()}+ members
+                </div>
+              ) : null}
+            </div> : null}
           </div>
         </section>
 
@@ -182,18 +198,14 @@ const ChapterPage = () => {
         </section>
 
         {/* Organizers */}
+        {(organizers ?? []).length > 0 && (
         <section className="container mx-auto px-4 mb-14">
           <div className="max-w-4xl mx-auto">
             <h2 className="section-title text-center">ORGANIZERS</h2>
             <p className="text-center text-muted-foreground mb-8">
-              The people who make {chapter.city} happen. Say hi at the next event.
+              The people who make {chapter.city} happen.
             </p>
             <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-              {(organizers ?? []).length === 0 && (
-                <p className="text-center text-muted-foreground sm:col-span-2">
-                  Organizers announced at launch.
-                </p>
-              )}
               {(organizers ?? []).map((o) => (
                 <div key={o.id} className="surface p-6 text-center">
                   <div className="w-20 h-20 rounded-full bg-secondary mx-auto mb-4 flex items-center justify-center overflow-hidden">
@@ -221,6 +233,7 @@ const ChapterPage = () => {
             </div>
           </div>
         </section>
+        )}
 
         {/* Past events gallery */}
         {past.length > 0 && (
@@ -241,9 +254,11 @@ const ChapterPage = () => {
                     <h3 className="font-display font-semibold group-hover:text-wildai-mint transition-colors">
                       {e.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{e.description}</p>
+                    {e.description && (
+                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{e.description}</p>
+                    )}
                     <span className="mt-3 inline-flex items-center gap-1 text-xs text-wildai-mint">
-                      VIEW RECAP <ArrowRight className="w-3 h-3" />
+                      {e.description ? 'VIEW RECAP' : 'VIEW EVENT'} <ArrowRight className="w-3 h-3" />
                     </span>
                   </Link>
                 ))}
@@ -288,7 +303,7 @@ const ChapterPage = () => {
               DEMO AT WILD AI {chapter.city.toUpperCase()}
             </h2>
             <p className="text-muted-foreground mb-5 max-w-xl mx-auto">
-              Have something to show? Submit to give a 5-minute fire talk at this chapter.
+              {DEMO_SIGNUP} No slides. All ages. Free.
             </p>
             <Link to="/speak">
               <Button >

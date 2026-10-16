@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Index from "./pages/Index";
 import PreviousEvents from "./pages/PreviousEvents";
@@ -13,12 +13,8 @@ import EventApril2026 from "./pages/EventApril2026";
 import EventMay2026 from "./pages/EventMay2026";
 import GopherAIConference from "./pages/GopherAIConference";
 import ShowAndTell from "./pages/ShowAndTell";
-import Afterparty from "./pages/Afterparty";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
-import AdminShowAndTell from "./pages/AdminShowAndTell";
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
 import Location from "./pages/Location";
 import Chapters from "./pages/Chapters";
 import ChapterPage from "./pages/ChapterPage";
@@ -28,7 +24,6 @@ import Speak from "./pages/Speak";
 import Sponsor from "./pages/Sponsor";
 import StartAChapter from "./pages/StartAChapter";
 import About from "./pages/About";
-import Press from "./pages/Press";
 import Join from "./pages/Join";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -58,12 +53,13 @@ const App = () => {
                 <Route path="/past-events" element={<PreviousEvents />} />
                 <Route path="/location" element={<Location />} />
                 <Route path="/locations" element={<Location />} />
-                <Route path="/afterparty" element={<Afterparty />} />
+                <Route path="/afterparty" element={<Navigate to="/" replace />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/admin/show-and-tell" element={<AdminShowAndTell />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/show-and-tell" element={<Navigate to="/" replace />} />
+                <Route path="/admin/login" element={<Navigate to="/" replace />} />
+                <Route path="/admin/*" element={<Navigate to="/" replace />} />
+                <Route path="/admin" element={<Navigate to="/" replace />} />
                 <Route path="/chapters" element={<Chapters />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/events/:slug" element={<EventDetail />} />
@@ -71,7 +67,7 @@ const App = () => {
                 <Route path="/sponsor" element={<Sponsor />} />
                 <Route path="/start-a-chapter" element={<StartAChapter />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/press" element={<Press />} />
+                <Route path="/press" element={<Navigate to="/" replace />} />
                 <Route path="/join" element={<Join />} />
                 <Route path="/:city" element={<ChapterPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

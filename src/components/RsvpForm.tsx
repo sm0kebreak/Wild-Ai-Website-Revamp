@@ -102,7 +102,7 @@ const RsvpForm = () => {
         <p className="kicker">Reserve a seat</p>
         <h3 className="mt-3 font-display text-xl font-semibold">Register for the meetup</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          RSVP for the next meetup on Meetup. This form adds you to the mailing list for reminders.
+          RSVP for the next meetup on Luma. This form adds you to the mailing list for reminders.
         </p>
         {rsvpUrl && (
           <a
@@ -111,7 +111,7 @@ const RsvpForm = () => {
             rel="noopener noreferrer"
             className="mt-4 inline-flex text-sm font-semibold text-accent hover:underline"
           >
-            RSVP on Meetup
+            RSVP on Luma
           </a>
         )}
 

@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
+import { submitLead } from '@/lib/submitLead';
 import { useChapters } from '@/hooks/useChapters';
 import PageHero from '@/components/PageHero';
 import { CheckCircle2, Mail, Sparkles, CalendarDays } from 'lucide-react';
@@ -28,17 +28,16 @@ const Join = () => {
     e.preventDefault();
     setStatus('submitting');
     const chapter = (chapters ?? []).find((c) => c.slug === city);
-    const { error } = await supabase.from('chapter_subscribers').insert({
-      email: email.toLowerCase().trim(),
-      source: 'join',
-      chapter_id: chapter?.id ?? null,
-      city_requested: city || null,
-    });
-    // 23505 = already subscribed with this email + source; treat as success
-    if (error && error.code !== '23505') {
-      setStatus('error');
-    } else {
+    const normalized = email.toLowerCase().trim();
+    try {
+      await submitLead({
+        form: 'email',
+        email: normalized,
+        payload: { source: 'join', city: city || null, chapterId: chapter?.id ?? null },
+      });
       setStatus('done');
+    } catch {
+      setStatus('error');
     }
   };
 
@@ -48,7 +47,7 @@ const Join = () => {
         <title>Join Wild AI - Get AI meetup invites for your city</title>
         <meta
           name="description"
-          content="Join the Wild AI community: event invites, speaker lineups, and recaps for Minneapolis, San Francisco, and Toronto."
+          content="Get Wild AI event invites for Minneapolis, San Francisco, Toronto, Chicago, and Austin."
         />
         <meta property="og:title" content="Join Wild AI" />
         <meta property="og:type" content="website" />
@@ -60,7 +59,7 @@ const Join = () => {
         <PageHero
           eyebrow="Get on the list"
           title={<>Join <span>Wild AI</span>.</>}
-          lede="One email per event. No spam, no cringe - just fire-talk lineups, demo nights, and recaps from the builders around you."
+          lede="One email per event. Demo lineups and recaps from the builders around you. All ages. Free."
         />
         <div className="container mx-auto px-4 pt-14">
 
@@ -72,7 +71,7 @@ const Join = () => {
                   <CheckCircle2 className="w-12 h-12 text-wildai-mint mx-auto mb-4" />
                   <h2 className="text-xl font-display font-semibold mb-2">YOU'RE IN</h2>
                   <p className="text-muted-foreground mb-6">
-                    Watch your inbox - the next event invite for your city lands there first.
+                    Jake has your signup for event invites.
                   </p>
                   <Link to="/chapters">
                     <Button variant="outline">BROWSE CHAPTERS</Button>
@@ -162,7 +161,7 @@ const Join = () => {
               <div className="bg-primary/25 surface p-6">
                 <h3 className="font-display font-semibold text-wildai-mint mb-1">WANT TO DO MORE THAN ATTEND?</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Fire talks and chapter organizing are open to everyone on the list.
+                  Demos and chapter organizing are open to everyone on the list.
                 </p>
                 <div className="flex gap-2 flex-wrap">
                   <Link to="/speak">

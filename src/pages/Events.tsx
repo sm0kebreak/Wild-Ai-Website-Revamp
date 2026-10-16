@@ -13,7 +13,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { CalendarDays, MapPin, ArrowRight, CalendarPlus } from 'lucide-react';
-import { useChapters, useAllEvents, isUpcoming, formatDate, formatTime } from '@/hooks/useChapters';
+import { useChapters, useAllEvents, archiveChapterEvents, isUpcoming, formatDate, formatTime } from '@/hooks/useChapters';
+import { rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
+import { SpeakerFace } from '@/components/SpeakerRow';
 import PageHero from '@/components/PageHero';
 
 const Events = () => {
@@ -22,10 +24,15 @@ const Events = () => {
   const [cityFilter, setCityFilter] = useState<string>('all');
   const [timeFilter, setTimeFilter] = useState<'upcoming' | 'past'>('upcoming');
 
+  const archive = archiveChapterEvents().filter((event) =>
+    cityFilter === 'all' ? true : event.chapter?.slug === cityFilter,
+  );
+  const archiveDates = new Set(archive.map((event) => event.event_date));
   const sorted = (events ?? [])
     .filter((e) => (cityFilter === 'all' ? true : e.chapter?.slug === cityFilter))
+    .filter((e) => !archiveDates.has(e.event_date))
     .sort((a, b) => b.event_date.localeCompare(a.event_date));
-  const filtered = sorted
+  const filtered = (timeFilter === 'past' ? [...sorted.filter((e) => !isUpcoming(e.event_date)), ...archive] : sorted)
     .filter((e) => (timeFilter === 'upcoming' ? isUpcoming(e.event_date) : !isUpcoming(e.event_date)))
     /* Upcoming reads soonest-first; past stays newest-first. */
     .sort((a, b) =>
@@ -46,7 +53,7 @@ const Events = () => {
         <title>Wild AI Events - Upcoming AI meetups & demo nights</title>
         <meta
           name="description"
-          content="All upcoming and past Wild AI events across Minneapolis, San Francisco, and Toronto. Fire talks, demo nights, and networking."
+          content="Upcoming and past Wild AI events in Minneapolis, San Francisco, Toronto, Chicago, and Austin."
         />
         <meta property="og:title" content="Wild AI Events" />
         <meta property="og:type" content="website" />
@@ -58,7 +65,7 @@ const Events = () => {
           eyebrow="On the calendar"
           icon={CalendarDays}
           title={<>Wild AI <span>events</span>.</>}
-          lede="Every gathering, every city - upcoming and archived."
+          lede="Every gathering, every city. 15-minute demos, no slides. All ages. Free. Register on Luma."
         />
         <div className="container mx-auto px-4 pt-12">
           {/* Filter bar */}
@@ -101,11 +108,11 @@ const Events = () => {
 
           {/* Event list */}
           <div className="max-w-3xl mx-auto space-y-4 mb-16">
-            {isLoading && <div className="surface p-6 h-28 animate-pulse" />}
-            {!isLoading && filtered.length === 0 && !showPastFallback && (
+            {isLoading && timeFilter === 'upcoming' && <div className="surface p-6 h-28 animate-pulse" />}
+            {!(isLoading && timeFilter === 'upcoming') && filtered.length === 0 && !showPastFallback && (
               <p className="text-center text-muted-foreground py-10">
                 {timeFilter === 'upcoming'
-                  ? 'No upcoming events in this city yet - check back soon.'
+                  ? 'Next event coming soon. Get notified below.'
                   : 'No past events for this filter yet.'}
               </p>
             )}
@@ -117,16 +124,15 @@ const Events = () => {
                 <h2 className="section-title text-center pt-4">PAST EVENTS</h2>
               </>
             )}
-            {displayList.map((e, i) => (
-              <Link
-                key={e.id}
-                to={`/events/${e.slug}`}
-                className={`block surface surface-interactive p-6 transition-colors group ${
+            {displayList.map((e, i) => {
+              const meetupHref = isUpcoming(e.event_date) ? rsvpUrlFor(e.event_date) : null;
+              const cardClass = `block surface surface-interactive p-6 transition-colors group ${
                   i === 0 && !showPastFallback && timeFilter === 'upcoming'
                     ? '!border-accent/50 ring-1 ring-accent/20 bg-primary/30'
                     : ''
-                }`}
-              >
+                }`;
+              const body = (
+              <>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex-grow">
                     {i === 0 && !showPastFallback && timeFilter === 'upcoming' && (
@@ -147,8 +153,8 @@ const Events = () => {
                         <>
                           <span>·</span>
                           <span>
-                            {formatTime(e.start_time)}
-                            {e.chapter?.slug === 'minneapolis' ? ' CT' : ''}
+                            {standingMeetupTime(e.event_date) ??
+                              `${formatTime(e.start_time)}${e.chapter?.slug === 'minneapolis' ? ' CT' : ''}`}
                           </span>
                         </>
                       )}
@@ -160,20 +166,92 @@ const Events = () => {
                       ) : null}
                     </div>
                     <h2 className="text-lg font-display font-semibold group-hover:text-wildai-mint transition-colors">
-                      {e.title}
+                      {meetupHref ? (
+                        <Link to={`/events/${e.slug}`} className="hover:text-wildai-mint">
+                          {e.title}
+                        </Link>
+                      ) : (
+                        e.title
+                      )}
                     </h2>
                     {e.venue_name && (
                       <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1">
                         <MapPin className="w-3.5 h-3.5" /> {e.venue_name}
                       </p>
                     )}
+                    {meetupHref && e.speakers.length > 0 && (
+                      <ul className="mt-3 space-y-2">
+                        {e.speakers.map((speaker) => {
+                          const entry = (
+                            <span className="flex items-start gap-2 text-sm font-sans leading-snug">
+                              <SpeakerFace
+                                speaker={{
+                                  id: speaker.name,
+                                  name: speaker.name,
+                                  photo: speaker.photo_url,
+                                  companies: [],
+                                }}
+                              />
+                              <span>
+                                <span className="font-medium text-foreground">{speaker.name}</span>
+                                {(speaker.topic || speaker.company) && (
+                                  <span className="mt-0.5 block text-xs text-muted-foreground">
+                                    {speaker.topic || speaker.company}
+                                  </span>
+                                )}
+                              </span>
+                            </span>
+                          );
+                          return (
+                            <li key={speaker.name}>
+                              {speaker.linkedin && meetupHref ? (
+                                <a
+                                  href={speaker.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex rounded-full hover:text-accent"
+                                >
+                                  {entry}
+                                </a>
+                              ) : (
+                                entry
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                   </div>
-                  <span className="inline-flex items-center gap-1 text-sm text-wildai-mint group-hover:gap-2 transition-all whitespace-nowrap">
-                    {isUpcoming(e.event_date) ? 'RSVP' : 'RECAP'} <ArrowRight className="w-4 h-4" />
-                  </span>
+                  {meetupHref ? (
+                    <a
+                      href={meetupHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm text-wildai-mint whitespace-nowrap hover:underline"
+                    >
+                      RSVP <ArrowRight className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-sm text-wildai-mint group-hover:gap-2 transition-all whitespace-nowrap">
+                      {e.description ? 'RECAP' : 'DETAILS'} <ArrowRight className="w-4 h-4" />
+                    </span>
+                  )}
                 </div>
-              </Link>
-            ))}
+              </>
+              );
+              if (meetupHref) {
+                return (
+                  <div key={e.id} className={cardClass}>
+                    {body}
+                  </div>
+                );
+              }
+              return (
+                <Link key={e.id} to={`/events/${e.slug}`} className={cardClass}>
+                  {body}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="max-w-xl mx-auto">

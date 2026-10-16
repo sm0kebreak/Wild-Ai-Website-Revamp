@@ -122,17 +122,7 @@
   html {
     background-color: hsl(191 15% 10%);
   }
-  /* Ambient wash behind inner pages so glass has depth to catch. */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(45% 40% at 8% 30%, hsl(179 78% 16% / 0.35), transparent 70%),
-      radial-gradient(40% 40% at 95% 85%, hsl(186 42% 22% / 0.28), transparent 70%);
-  }
+  /* Flat field. Color stays in the tokens, not in a page-wide glow. */
   ::selection {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
@@ -196,17 +186,8 @@
   /* ---------- Glass ---------- */
   .glass {
     @apply relative rounded-[var(--radius)];
-    border: 1px solid hsl(var(--foreground) / 0.1);
-    background: linear-gradient(
-      158deg,
-      hsl(var(--foreground) / 0.075),
-      hsl(var(--foreground) / 0.025)
-    );
-    backdrop-filter: blur(16px) saturate(125%);
-    -webkit-backdrop-filter: blur(16px) saturate(125%);
-    box-shadow:
-      inset 0 1px 0 hsl(var(--foreground) / 0.08),
-      0 24px 48px -36px hsl(191 45% 3% / 0.85);
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card));
   }
   [data-surface='paper'] .glass {
     border-color: hsl(var(--foreground) / 0.08);
@@ -230,16 +211,87 @@
     transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   }
   .glass-interactive:hover {
-    border-color: hsl(var(--accent) / 0.4);
-    transform: translateY(-2px);
-    box-shadow:
-      inset 0 1px 0 hsl(var(--foreground) / 0.12),
-      0 30px 56px -34px hsl(191 45% 3% / 0.95);
+    border-color: hsl(var(--accent) / 0.45);
   }
 
+  .logo-mark {
+    --logo-h: 2.5rem;
+  }
+  .logo-mark[data-fit='icon'] {
+    --logo-h: 3rem;
+  }
+  .logo-mark[data-fit='word'],
+  .logo-mark[data-fit='wide'] {
+    --logo-h: 2.125rem;
+  }
   .logo-mark img {
+    height: var(--logo-h);
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
     opacity: 0.55;
     transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .logo-card {
+    overflow: hidden;
+  }
+  @supports (overflow: clip) {
+    .logo-card {
+      overflow: clip;
+    }
+  }
+  .logo-rail {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: auto;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    cursor: grab;
+  }
+  .logo-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .logo-rail.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+  .logo-fade {
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    width: 1.75rem;
+  }
+  .logo-fade-left {
+    left: 0;
+    background: linear-gradient(to right, hsl(var(--card)), transparent);
+  }
+  .logo-fade-right {
+    right: 0;
+    background: linear-gradient(to left, hsl(var(--card)), transparent);
+  }
+  @media (min-width: 768px) {
+    .logo-mark {
+      --logo-h: 3.25rem;
+    }
+    .logo-mark[data-fit='icon'] {
+      --logo-h: 3.75rem;
+    }
+    .logo-mark[data-fit='word'],
+    .logo-mark[data-fit='wide'] {
+      --logo-h: 2.875rem;
+    }
+  }
+  @media (pointer: coarse) {
+    .logo-rail {
+      cursor: auto;
+    }
   }
   .logo-mark:hover img,
   .logo-mark:focus-visible img {
@@ -251,27 +303,14 @@
   /* Every card on the site shares the glass treatment. */
   .surface {
     @apply relative rounded-[var(--radius)];
-    border: 1px solid hsl(var(--foreground) / 0.1);
-    background-image: linear-gradient(
-      158deg,
-      hsl(var(--foreground) / 0.075),
-      hsl(var(--foreground) / 0.025)
-    );
-    backdrop-filter: blur(16px) saturate(125%);
-    -webkit-backdrop-filter: blur(16px) saturate(125%);
-    box-shadow:
-      inset 0 1px 0 hsl(var(--foreground) / 0.08),
-      0 24px 48px -36px hsl(191 45% 3% / 0.85);
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card));
   }
   .surface-interactive {
     transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   }
   .surface-interactive:hover {
-    border-color: hsl(var(--accent) / 0.4);
-    transform: translateY(-2px);
-    box-shadow:
-      inset 0 1px 0 hsl(var(--foreground) / 0.12),
-      0 30px 56px -34px hsl(191 45% 3% / 0.95);
+    border-color: hsl(var(--accent) / 0.45);
   }
   .cyberpunk-border {
     @apply surface;
@@ -382,6 +421,8 @@
   }
   .site-header {
     padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
   .site-footer {
     padding-bottom: env(safe-area-inset-bottom);
@@ -578,12 +619,142 @@
   }
   .page-hero__wash {
     position: absolute;
-    inset: -40% -10% auto -10%;
-    height: 180%;
-    background:
-      radial-gradient(40% 58% at 16% 26%, hsl(179 78% 16% / 0.8), transparent 64%),
-      radial-gradient(36% 50% at 84% 8%, hsl(186 40% 20% / 0.6), transparent 66%);
-    filter: blur(26px);
+    inset: 0;
+    background: radial-gradient(42% 70% at 0% 0%, hsl(179 78% 16% / 0.4), transparent 72%);
+  }
+
+  /* ---------- Event cards ---------- */
+  .city-pills {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+  .city-pills::-webkit-scrollbar {
+    display: none;
+  }
+  .city-pill {
+    flex: 0 0 auto;
+    min-height: 2.75rem;
+    border-radius: 999px;
+    border: 1px solid hsl(var(--border));
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.7rem 0.95rem;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .city-pill:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+  .city-pill[data-selected='true'] {
+    background: hsl(var(--cta));
+    border-color: hsl(var(--cta));
+    color: hsl(var(--cta-foreground));
+  }
+  .event-card {
+    display: flex;
+    min-width: 0;
+    max-width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.875rem;
+    background: hsl(var(--card));
+    padding: 1rem;
+  }
+  @media (min-width: 640px) {
+    .event-card {
+      flex-direction: row;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.15rem 1.25rem;
+    }
+  }
+  .event-card-featured {
+    padding: 1.15rem;
+  }
+  @media (min-width: 640px) {
+    .event-card-featured {
+      padding: 1.35rem 1.5rem;
+    }
+  }
+  .event-card__date {
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-bottom: 0.75rem;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+  .event-card__date strong {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: hsl(var(--foreground));
+  }
+  @media (min-width: 640px) {
+    .event-card__date {
+      width: 4.5rem;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.15rem;
+      border-bottom: 0;
+      border-right: 1px solid hsl(var(--border));
+      padding: 0 1rem 0 0;
+    }
+  }
+  .action-bar {
+    display: grid;
+    min-width: 0;
+    max-width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.875rem;
+    background: hsl(var(--card));
+  }
+  .action-bar > li {
+    min-width: 0;
+  }
+  .action-link {
+    display: flex;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem;
+    transition: background-color 0.15s ease;
+  }
+  .action-bar > li:not(:last-child) .action-link {
+    border-right: 1px solid hsl(var(--border));
+  }
+  @media (min-width: 640px) {
+    .action-link {
+      gap: 0.75rem;
+      padding: 0.8rem 1rem;
+    }
+  }
+  .action-link:hover {
+    background: hsl(var(--secondary));
+  }
+  .action-link:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: -2px;
   }
   .page-hero__title {
     @apply font-display font-bold;
@@ -665,11 +836,14 @@
   opacity: 1;
   transform: none;
 }
+@media (pointer: coarse) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
 
 @media (max-width: 767px) {
-  .display-title {
-    font-size: clamp(2.1rem, 9.6vw, 3.25rem);
-  }
   .page-hero {
     padding: calc(6.25rem + env(safe-area-inset-top)) 0 2.75rem;
   }
@@ -679,13 +853,16 @@
   .section-title {
     font-size: 1.625rem;
   }
-  /* Hero runs edge to edge, under the status bar and browser toolbar. */
+  /* Keep the hero inside the visible viewport, above the browser toolbar. */
   .hero-stage {
     min-height: 0;
     height: 100svh;
-    height: 100lvh;
+    height: 100dvh;
     padding-top: calc(4rem + env(safe-area-inset-top));
-    padding-bottom: calc(100lvh - 100svh);
+    padding-bottom: max(1.75rem, env(safe-area-inset-bottom));
+  }
+  .display-title {
+    font-size: clamp(1.85rem, 8.4vw, 2.6rem);
   }
   .intro-logo {
     width: min(68vw, 360px);
@@ -695,6 +872,34 @@
   .hero-compact-hide {
     display: none;
   }
+}
+
+/* Phones scroll natively: no smoothed document scrolling, no blurred wash, no frosted header. */
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .hero-wash {
+    animation: none;
+    filter: none;
+  }
+  .site-header.border-border {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: hsl(var(--background));
+  }
+}
+html[data-native-scroll] {
+  scroll-behavior: auto;
+}
+html[data-native-scroll] .hero-wash {
+  animation: none;
+  filter: none;
+}
+html[data-native-scroll] .site-header.border-border {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background-color: hsl(var(--background));
 }
 
 @media (prefers-reduced-motion: reduce) {

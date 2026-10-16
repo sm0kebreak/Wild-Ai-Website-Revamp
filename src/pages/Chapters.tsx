@@ -5,10 +5,16 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import EmailCapture from '@/components/EmailCapture';
 import { Button } from '@/components/ui/button';
-import { MapPin, Users, CalendarDays, Rocket, ArrowRight } from 'lucide-react';
-import { useChapters, useAllEvents, isUpcoming, formatDate } from '@/hooks/useChapters';
-import NetworkField from '@/components/NetworkField';
+import { MapPin, CalendarDays, ArrowRight } from 'lucide-react';
+import {
+  formatMemberCount,
+  useChapters,
+  useAllEvents,
+  isUpcoming,
+  formatDate,
+} from '@/hooks/useChapters';
 import PageHero from '@/components/PageHero';
+import { CHAPTER_SEO_CITIES } from '@/data/chapters';
 
 const Chapters = () => {
   const { data: chapters, isLoading } = useChapters();
@@ -16,136 +22,103 @@ const Chapters = () => {
 
   const nextEventFor = (chapterId: string) =>
     (events ?? [])
-      .filter((e) => e.chapter_id === chapterId && isUpcoming(e.event_date))
+      .filter((event) => event.chapter_id === chapterId && isUpcoming(event.event_date))
       .sort((a, b) => a.event_date.localeCompare(b.event_date))[0];
 
   return (
     <div className="flex flex-col min-h-screen">
       <Helmet>
-        <title>Find a Wild AI Chapter - Minneapolis, San Francisco, Toronto</title>
+        <title>Wild AI chapters - {CHAPTER_SEO_CITIES}</title>
         <meta
           name="description"
-          content="Wild AI meetups across Minneapolis, San Francisco, and Toronto. Find your city, meet local AI builders, and RSVP for the next event."
+          content={`Find a Wild AI meetup in ${CHAPTER_SEO_CITIES}. See the next event in your city, or get notified when a date is set.`}
         />
-        <meta property="og:title" content="Find a Wild AI Chapter" />
+        <meta property="og:title" content="Find a Wild AI chapter" />
         <meta
           property="og:description"
-          content="Wild AI meetups across Minneapolis, San Francisco, and Toronto. Find your city and RSVP."
+          content={`Wild AI meetups in ${CHAPTER_SEO_CITIES}. Pick a city and see what is next.`}
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
       </Helmet>
       <Navbar />
-      <main className="pb-20 flex-grow chapters-page">
+      <main className="pb-20 flex-grow">
         <PageHero
-          eyebrow="Wild AI chapters"
-          title={<>Find your <span>community.</span></>}
-          lede="Meet local AI builders and find the next Wild AI event near you."
+          eyebrow="Chapters"
+          title={
+            <>
+              Find your <span>city</span>.
+            </>
+          }
+          lede="Five chapters. One format. Minneapolis is on the calendar. The others will post a date here when it is set."
           aside={
             <>
-              <span>Across North America</span>
-              <strong>{chapters?.length ?? 0} chapters</strong>
-              <span>
-                {(chapters ?? []).reduce((sum, chapter) => sum + (chapter.member_count ?? 0), 0)}+
-                members
-              </span>
+              <span>North America</span>
+              <strong>{chapters?.length ?? 5} chapters</strong>
             </>
           }
         />
 
-        <section className="border-y border-border">
-          <div className="container mx-auto px-4 grid lg:grid-cols-2 max-w-7xl">
-            <div className="py-8 lg:pr-8 lg:border-r border-border">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-semibold">Our communities</h2>
-              </div>
-              <NetworkField compact />
-            </div>
-            <div className="py-8 lg:pl-8">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-semibold">Chapter map</h2>
-              </div>
-              <div className="surface overflow-hidden h-[360px] grayscale contrast-125 opacity-80 hover:grayscale-0 duration-500">
-                <iframe
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=-132.0%2C22.0%2C-52.0%2C56.0&layer=mapnik"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  loading="lazy"
-                  title="Wild AI chapters map"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="container mx-auto px-4 py-12 md:py-20 max-w-7xl">
-          <div className="flex items-end justify-between gap-6 mb-8 border-b border-border pb-5">
-              <h2 className="section-title mb-0">Chapter directory</h2>
-          </div>
-          <div className="grid md:grid-cols-3 border-l border-t border-border mb-16">
+        <section className="container mx-auto px-4 py-12 md:py-16 max-w-6xl">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {isLoading &&
-              [0, 1, 2].map((i) => (
-                <div key={i} className="bg-secondary/50 border-r border-b border-border p-6 h-72 animate-pulse" />
+              [0, 1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-56 animate-pulse rounded-xl border border-border bg-card" />
               ))}
-            {(chapters ?? []).map((c, index) => {
-              const next = nextEventFor(c.id);
+            {(chapters ?? []).map((chapter) => {
+              const next = nextEventFor(chapter.id);
+              const members = formatMemberCount(chapter.member_count);
               return (
-                <div key={c.id} className="chapter-node bg-secondary/30 border-r border-b border-border p-6 flex flex-col min-h-72">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs text-muted-foreground">Chapter {index + 1}</span>
-                    {c.status === 'launching' ? (
-                      <span className="text-[10px] font-mono text-wildai-mint border border-wildai-mint/40 px-2 py-0.5 flex items-center gap-1">
-                        <Rocket className="w-3 h-3" /> Launching
+                <Link
+                  key={chapter.slug}
+                  to={`/${chapter.slug}`}
+                  className="flex h-full flex-col rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent/40"
+                >
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <MapPin className="h-3.5 w-3.5 text-accent" />
+                      {chapter.region}
+                    </span>
+                    <span className={`kicker ${chapter.status === 'active' ? 'text-accent' : 'text-ember'}`}>
+                      {chapter.status === 'active' ? 'Active' : 'Launching'}
+                    </span>
+                  </div>
+                  <h2 className="font-display text-2xl font-semibold">{chapter.city}</h2>
+                  <p className="mt-4 flex items-start gap-2 text-sm text-muted-foreground">
+                    <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                    {next ? (
+                      <span>
+                        Next: {formatDate(next.event_date)}
+                        {next.venue_name ? ` · ${next.venue_name}` : ''}
                       </span>
                     ) : (
-                      <span className="text-xs text-primary">Active</span>
+                      <span>Next event coming soon</span>
                     )}
-                  </div>
-                  <MapPin className="w-5 h-5 text-wildai-mint mb-4" />
-                  <h3 className="text-2xl font-semibold mb-1">{c.city}</h3>
-                  <p className="text-xs text-muted-foreground mb-3">{c.region}</p>
-                  <p className="text-sm text-muted-foreground mb-4 flex-grow">{c.tagline}</p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                    <Users className="w-3.5 h-3.5 text-wildai-mint" />
-                    <span>{c.member_count ?? 0}+ members</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-5">
-                    <CalendarDays className="w-3.5 h-3.5 text-wildai-mint" />
-                    {next ? (
-                      <span>Next: {formatDate(next.event_date)}</span>
-                    ) : (
-                      <span>{c.cadence ?? 'Dates announced at launch'}</span>
-                    )}
-                  </div>
-                  <Link to={`/${c.slug}`} className="mt-auto">
-                    <Button className="w-full group">
-                      View chapter <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
-                    </Button>
-                  </Link>
-                </div>
+                  </p>
+                  {members && <p className="mt-3 text-xs text-muted-foreground">{members}</p>}
+                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+                    {next ? 'View event' : 'Get notified'}
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
+                </Link>
               );
             })}
           </div>
 
-          {/* Don't see your city + notify-me */}
-          <div className="grid md:grid-cols-2 border-l border-t border-border">
-            <div className="bg-secondary/30 border-r border-b border-border p-8 flex flex-col justify-center">
-              <h2 className="text-xl font-semibold mb-2">Don't see your city?</h2>
-              <p className="text-sm text-muted-foreground mb-5">
-                We help passionate locals launch new Wild AI chapters - playbook, brand, and
-                community included.
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            <div className="flex flex-col justify-center rounded-xl border border-border bg-card p-6">
+              <h2 className="font-display text-xl font-semibold">Don&apos;t see your city?</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Start a chapter. We share the format, the name, and a hand with the first night.
               </p>
-              <Link to="/start-a-chapter">
-                <Button variant="outline" className="w-full md:w-auto">
-                  Start a chapter
-                </Button>
+              <Link to="/start-a-chapter" className="mt-5">
+                <Button variant="outline">Start a chapter</Button>
               </Link>
             </div>
             <EmailCapture
               source="notify"
-              title="Notify me"
-              description="Get an email the moment a Wild AI chapter launches near you."
+              title="Get notified"
+              description="An email when a chapter opens near you."
               compact
             />
           </div>

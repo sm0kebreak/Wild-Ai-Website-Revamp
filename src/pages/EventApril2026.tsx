@@ -10,21 +10,21 @@ const speakers = [
     name: "Kaushik Suresh",
     title: "AI for kidney disease modeling, endorsed by Mayo Clinic",
     linkedin: "https://www.linkedin.com/in/kaushiksuresh2110/",
-    image: "/lovable-uploads/kaushik-suresh.jpg",
+    image: "/speakers/kaushik-suresh.webp",
     initials: "KS",
   },
   {
     name: "Joe LaChance",
     title: "79.2% token reduction, better context, lower latency at Satori",
     linkedin: "https://www.linkedin.com/in/jlachance1/",
-    image: "/lovable-uploads/joe-lachance.jpg",
+    image: "/speakers/joe-lachance.webp",
     initials: "JL",
   },
   {
     name: "Mamady Konneh",
     title: "Agentic AI that takes action across tools and workflows",
     linkedin: "https://www.linkedin.com/in/mamadykonneh/",
-    image: "/lovable-uploads/mamady-konneh.jpg",
+    image: "/speakers/mamady-konneh.webp",
     initials: "MK",
   },
 ];
@@ -135,7 +135,7 @@ const EventApril2026 = () => {
             <h2 className="text-2xl font-display font-semibold mb-3">JOIN US</h2>
             <p className="text-muted-foreground mb-6">Connect with the Wild AI community.</p>
             <a
-              href="/#register"
+              href="https://luma.com/wildai" target="_blank" rel="noopener noreferrer"
               className="btn-primary"
             >
               Register Now

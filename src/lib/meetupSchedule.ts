@@ -1,4 +1,5 @@
 import type { Chapter, ChapterEvent } from '@/hooks/useChapters';
+import { confirmedMeetupSpeakers } from '@/data/speakerArchive';
 
 export const MEETUP_VENUE = {
   name: 'Dangerous Man Brewing',
@@ -8,24 +9,67 @@ export const MEETUP_VENUE = {
 };
 
 export const MEETUP_START_TIME = '18:00';
-export const MEETUP_END_TIME = '20:00';
-export const MEETUP_CADENCE = 'Third Monday of every month at 6:00 PM CT';
+/** Networking runs until 9:00 PM. Doors stay at 18:00. */
+export const MEETUP_END_TIME = '21:00';
+export const MEETUP_CADENCE = 'Third Monday of every month. Doors 6:00 PM CT, demos at 6:40 PM.';
 
-/** The next announced Minneapolis meetup. Later months stay on the third-Monday cadence. */
-export const CONFIRMED_MEETUP_DATE = '2026-10-19';
-export const CONFIRMED_MEETUP_URL = 'https://www.meetup.com/wild-ai/events/316500602/';
+/** One line for heroes and cards, so a doors time never hides the demo start. */
+export const MEETUP_TIME_LINE = 'Doors 6:00 PM · Demos 6:40 PM · Until 9 PM CT';
 
-export const rsvpUrlFor = (dateIso: string) =>
-  dateIso === CONFIRMED_MEETUP_DATE ? CONFIRMED_MEETUP_URL : null;
+/** Exact demo-signup line. Use this on every signup surface. */
+export const DEMO_SIGNUP =
+  'Sign up to demo: 15 minutes on the mic. Demo to the room what you built, then take questions and feedback from the audience.';
+
+export const meetupFormatCopy =
+  'Doors open at 6:00 PM CT. Live demos start at 6:40 PM. Networking until 9. 15-minute demos, no slides. All ages. Free.';
+
+/** Wild AI Luma calendar. Nights without their own event page register here. */
+export const LUMA_CALENDAR_URL = 'https://luma.com/wildai';
+
+/** October 19, 2026 is the only night with its own Luma event. */
+const LUMA_EVENT_URLS: Record<string, string> = {
+  '2026-10-19': 'https://luma.com/50wo8gm8',
+};
+
+/** Announced Minneapolis nights. Registration is on Luma. */
+export const CONFIRMED_MEETUPS = [
+  { date: '2026-10-19' },
+  { date: '2026-11-16' },
+  { date: '2026-12-21' },
+] as const;
+
+export const CONFIRMED_MEETUP_DATE = CONFIRMED_MEETUPS[0].date;
+export const CONFIRMED_MEETUP_URL = LUMA_EVENT_URLS[CONFIRMED_MEETUP_DATE];
+
+export const rsvpUrlFor = (dateIso: string) => LUMA_EVENT_URLS[dateIso] ?? LUMA_CALENDAR_URL;
+
+const isConfirmedMeetup = (dateIso: string) =>
+  CONFIRMED_MEETUPS.some((meetup) => meetup.date === dateIso);
+
+/** Clock line for an announced Minneapolis night, or null for every other date. */
+export const standingMeetupTime = (dateIso: string) =>
+  isConfirmedMeetup(dateIso) ? MEETUP_TIME_LINE : null;
+
+/** Confirmed dates that have not passed, soonest first. */
+export const confirmedMeetupDates = (from = new Date()): string[] => {
+  const today = new Date(from);
+  today.setHours(0, 0, 0, 0);
+  return CONFIRMED_MEETUPS.map((meetup) => meetup.date).filter(
+    (date) => new Date(`${date}T00:00:00`) >= today,
+  );
+};
 
 export const meetupAgenda = [
   { time: '6:00 PM', label: 'Doors open (CT)' },
-  { time: 'Then', label: 'Live demos from builders' },
-  { time: 'After', label: 'Networking' },
+  {
+    time: '6:40 PM',
+    label: 'Demos start. About 10 minutes to demo, then about 5 minutes of questions and feedback. No slides.',
+  },
+  { time: 'Until 9 PM', label: 'Networking' },
 ];
 
 export const meetupBlurb =
-  'Doors open at 6:00 PM CT at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Live demos from builders, then networking.';
+  'Doors open at 6:00 PM CT at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Live demos start at 6:40 PM CT. Networking until 9. Each demo is 15 minutes with no slides: about 10 minutes to show what you built, then about 5 minutes of questions and feedback. All ages. Free.';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const toYmd = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -55,42 +99,47 @@ export const upcomingMeetupDates = (count = 4, from = new Date()): string[] => {
   return dates;
 };
 
-export const nextMeetupDate = (from = new Date()) => upcomingMeetupDates(1, from)[0];
+export const nextMeetupDate = (from = new Date()) =>
+  confirmedMeetupDates(from)[0] ?? upcomingMeetupDates(1, from)[0];
 
-/** Recurring meetups rendered alongside anything already stored for the chapter. */
-export const scheduledMeetups = (chapter: Chapter, count = 4): ChapterEvent[] =>
-  upcomingMeetupDates(count).map((date) => ({
+/** Confirmed Minneapolis meetups, alongside anything already stored for the chapter. */
+export const scheduledMeetups = (chapter: Chapter, count = 4): ChapterEvent[] => {
+  const confirmed = confirmedMeetupDates();
+  const dates = confirmed.length > 0 ? confirmed : upcomingMeetupDates(count);
+  return dates.map((date) => ({
     id: `scheduled-${date}`,
     chapter_id: chapter.id,
     slug: meetupSlug(date),
     title: meetupTitle(date),
     event_date: date,
     start_time: MEETUP_START_TIME,
-    end_time: null,
+    end_time: MEETUP_END_TIME,
     venue_name: MEETUP_VENUE.name,
     venue_address: MEETUP_VENUE.address,
     description: meetupBlurb,
     agenda: meetupAgenda,
-    speakers: [],
+    speakers: confirmedMeetupSpeakers(date),
     recap_url: null,
     meetup_url: rsvpUrlFor(date),
     attendee_count: null,
     chapter,
   }));
+};
 
-/** Public facts for the announced meetup, including when a stored row already exists. */
+/** Public facts for an announced meetup, including when a stored row already exists. */
 export const withConfirmedMeetup = <T extends ChapterEvent>(event: T): T => {
-  if (event.event_date !== CONFIRMED_MEETUP_DATE) return event;
+  if (!isConfirmedMeetup(event.event_date)) return event;
+  const meetupUrl = rsvpUrlFor(event.event_date);
   return {
     ...event,
     title: meetupTitle(event.event_date),
     start_time: MEETUP_START_TIME,
-    end_time: null,
+    end_time: MEETUP_END_TIME,
     venue_name: MEETUP_VENUE.name,
     venue_address: MEETUP_VENUE.address,
     description: meetupBlurb,
     agenda: meetupAgenda,
-    meetup_url: CONFIRMED_MEETUP_URL,
-    speakers: [],
+    meetup_url: meetupUrl,
+    speakers: confirmedMeetupSpeakers(event.event_date),
   };
 };

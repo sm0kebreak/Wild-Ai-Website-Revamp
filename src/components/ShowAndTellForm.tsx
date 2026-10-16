@@ -1,18 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Upload, CheckCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { submitLead } from '@/lib/submitLead';
 
 const ShowAndTellForm = () => {
   const { toast } = useToast();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     name: '',
     projectName: '',
@@ -20,16 +17,6 @@ const ShowAndTellForm = () => {
     linkedinUrl: '',
     email: '',
   });
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,22 +27,19 @@ const ShowAndTellForm = () => {
     setSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke('submit-show-and-tell', {
-        body: {
-          name: form.name,
+      await submitLead({
+        form: 'show-and-tell',
+        name: form.name,
+        email: form.email,
+        payload: {
           projectName: form.projectName,
           description: form.description,
-          email: form.email,
           linkedinUrl: form.linkedinUrl,
-          imageBase64: preview,
-          imageName: imageFile?.name || 'image.png',
         },
       });
 
-      if (error) throw error;
-
       setSubmitted(true);
-      toast({ title: "You're in!", description: "We'll save a spot for your Show & Tell." });
+      toast({ title: "You're in!", description: "Jake has your Show & Tell signup." });
     } catch (err) {
       console.error('Submission error:', err);
       toast({ title: "Something went wrong", description: "Please try again.", variant: "destructive" });
@@ -69,7 +53,7 @@ const ShowAndTellForm = () => {
       <div className="p-6 md:p-8 surface text-center">
         <CheckCircle className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
         <h3 className="text-xl font-display font-semibold mb-2">YOU'RE IN!</h3>
-        <p className="text-muted-foreground">We'll have a spot ready for your Show & Tell. See you March 16th!</p>
+        <p className="text-muted-foreground">Jake has your Show & Tell signup.</p>
       </div>
     );
   }
@@ -93,11 +77,11 @@ const ShowAndTellForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="sat-linkedin">LinkedIn URL</Label>
+        <Label htmlFor="sat-linkedin">LinkedIn or X URL</Label>
         <Input
           id="sat-linkedin"
           type="url"
-          placeholder="https://linkedin.com/in/janedoe"
+          placeholder="https://linkedin.com/in/… or https://x.com/…"
           value={form.linkedinUrl}
           onChange={(e) => setForm({ ...form, linkedinUrl: e.target.value })}
           maxLength={255}
@@ -125,30 +109,6 @@ const ShowAndTellForm = () => {
           maxLength={150}
         />
         <p className="text-xs text-muted-foreground text-right">{form.description.length}/150</p>
-      </div>
-
-      <div className="space-y-2">
-        <Label>Project Image / Logo</Label>
-        <div
-          className="border-2 border-dashed border-wildai-mint/30 rounded-lg p-4 text-center cursor-pointer hover:border-wildai-mint/60 transition-colors"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          {preview ? (
-            <img src={preview} alt="Project preview" className="max-h-24 mx-auto rounded" />
-          ) : (
-            <div className="flex flex-col items-center gap-2 text-muted-foreground">
-              <Upload className="w-6 h-6 text-wildai-mint/50" />
-              <span className="text-sm">Click to upload an image</span>
-            </div>
-          )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
       </div>
 
       <div className="space-y-2">

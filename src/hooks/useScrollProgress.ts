@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
 
+/** Touch and reduced-motion sessions keep the browser's own scroll. */
+export const nativeScrollQuery = '(pointer: coarse), (prefers-reduced-motion: reduce)';
+
+export const prefersNativeScroll = () =>
+  typeof window !== 'undefined' && window.matchMedia(nativeScrollQuery).matches;
+
 /**
  * Returns how far the page has scrolled through `spanRatio` viewport heights,
  * clamped to 0..1.
@@ -8,11 +14,19 @@ import { useEffect, useState } from 'react';
  * exactly, so wheel clicks - which arrive as coarse jumps - still read as one
  * continuous glide. `smoothing` is the fraction of the remaining distance
  * closed each frame; lower is slower and looser.
+ *
+ * On a coarse pointer, or when the user prefers reduced motion, this stays at
+ * 0 and does not listen. Those sessions scroll natively.
  */
 export const useScrollProgress = (spanRatio = 1, smoothing = 0.12) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    if (prefersNativeScroll()) {
+      document.documentElement.dataset.nativeScroll = 'true';
+      return;
+    }
+
     let frame = 0;
     let current = 0;
     let target = 0;
