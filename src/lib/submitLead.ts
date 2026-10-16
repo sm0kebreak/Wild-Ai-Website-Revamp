@@ -9,7 +9,6 @@ export type LeadInput = {
 
 export type LeadResult = {
   ok: true;
-  emailed: boolean;
 };
 
 const IMAGE_KEYS = new Set([
@@ -36,7 +35,7 @@ function cleanPayload(payload: Record<string, unknown> | undefined) {
   return next;
 }
 
-/** POST /api/lead. The server stores private Blob JSON and emails jake@wildai.us when a provider key is set. */
+/** Store a public form in the private Vercel Blob store via POST /api/lead. */
 export async function submitLead(input: LeadInput): Promise<LeadResult> {
   const response = await fetch('/api/lead', {
     method: 'POST',
@@ -47,5 +46,5 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
   if (!response.ok || !data?.ok) {
     throw new Error(typeof data?.error === 'string' ? data.error : 'Could not save this submission');
   }
-  return { ok: true, emailed: Boolean(data.emailed) };
+  return { ok: true };
 }
