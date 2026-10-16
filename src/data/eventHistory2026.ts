@@ -86,7 +86,7 @@ export const eventHistory2026: EventHistoryEntry[] = [
       },
       {
         id: 'charlie-divine',
-        name: 'Charlie Divine',
+        name: 'Charlie Devine',
         topic: 'A small AI company for trading and market prediction.',
       },
       {

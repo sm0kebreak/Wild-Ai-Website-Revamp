@@ -211,6 +211,7 @@ export const speakerStageLogos: CompanyLogo[] = [
   { name: 'Ovicounter AI' },
   { name: 'Parallax' },
   { name: 'Quickly' },
+  { name: 'Quinoa', logo: '/lovable-uploads/quinoa-logo.png', url: 'https://quinoa.health' },
   { name: 'Rosenblatt AI' },
   { name: 'Satori' },
   { name: 'Simple Lead AI', url: 'https://siimplelead.com/' },
