@@ -14,7 +14,8 @@ import {
 } from '@/components/ui/select';
 import { CalendarDays, MapPin, ArrowRight, CalendarPlus } from 'lucide-react';
 import { useChapters, useAllEvents, archiveChapterEvents, isUpcoming, formatDate, formatTime } from '@/hooks/useChapters';
-import { rsvpUrlFor } from '@/lib/meetupSchedule';
+import { rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
+import { SpeakerFace } from '@/components/SpeakerRow';
 import PageHero from '@/components/PageHero';
 
 const Events = () => {
@@ -152,8 +153,8 @@ const Events = () => {
                         <>
                           <span>·</span>
                           <span>
-                            {formatTime(e.start_time)}
-                            {e.chapter?.slug === 'minneapolis' ? ' CT' : ''}
+                            {standingMeetupTime(e.event_date) ??
+                              `${formatTime(e.start_time)}${e.chapter?.slug === 'minneapolis' ? ' CT' : ''}`}
                           </span>
                         </>
                       )}
@@ -165,25 +166,87 @@ const Events = () => {
                       ) : null}
                     </div>
                     <h2 className="text-lg font-display font-semibold group-hover:text-wildai-mint transition-colors">
-                      {e.title}
+                      {meetupHref ? (
+                        <Link to={`/events/${e.slug}`} className="hover:text-wildai-mint">
+                          {e.title}
+                        </Link>
+                      ) : (
+                        e.title
+                      )}
                     </h2>
                     {e.venue_name && (
                       <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1">
                         <MapPin className="w-3.5 h-3.5" /> {e.venue_name}
                       </p>
                     )}
+                    {meetupHref && e.speakers.length > 0 && (
+                      <ul className="mt-3 space-y-2">
+                        {e.speakers.map((speaker) => {
+                          const entry = (
+                            <span className="flex items-start gap-2 text-sm font-sans leading-snug">
+                              <SpeakerFace
+                                speaker={{
+                                  id: speaker.name,
+                                  name: speaker.name,
+                                  photo: speaker.photo_url,
+                                  companies: [],
+                                }}
+                              />
+                              <span>
+                                <span className="font-medium text-foreground">{speaker.name}</span>
+                                {(speaker.topic || speaker.company) && (
+                                  <span className="mt-0.5 block text-xs text-muted-foreground">
+                                    {speaker.topic || speaker.company}
+                                  </span>
+                                )}
+                              </span>
+                            </span>
+                          );
+                          return (
+                            <li key={speaker.name}>
+                              {speaker.linkedin && meetupHref ? (
+                                <a
+                                  href={speaker.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex rounded-full hover:text-accent"
+                                >
+                                  {entry}
+                                </a>
+                              ) : (
+                                entry
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                   </div>
-                  <span className="inline-flex items-center gap-1 text-sm text-wildai-mint group-hover:gap-2 transition-all whitespace-nowrap">
-                    {isUpcoming(e.event_date) ? 'RSVP' : e.description ? 'RECAP' : 'DETAILS'} <ArrowRight className="w-4 h-4" />
-                  </span>
+                  {meetupHref ? (
+                    <a
+                      href={meetupHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm text-wildai-mint whitespace-nowrap hover:underline"
+                    >
+                      RSVP <ArrowRight className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-sm text-wildai-mint group-hover:gap-2 transition-all whitespace-nowrap">
+                      {e.description ? 'RECAP' : 'DETAILS'} <ArrowRight className="w-4 h-4" />
+                    </span>
+                  )}
                 </div>
               </>
               );
-              return meetupHref ? (
-                <a key={e.id} href={meetupHref} target="_blank" rel="noopener noreferrer" className={cardClass}>
-                  {body}
-                </a>
-              ) : (
+              if (meetupHref) {
+                return (
+                  <div key={e.id} className={cardClass}>
+                    {body}
+                  </div>
+                );
+              }
+              return (
                 <Link key={e.id} to={`/events/${e.slug}`} className={cardClass}>
                   {body}
                 </Link>

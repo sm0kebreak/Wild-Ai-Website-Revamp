@@ -17,9 +17,9 @@ export const publicChapters: PublicChapter[] = [
     label: 'Minneapolis',
     region: 'Minnesota',
     status: 'active',
-    tagline: 'Third Monday of the month, 6:00 PM CT.',
+    tagline: 'Third Monday of the month. Doors 6:00 PM CT, demos at 6:40 PM.',
     about:
-      'The original Wild AI room. Short demos from local builders, then time to talk. Doors open at 6:00 PM CT at Dangerous Man Brewing.',
+      'The original Wild AI room. Short demos from local builders, then time to talk. Doors open at 6:00 PM CT at Dangerous Man Brewing. Live demos start at 6:40 PM. Networking until 9.',
   },
   {
     slug: 'san-francisco',

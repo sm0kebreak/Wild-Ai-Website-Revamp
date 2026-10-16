@@ -27,7 +27,9 @@ import {
   formatDate,
   formatTime,
 } from '@/hooks/useChapters';
-import { rsvpUrlFor } from '@/lib/meetupSchedule';
+import { meetupAgenda, rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
+import { upcomingLineups } from '@/data/speakerArchive';
+import SpeakerRow from '@/components/SpeakerRow';
 
 const ChapterPage = () => {
   const { city } = useParams<{ city: string }>();
@@ -40,6 +42,8 @@ const ChapterPage = () => {
   const sorted = (events ?? []).slice().sort((a, b) => b.event_date.localeCompare(a.event_date));
   const next = sorted.filter((e) => isUpcoming(e.event_date)).pop();
   const past = sorted.filter((e) => !isUpcoming(e.event_date));
+  const nextLineup = next ? upcomingLineups[next.event_date] : undefined;
+  const nextClock = next ? standingMeetupTime(next.event_date) : null;
 
   if (isLoading || !chapter) {
     return (
@@ -120,13 +124,25 @@ const ChapterPage = () => {
                   <p className="text-muted-foreground mb-3 flex items-center gap-2">
                     <CalendarDays className="w-4 h-4" /> {formatDate(next.event_date)}
                   </p>
-                  <p className="text-muted-foreground mb-3 flex items-center gap-2">
-                    <Clock className="w-4 h-4" /> {formatTime(next.start_time)}
-                    {chapter.slug === 'minneapolis' ? ' CT' : ''}
-                    {next.end_time ? ` – ${formatTime(next.end_time)}` : ''}
+                  <p className="text-muted-foreground mb-3 flex items-start gap-2">
+                    <Clock className="mt-0.5 h-4 w-4 shrink-0" />
+                    <span className="min-w-0">
+                      {nextClock ?? (
+                        <>
+                          {formatTime(next.start_time)}
+                          {chapter.slug === 'minneapolis' ? ' CT' : ''}
+                          {next.end_time ? ` – ${formatTime(next.end_time)}` : ''}
+                        </>
+                      )}
+                    </span>
                   </p>
                   <p className="font-medium mb-1">{next.venue_name}</p>
                   <p className="text-muted-foreground mb-4">{next.venue_address}</p>
+                  {nextLineup && nextLineup.length > 0 && (
+                    <div className="mb-4">
+                      <SpeakerRow speakers={nextLineup} detailed />
+                    </div>
+                  )}
                   <a href={`/events/${next.slug}`}>
                     <Button >
                       EVENT DETAILS <ArrowRight className="w-4 h-4 ml-1" />
@@ -149,11 +165,12 @@ const ChapterPage = () => {
               </p>
               <ul className="space-y-3 text-muted-foreground text-sm">
                 {chapter.slug === 'minneapolis' ? (
-                  <>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Doors open at 6:00 PM CT</li>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Live demos from builders</li>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Networking</li>
-                  </>
+                  meetupAgenda.map((item) => (
+                    <li key={item.time} className="flex items-start">
+                      <span className="text-wildai-mint mr-2">→</span>
+                      {item.time} · {item.label}
+                    </li>
+                  ))
                 ) : (
                   <>
                     <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Time to settle in</li>

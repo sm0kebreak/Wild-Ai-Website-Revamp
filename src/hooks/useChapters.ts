@@ -54,7 +54,13 @@ export interface ChapterEvent {
   venue_address: string | null;
   description: string | null;
   agenda: { time: string; label: string }[];
-  speakers: { name: string; company?: string; topic?: string; photo_url?: string }[];
+  speakers: {
+    name: string;
+    company?: string;
+    topic?: string;
+    photo_url?: string;
+    linkedin?: string;
+  }[];
   recap_url: string | null;
   meetup_url: string | null;
   attendee_count: number | null;

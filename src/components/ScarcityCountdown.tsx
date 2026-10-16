@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useCountdown } from '@/hooks/useCountdown';
-import { MEETUP_START_TIME, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
+import { MEETUP_START_TIME, meetupFormatCopy, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 /** Animated two-digit cell - the digit slides when its value changes. */
 const Digit = ({ value, label }: { value: number; label: string }) => (
@@ -66,8 +66,7 @@ const ScarcityCountdown = () => {
 
             <div className="md:border-l md:border-border md:pl-10">
               <p className="text-[0.9375rem] text-muted-foreground leading-relaxed max-w-md">
-                RSVP on Luma. Doors open at 6:00 PM CT, then live demos from builders and
-                networking.
+                RSVP on Luma. {meetupFormatCopy}
               </p>
               <p className="mt-3 inline-flex chip chip-ember">Most events fill up - RSVP early</p>
             </div>

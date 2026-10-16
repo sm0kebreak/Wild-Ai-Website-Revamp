@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays, MapPin } from 'lucide-react';
 import { useCountdown } from '@/hooks/useCountdown';
 import {
   MEETUP_START_TIME,
+  MEETUP_TIME_LINE,
   MEETUP_VENUE,
   meetupSlug,
   meetupTitle,
@@ -57,8 +58,11 @@ const HeroCountdown = ({ spent }: { spent?: boolean }) => {
         className="group mx-auto mt-2 flex w-full max-w-xs flex-col items-center rounded-xl px-3 py-1 text-center md:mt-7 md:max-w-none md:py-2"
       >
         <span className="font-display text-base font-semibold md:text-xl">{meetupTitle(date)}</span>
-        <span className="mt-1 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-          <CalendarDays className="h-4 w-4" /> {formatDate(date)} · 6:00 PM CT
+        <span className="mt-1 flex items-start justify-center gap-2 text-balance text-sm text-muted-foreground">
+          <CalendarDays className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>
+            {formatDate(date)} · {MEETUP_TIME_LINE}
+          </span>
         </span>
         <span className="hero-compact-hide mt-1.5 hidden items-center justify-center gap-2 text-[0.9375rem] text-muted-foreground md:flex">
           <MapPin className="h-4 w-4" /> {MEETUP_VENUE.name}

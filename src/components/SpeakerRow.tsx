@@ -48,26 +48,27 @@ const SpeakerChip = ({ speaker, detailed }: { speaker: LineupSpeaker; detailed?:
   const body = (
     <>
       <SpeakerFace speaker={speaker} />
-      <span className="min-w-0">
+      <span className={cn('min-w-0', detailed && 'max-w-[18rem]')}>
         <span className="block text-sm font-medium leading-tight">{speaker.name}</span>
         {detailed && speaker.role && (
-          <span className="mt-0.5 block text-xs leading-tight text-muted-foreground">{speaker.role}</span>
+          <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">{speaker.role}</span>
         )}
       </span>
     </>
   );
 
+  const className = cn(
+    'inline-flex gap-2 rounded-full',
+    detailed ? 'items-start' : 'items-center',
+    speaker.linkedin && 'transition-colors hover:text-accent',
+  );
+
   if (!speaker.linkedin) {
-    return <span className="inline-flex items-center gap-2">{body}</span>;
+    return <span className={className}>{body}</span>;
   }
 
   return (
-    <a
-      href={speaker.linkedin}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 rounded-full transition-colors hover:text-accent"
-    >
+    <a href={speaker.linkedin} target="_blank" rel="noopener noreferrer" className={className}>
       {body}
     </a>
   );

@@ -1,7 +1,14 @@
 import React from 'react';
 import { Clock, Users, MessageSquare, Youtube, CalendarDays, MapPin, ArrowUpRight } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
-import { MEETUP_VENUE, meetupTitle, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
+import {
+  MEETUP_VENUE,
+  meetupAgenda,
+  meetupFormatCopy,
+  meetupTitle,
+  nextMeetupDate,
+  rsvpUrlFor,
+} from '@/lib/meetupSchedule';
 import { formatDate } from '@/hooks/useChapters';
 
 const expectations = [
@@ -11,19 +18,12 @@ const expectations = [
   'Casual, inclusive environment',
 ];
 
-const schedule = [
-  { icon: Clock, time: '6:00 PM CT', detail: 'Doors open.' },
-  {
-    icon: MessageSquare,
-    time: 'Then',
-    detail: 'Live demos from builders.',
-  },
-  {
-    icon: Users,
-    time: 'After',
-    detail: 'Networking.',
-  },
-];
+const scheduleIcons = [Clock, MessageSquare, Users];
+const schedule = meetupAgenda.map((slot, index) => ({
+  icon: scheduleIcons[index] ?? Clock,
+  time: slot.time,
+  detail: slot.label.endsWith('.') ? slot.label : `${slot.label}.`,
+}));
 
 const EventDetails = () => {
   const nextDate = nextMeetupDate();
@@ -46,7 +46,7 @@ const EventDetails = () => {
               <p className="font-display text-3xl font-semibold text-foreground">
                 {formatDate(nextDate)}
               </p>
-              <p className="mt-1 text-muted-foreground">Doors open at 6:00 PM CT</p>
+              <p className="mt-1 text-muted-foreground">{meetupFormatCopy}</p>
 
               <div className="mt-6 flex items-start gap-3 border-t border-border/60 pt-6">
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" />

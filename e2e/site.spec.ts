@@ -236,6 +236,54 @@ test('events Upcoming and Past filters', async ({ page }) => {
   await expect(page.getByText('October 19, 2026')).toBeVisible();
 });
 
+const VIKAS_LINKEDIN = 'https://www.linkedin.com/in/vikas-sabbi-801010a9';
+const BILLY_LINKEDIN = 'https://www.linkedin.com/in/billy-walker';
+
+test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
+  await openPath(page, '/');
+  const next = page.locator('#next-event');
+  await expect(next.getByText('6:40 PM')).toBeVisible();
+  await expect(next.getByText('Vikas Sabbi')).toBeVisible();
+  await expect(next.getByText('Eric Phillips')).toBeVisible();
+  await expect(next.getByText('Billy Walker')).toBeVisible();
+  await expect(next.getByText('Ducky, a peer-to-peer desktop app.')).toBeVisible();
+  await expect(next.getByText(/Circex, AI that turns NASA/)).toBeVisible();
+  await expect(next.getByText(/first high schooler ever to speak at Wild AI/i)).toBeVisible();
+  await expect(next.getByText(/stealth project, more soon/i)).toBeVisible();
+  const nextText = await next.innerText();
+  expect(nextText.indexOf('Vikas Sabbi')).toBeLessThan(nextText.indexOf('Eric Phillips'));
+  expect(nextText.indexOf('Eric Phillips')).toBeLessThan(nextText.indexOf('Billy Walker'));
+  await expect(next.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
+  await expect(next.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
+  await expect(next.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
+
+  await openPath(page, '/events/msp-october-2026');
+  await expect(page.getByText('6:40 PM').first()).toBeVisible();
+  await expect(page.getByText('6:30')).toHaveCount(0);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /Live demos start at 6:40 PM/);
+  const lineup = page.locator('div.surface').filter({ has: page.getByRole('heading', { name: 'SPEAKER LINEUP' }) });
+  await expect(lineup.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
+  await expect(lineup.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
+  await expect(lineup.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
+  await expect(lineup.getByText('Eric Phillips')).toBeVisible();
+  await expect(lineup.getByText(/first high schooler ever/i)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'RSVP NOW' })).toHaveAttribute('href', LUMA_EVENT);
+
+  await openPath(page, '/events');
+  await expect(page.getByText('Demos 6:40 PM').first()).toBeVisible();
+  await expect(page.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
+  await expect(page.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
+  await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
+  await expect(page.getByText('Eric Phillips')).toBeVisible();
+
+  await openPath(page, '/minneapolis');
+  await expect(page.getByText('6:40 PM').first()).toBeVisible();
+  await expect(page.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
+  await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
+  await expect(page.getByText(/first high schooler ever/i)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Register' }).first()).toHaveAttribute('href', LUMA_EVENT);
+});
+
 test('anchors scroll to the named section', async ({ page }) => {
   await openPath(page, '/about');
   await page.locator('a[href="/about#conduct"]').click();

@@ -524,6 +524,18 @@ const people = {
   vikasSabbi: {
     id: 'vikas-sabbi',
     name: 'Vikas Sabbi',
+    linkedin: 'https://www.linkedin.com/in/vikas-sabbi-801010a9',
+    companies: [],
+  },
+  ericPhillips: {
+    id: 'eric-phillips',
+    name: 'Eric Phillips',
+    companies: [],
+  },
+  billyWalker: {
+    id: 'billy-walker',
+    name: 'Billy Walker',
+    linkedin: 'https://www.linkedin.com/in/billy-walker',
     companies: [],
   },
 } satisfies Record<string, Person>;
@@ -839,10 +851,30 @@ export const pastEvents: PastEventRecord[] = [
   },
 ];
 
-/** October 19, 2026 is still upcoming. Vikas Sabbi is confirmed for that night. */
+/**
+ * October 19, 2026 lineup, in announced order.
+ * Eric Phillips has no LinkedIn URL. He is the first high schooler ever to speak at Wild AI.
+ * No employers or headshots were provided.
+ */
 export const upcomingLineups: Record<string, LineupSpeaker[]> = {
-  '2026-10-19': [line(people.vikasSabbi)],
+  '2026-10-19': [
+    line(people.vikasSabbi, 'Ducky, a peer-to-peer desktop app.'),
+    line(
+      people.ericPhillips,
+      "Circex, AI that turns NASA's free-text telescope alerts into searchable data. The first high schooler ever to speak at Wild AI.",
+    ),
+    line(people.billyWalker, 'Demoing his stealth project, more soon.'),
+  ],
 };
+
+/** Speaker cards for a confirmed night. Empty when that night has no announced lineup. */
+export const confirmedMeetupSpeakers = (dateIso: string) =>
+  (upcomingLineups[dateIso] ?? []).map((speaker) => ({
+    name: speaker.name,
+    topic: speaker.role,
+    photo_url: speaker.photo,
+    linkedin: speaker.linkedin,
+  }));
 
 export const pastEventByDisplayDate = (displayDate: string) =>
   pastEvents.find((event) => event.displayDate === displayDate);

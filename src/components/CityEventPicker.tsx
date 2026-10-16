@@ -3,7 +3,14 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDate } from '@/hooks/useChapters';
-import { MEETUP_VENUE, meetupSlug, meetupTitle, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
+import {
+  MEETUP_TIME_LINE,
+  MEETUP_VENUE,
+  meetupSlug,
+  meetupTitle,
+  nextMeetupDate,
+  rsvpUrlFor,
+} from '@/lib/meetupSchedule';
 import { upcomingLineups } from '@/data/speakerArchive';
 import SpeakerRow from '@/components/SpeakerRow';
 
@@ -37,11 +44,11 @@ const CityEventPicker = () => {
             {meetupTitle(dateIso)}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {formatDate(dateIso)} · 6:00 PM CT
+            {formatDate(dateIso)} · {MEETUP_TIME_LINE}
           </p>
           {lineup && (
             <div className="mt-2">
-              <SpeakerRow speakers={lineup} />
+              <SpeakerRow speakers={lineup} detailed />
             </div>
           )}
           <p className="mt-2 flex min-w-0 items-start gap-2 text-sm">

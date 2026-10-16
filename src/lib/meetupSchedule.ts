@@ -1,4 +1,5 @@
 import type { Chapter, ChapterEvent } from '@/hooks/useChapters';
+import { confirmedMeetupSpeakers } from '@/data/speakerArchive';
 
 export const MEETUP_VENUE = {
   name: 'Dangerous Man Brewing',
@@ -8,8 +9,15 @@ export const MEETUP_VENUE = {
 };
 
 export const MEETUP_START_TIME = '18:00';
-export const MEETUP_END_TIME = '20:00';
-export const MEETUP_CADENCE = 'Third Monday of every month at 6:00 PM CT';
+/** Networking runs until 9:00 PM. Doors stay at 18:00. */
+export const MEETUP_END_TIME = '21:00';
+export const MEETUP_CADENCE = 'Third Monday of every month. Doors 6:00 PM CT, demos at 6:40 PM.';
+
+/** One line for heroes and cards, so a doors time never hides the demo start. */
+export const MEETUP_TIME_LINE = 'Doors 6:00 PM · Demos 6:40 PM · Until 9 PM CT';
+
+export const meetupFormatCopy =
+  'Doors open at 6:00 PM CT. Live demos start at 6:40 PM. Networking until 9.';
 
 /** Wild AI Luma calendar. Nights without their own event page register here. */
 export const LUMA_CALENDAR_URL = 'https://luma.com/wildai';
@@ -34,6 +42,10 @@ export const rsvpUrlFor = (dateIso: string) => LUMA_EVENT_URLS[dateIso] ?? LUMA_
 const isConfirmedMeetup = (dateIso: string) =>
   CONFIRMED_MEETUPS.some((meetup) => meetup.date === dateIso);
 
+/** Clock line for an announced Minneapolis night, or null for every other date. */
+export const standingMeetupTime = (dateIso: string) =>
+  isConfirmedMeetup(dateIso) ? MEETUP_TIME_LINE : null;
+
 /** Confirmed dates that have not passed, soonest first. */
 export const confirmedMeetupDates = (from = new Date()): string[] => {
   const today = new Date(from);
@@ -45,12 +57,12 @@ export const confirmedMeetupDates = (from = new Date()): string[] => {
 
 export const meetupAgenda = [
   { time: '6:00 PM', label: 'Doors open (CT)' },
-  { time: 'Then', label: 'Live demos from builders' },
-  { time: 'After', label: 'Networking' },
+  { time: '6:40 PM', label: 'Live demos start' },
+  { time: 'Until 9 PM', label: 'Networking' },
 ];
 
 export const meetupBlurb =
-  'Doors open at 6:00 PM CT at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Live demos from builders, then networking.';
+  'Doors open at 6:00 PM CT at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Live demos start at 6:40 PM CT. Networking until 9.';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const toYmd = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -94,12 +106,12 @@ export const scheduledMeetups = (chapter: Chapter, count = 4): ChapterEvent[] =>
     title: meetupTitle(date),
     event_date: date,
     start_time: MEETUP_START_TIME,
-    end_time: null,
+    end_time: MEETUP_END_TIME,
     venue_name: MEETUP_VENUE.name,
     venue_address: MEETUP_VENUE.address,
     description: meetupBlurb,
     agenda: meetupAgenda,
-    speakers: [],
+    speakers: confirmedMeetupSpeakers(date),
     recap_url: null,
     meetup_url: rsvpUrlFor(date),
     attendee_count: null,
@@ -115,12 +127,12 @@ export const withConfirmedMeetup = <T extends ChapterEvent>(event: T): T => {
     ...event,
     title: meetupTitle(event.event_date),
     start_time: MEETUP_START_TIME,
-    end_time: null,
+    end_time: MEETUP_END_TIME,
     venue_name: MEETUP_VENUE.name,
     venue_address: MEETUP_VENUE.address,
     description: meetupBlurb,
     agenda: meetupAgenda,
     meetup_url: meetupUrl,
-    speakers: [],
+    speakers: confirmedMeetupSpeakers(event.event_date),
   };
 };
