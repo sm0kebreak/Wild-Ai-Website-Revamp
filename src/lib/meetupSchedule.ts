@@ -11,18 +11,28 @@ export const MEETUP_START_TIME = '18:00';
 export const MEETUP_END_TIME = '20:00';
 export const MEETUP_CADENCE = 'Third Monday of every month at 6:00 PM CT';
 
-/** Announced Minneapolis meetups. Do not add a date that does not have a Meetup link. */
+/** Wild AI Luma calendar. Nights without their own event page register here. */
+export const LUMA_CALENDAR_URL = 'https://luma.com/wildai';
+
+/** October 19, 2026 is the only night with its own Luma event. */
+const LUMA_EVENT_URLS: Record<string, string> = {
+  '2026-10-19': 'https://luma.com/50wo8gm8',
+};
+
+/** Announced Minneapolis nights. Registration is on Luma. */
 export const CONFIRMED_MEETUPS = [
-  { date: '2026-10-19', url: 'https://www.meetup.com/wild-ai/events/316500602/' },
-  { date: '2026-11-16', url: 'https://www.meetup.com/wild-ai/events/316059008/' },
-  { date: '2026-12-21', url: 'https://www.meetup.com/wild-ai/events/316059021/' },
+  { date: '2026-10-19' },
+  { date: '2026-11-16' },
+  { date: '2026-12-21' },
 ] as const;
 
 export const CONFIRMED_MEETUP_DATE = CONFIRMED_MEETUPS[0].date;
-export const CONFIRMED_MEETUP_URL = CONFIRMED_MEETUPS[0].url;
+export const CONFIRMED_MEETUP_URL = LUMA_EVENT_URLS[CONFIRMED_MEETUP_DATE];
 
-export const rsvpUrlFor = (dateIso: string) =>
-  CONFIRMED_MEETUPS.find((meetup) => meetup.date === dateIso)?.url ?? null;
+export const rsvpUrlFor = (dateIso: string) => LUMA_EVENT_URLS[dateIso] ?? LUMA_CALENDAR_URL;
+
+const isConfirmedMeetup = (dateIso: string) =>
+  CONFIRMED_MEETUPS.some((meetup) => meetup.date === dateIso);
 
 /** Confirmed dates that have not passed, soonest first. */
 export const confirmedMeetupDates = (from = new Date()): string[] => {
@@ -99,8 +109,8 @@ export const scheduledMeetups = (chapter: Chapter, count = 4): ChapterEvent[] =>
 
 /** Public facts for an announced meetup, including when a stored row already exists. */
 export const withConfirmedMeetup = <T extends ChapterEvent>(event: T): T => {
+  if (!isConfirmedMeetup(event.event_date)) return event;
   const meetupUrl = rsvpUrlFor(event.event_date);
-  if (!meetupUrl) return event;
   return {
     ...event,
     title: meetupTitle(event.event_date),

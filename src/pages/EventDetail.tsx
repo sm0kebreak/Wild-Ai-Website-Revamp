@@ -23,6 +23,7 @@ import {
   formatTime,
 } from '@/hooks/useChapters';
 import { getEventHistoryByDate } from '@/data/eventHistory2026';
+import { rsvpUrlFor } from '@/lib/meetupSchedule';
 import { publicChapters } from '@/data/chapters';
 
 const EventDetail = () => {
@@ -125,13 +126,11 @@ const EventDetail = () => {
             </div>
             {upcoming ? (
               <div className="flex flex-col sm:flex-row gap-3">
-                {event.meetup_url && (
-                  <a href={event.meetup_url} target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" >
-                      RSVP NOW
-                    </Button>
-                  </a>
-                )}
+                <a href={rsvpUrlFor(event.event_date)} target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" >
+                    RSVP NOW
+                  </Button>
+                </a>
                 <a href={gcalUrl} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="lg">
                     <CalendarDays className="w-4 h-4 mr-2" /> ADD TO CALENDAR

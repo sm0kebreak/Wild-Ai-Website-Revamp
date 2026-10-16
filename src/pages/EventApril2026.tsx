@@ -135,7 +135,7 @@ const EventApril2026 = () => {
             <h2 className="text-2xl font-display font-semibold mb-3">JOIN US</h2>
             <p className="text-muted-foreground mb-6">Connect with the Wild AI community.</p>
             <a
-              href="/#register"
+              href="https://luma.com/wildai" target="_blank" rel="noopener noreferrer"
               className="btn-primary"
             >
               Register Now

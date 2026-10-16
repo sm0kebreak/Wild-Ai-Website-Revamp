@@ -66,7 +66,7 @@ const ScarcityCountdown = () => {
 
             <div className="md:border-l md:border-border md:pl-10">
               <p className="text-[0.9375rem] text-muted-foreground leading-relaxed max-w-md">
-                RSVP on Meetup. Doors open at 6:00 PM CT, then live demos from builders and
+                RSVP on Luma. Doors open at 6:00 PM CT, then live demos from builders and
                 networking.
               </p>
               <p className="mt-3 inline-flex chip chip-ember">Most events fill up - RSVP early</p>

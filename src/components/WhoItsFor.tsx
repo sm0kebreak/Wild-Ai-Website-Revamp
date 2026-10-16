@@ -66,7 +66,7 @@ const WhoItsFor = () => (
       </div>
 
       <Reveal delay={150} className="mt-10">
-        <a href="#register">
+        <a href="https://luma.com/wildai" target="_blank" rel="noopener noreferrer">
           <Button size="lg" className="group">
             Register now
             <ArrowRight className="transition-transform group-hover:translate-x-1" />

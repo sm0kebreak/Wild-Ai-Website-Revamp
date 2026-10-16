@@ -64,9 +64,9 @@ const Afterparty = () => {
             <p className="text-lg text-muted-foreground mb-8">
               AI is still wild - an uncharted frontier - and the best way to explore it is together.
             </p>
-            <a href="https://www.meetup.com/wild-ai/" target="_blank" rel="noopener noreferrer">
+            <a href="https://luma.com/wildai" target="_blank" rel="noopener noreferrer">
               <Button size="lg" >
-                Visit Our Meetup Page
+                RSVP on Luma
               </Button>
             </a>
           </div>
@@ -181,7 +181,7 @@ const Afterparty = () => {
             <h2 className="section-title text-center mb-12">Working on something cool? sign up to speak at a future meetup</h2>
             
             <div className="text-center mb-12">
-              <a href="/#register">
+              <a href="/speak">
                 <Button size="lg" className=" mb-8">
                   Sign Up to Speak
                 </Button>

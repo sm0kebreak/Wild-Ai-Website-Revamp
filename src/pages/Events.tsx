@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import { CalendarDays, MapPin, ArrowRight, CalendarPlus } from 'lucide-react';
 import { useChapters, useAllEvents, archiveChapterEvents, isUpcoming, formatDate, formatTime } from '@/hooks/useChapters';
+import { rsvpUrlFor } from '@/lib/meetupSchedule';
 import PageHero from '@/components/PageHero';
 
 const Events = () => {
@@ -123,7 +124,7 @@ const Events = () => {
               </>
             )}
             {displayList.map((e, i) => {
-              const meetupHref = isUpcoming(e.event_date) ? e.meetup_url : null;
+              const meetupHref = isUpcoming(e.event_date) ? rsvpUrlFor(e.event_date) : null;
               const cardClass = `block surface surface-interactive p-6 transition-colors group ${
                   i === 0 && !showPastFallback && timeFilter === 'upcoming'
                     ? '!border-accent/50 ring-1 ring-accent/20 bg-primary/30'

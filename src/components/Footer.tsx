@@ -126,12 +126,12 @@ const Footer = () => {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href="https://www.meetup.com/wild-ai/"
+                    href="https://luma.com/wildai"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Wild AI Meetup Page
+                    Wild AI on Luma
                   </a>
                 </li>
               </ul>

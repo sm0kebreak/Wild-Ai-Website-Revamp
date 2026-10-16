@@ -64,7 +64,7 @@ const EventDetails = () => {
                   rel="noopener noreferrer"
                   className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent"
                 >
-                  RSVP on Meetup
+                  RSVP on Luma
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               )}

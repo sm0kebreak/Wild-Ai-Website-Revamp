@@ -27,6 +27,7 @@ import {
   formatDate,
   formatTime,
 } from '@/hooks/useChapters';
+import { rsvpUrlFor } from '@/lib/meetupSchedule';
 
 const ChapterPage = () => {
   const { city } = useParams<{ city: string }>();
@@ -88,9 +89,9 @@ const ChapterPage = () => {
         >
           {next ? (
             <a
-              href={next.meetup_url ?? `/events/${next.slug}`}
-              target={next.meetup_url ? '_blank' : undefined}
-              rel={next.meetup_url ? 'noopener noreferrer' : undefined}
+              href={rsvpUrlFor(next.event_date)}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Button size="lg">Register</Button>
             </a>
