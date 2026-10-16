@@ -405,7 +405,7 @@ const people = {
     name: "Tom O'Neill",
     linkedin: 'https://www.linkedin.com/in/tomoneill/',
     photo: '/speakers/tom-oneill.webp',
-    companies: ['Nerdery', 'Parallax', 'Quickly'],
+    companies: ['Nerdery', 'Parallax', 'Kwikly'],
   },
   sageFaraday: {
     id: 'sage-faraday',
@@ -606,7 +606,7 @@ export const pastEvents: PastEventRecord[] = [
       line(people.pierceRhine),
       line(people.darshGarg, 'Tortus'),
       line(people.libanKano, 'CareSupport'),
-      line(people.tomOneill, 'Quickly'),
+      line(people.tomOneill, 'Kwikly'),
     ],
   },
   {
