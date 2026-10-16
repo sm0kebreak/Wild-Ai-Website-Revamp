@@ -260,7 +260,10 @@ test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
   await openPath(page, '/events/msp-october-2026');
   await expect(page.getByText('6:40 PM').first()).toBeVisible();
   await expect(page.getByText('6:30')).toHaveCount(0);
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /Live demos start at 6:40 PM/);
+  await expect(page.locator('meta[data-rh="true"][name="description"]')).toHaveAttribute(
+    'content',
+    /Live demos start at 6:40 PM CT\. Networking until 9\./,
+  );
   const lineup = page.locator('div.surface').filter({ has: page.getByRole('heading', { name: 'SPEAKER LINEUP' }) });
   await expect(lineup.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
   await expect(lineup.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
