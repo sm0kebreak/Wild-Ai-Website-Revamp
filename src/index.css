@@ -232,12 +232,24 @@
     opacity: 0.55;
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
+  .logo-card {
+    overflow: hidden;
+  }
+  @supports (overflow: clip) {
+    .logo-card {
+      overflow: clip;
+    }
+  }
   .logo-rail {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: auto;
     overscroll-behavior-x: contain;
-    touch-action: auto;
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     cursor: grab;
   }
@@ -247,6 +259,22 @@
   .logo-rail.is-dragging {
     cursor: grabbing;
     user-select: none;
+  }
+  .logo-fade {
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    width: 1.75rem;
+  }
+  .logo-fade-left {
+    left: 0;
+    background: linear-gradient(to right, hsl(var(--card)), transparent);
+  }
+  .logo-fade-right {
+    right: 0;
+    background: linear-gradient(to left, hsl(var(--card)), transparent);
   }
   @media (min-width: 768px) {
     .logo-mark {
@@ -807,6 +835,12 @@
 [data-reveal='shown'] {
   opacity: 1;
   transform: none;
+}
+@media (pointer: coarse) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (max-width: 767px) {

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import LogoRail from '@/components/motion/LogoRail';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import LogoRail, { type LogoRailHandle } from '@/components/motion/LogoRail';
 import Reveal from '@/components/motion/Reveal';
 import { logoFit, logos, type CompanyLogo } from '@/data/companyLogos';
 import { speakerCompanyCount } from '@/data/speakerArchive';
@@ -101,20 +102,27 @@ const LogoFilters = () => {
 /** Two counter-scrolling rows of companies represented at Wild AI events. */
 const LogoCarousel = () => {
   const [showAll, setShowAll] = useState(false);
+  const firstRail = useRef<LogoRailHandle>(null);
+  const secondRail = useRef<LogoRailHandle>(null);
+
+  const nudge = (direction: -1 | 1) => {
+    firstRail.current?.nudge(direction);
+    secondRail.current?.nudge(direction);
+  };
 
   return (
-    <section id="companies" className="py-4 md:py-6">
+    <section id="companies" className="min-w-0 py-4 md:py-6">
       <LogoFilters />
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto min-w-0 px-4">
         <Reveal>
-          <div className="glass overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-border/60 px-5 py-3 md:px-8">
+          <div className="logo-card glass min-w-0">
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 px-5 py-3 md:px-8">
               <p className="font-display text-base font-semibold leading-snug md:text-lg">
                 {speakerCompanyCount} companies have taken the stage at Wild AI
               </p>
               <button
                 type="button"
-                className="inline-flex min-h-11 shrink-0 items-center rounded-md px-1 text-sm font-semibold text-accent"
+                className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-accent/50 bg-accent/15 px-4 text-sm font-semibold text-accent"
                 aria-expanded={showAll}
                 aria-controls="company-logos"
                 onClick={() => setShowAll((open) => !open)}
@@ -123,7 +131,7 @@ const LogoCarousel = () => {
               </button>
             </div>
 
-            <div id="company-logos" className="py-3 md:py-4">
+            <div id="company-logos" className="relative min-w-0 py-3 md:py-4">
               {showAll ? (
                 <div className="grid grid-cols-2 gap-x-2 gap-y-1 px-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                   {logosByName.map((company) => (
@@ -132,13 +140,18 @@ const LogoCarousel = () => {
                 </div>
               ) : (
                 <>
-                  <LogoRail duration={70} label="Company logos, first row. Scroll horizontally to browse.">
+                  <LogoRail
+                    ref={firstRail}
+                    duration={70}
+                    label="Company logos, first row. Scroll horizontally to browse."
+                  >
                     {logoRows[0].map((company) => (
                       <LogoMark key={company.name} company={company} />
                     ))}
                   </LogoRail>
                   <div className="mx-5 h-px bg-border/40 md:mx-8" />
                   <LogoRail
+                    ref={secondRail}
                     duration={82}
                     reverse
                     label="Company logos, second row. Scroll horizontally to browse."
@@ -147,6 +160,24 @@ const LogoCarousel = () => {
                       <LogoMark key={company.name} company={company} />
                     ))}
                   </LogoRail>
+                  <div className="logo-fade logo-fade-left" aria-hidden="true" />
+                  <div className="logo-fade logo-fade-right" aria-hidden="true" />
+                  <button
+                    type="button"
+                    className="absolute left-2 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 text-foreground shadow-sm"
+                    aria-label="Show previous logos"
+                    onClick={() => nudge(-1)}
+                  >
+                    <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 text-foreground shadow-sm"
+                    aria-label="Show next logos"
+                    onClick={() => nudge(1)}
+                  >
+                    <ChevronRight className="h-5 w-5" aria-hidden="true" />
+                  </button>
                 </>
               )}
             </div>
