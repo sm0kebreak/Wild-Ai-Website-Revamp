@@ -4,8 +4,6 @@ export interface CompanyLogo {
   url?: string;
   /** 'dark-bg': light art on an opaque dark box. 'light-ink': light art on transparency. 'plain': a single-color mark. */
   tone?: 'dark-bg' | 'deep-bg' | 'light-ink' | 'plain';
-  /** Light-on-transparent marks sit on a dark tile so the ink stays visible. */
-  tile?: 'light' | 'dark';
 }
 
 /** Logos already on the site before the speaker-company pass. */
@@ -21,7 +19,6 @@ const existingLogos: CompanyLogo[] = [
 }, {
   name: 'Attentio',
   tone: 'light-ink',
-  tile: 'dark',
   logo: '/lovable-uploads/attentio-logo.png',
   url: 'http://attentio.ai/'
 }, {
@@ -85,7 +82,6 @@ const existingLogos: CompanyLogo[] = [
 }, {
   name: 'Gullview Tech',
   tone: 'light-ink',
-  tile: 'dark',
   logo: '/lovable-uploads/gullview-logo.png?v=2',
   url: 'https://www.gullviewtech.com/'
 }, {
@@ -107,13 +103,11 @@ const existingLogos: CompanyLogo[] = [
 }, {
   name: 'Monkey Island',
   tone: 'light-ink',
-  tile: 'dark',
   logo: '/lovable-uploads/monkeyisland-logo.png?v=2',
   url: 'https://www.monkeyislandventures.com/'
 }, {
   name: 'Ovul',
   tone: 'light-ink',
-  tile: 'dark',
   logo: '/lovable-uploads/ovul-logo.png',
   url: 'https://ovul.ai/'
 }, {
@@ -192,7 +186,7 @@ const existingLogos: CompanyLogo[] = [
 
 /**
  * Speaker companies that are not already in `existingLogos`.
- * A logo is used when a real mark was available. Otherwise the carousel draws a wordmark.
+ * A logo is used when a real mark was available. Otherwise the carousel draws the name.
  */
 export const speakerStageLogos: CompanyLogo[] = [
   { name: '3M', logo: '/logos/3m.svg', url: 'https://www.3m.com/' },
@@ -203,32 +197,31 @@ export const speakerStageLogos: CompanyLogo[] = [
   { name: 'Chickensoft', logo: '/logos/chickensoft.png', url: 'https://chickensoft.games/' },
   { name: 'Cloudflare', logo: '/logos/cloudflare.svg', url: 'https://www.cloudflare.com/' },
   { name: 'Custom AI Studio', logo: '/logos/custom-ai-studio.png', url: 'https://www.customaistudio.io/' },
-  { name: 'Deep Render' },
+  { name: 'Deep Render', logo: '/logos/deep-render.png', url: 'https://deeprender.ai/' },
   { name: 'Famelia', logo: '/logos/famelia.svg', url: 'https://famelia.app/' },
   { name: 'Invene', logo: '/logos/invene.png', url: 'https://www.invene.com/' },
   { name: 'Luminal', logo: '/logos/luminal.svg', url: 'https://luminal.com/' },
   { name: 'Mayo Clinic', logo: '/logos/mayo-clinic.svg', url: 'https://www.mayoclinic.org/' },
-  { name: 'Memory Atlas' },
+  { name: 'Memory Atlas', url: 'https://devpost.com/software/memory-atlas' },
   { name: 'NASA', logo: '/logos/nasa.svg', url: 'https://www.nasa.gov/' },
   { name: 'Nerdery', logo: '/logos/nerdery.svg', url: 'https://www.nerdery.com/' },
   { name: 'Omega Point', logo: '/logos/omega-point.png', url: 'https://www.ompnt.com/' },
-  { name: 'Onni Health' },
+  { name: 'Onni Health', url: 'https://www.linkedin.com/company/nimblehealthh' },
   { name: 'Optum', logo: '/logos/optum.svg', url: 'https://www.optum.com/' },
-  { name: 'Ovicounter AI' },
-  { name: 'Parallax' },
+  { name: 'Ovicounter AI', logo: '/logos/ovicounter.svg', url: 'https://ovicounter.ai/' },
+  { name: 'Parallax', logo: '/logos/parallax.png', url: 'https://www.getparallax.com/', tone: 'dark-bg' },
   { name: 'Quickly' },
   { name: 'Quinoa', logo: '/lovable-uploads/quinoa-logo.png', url: 'https://quinoa.health' },
-  { name: 'Rosenblatt AI' },
-  { name: 'Satori' },
+  { name: 'Rosenblatt AI', logo: '/logos/rosenblatt.svg', url: 'https://www.rosenblatt.ai/', tone: 'light-ink' },
+  { name: 'Satori', logo: '/logos/satori.png', url: 'https://satori.sh/' },
   { name: 'Simple Lead AI', logo: '/logos/simple-lead.png', url: 'https://siimplelead.com/' },
   { name: 'smallest.ai', logo: '/logos/smallest.png', url: 'https://smallest.ai/' },
-  { name: 'Talkition' },
   { name: 'Target', logo: '/logos/target.png', url: 'https://www.target.com/' },
   { name: 'Tortus', logo: '/logos/tortus.png', url: 'https://tortus.ai/' },
   { name: 'UW-River Falls', logo: '/logos/uwrf.png', url: 'https://www.uwrf.edu/' },
   { name: 'VelociTx', logo: '/logos/velocitx.png', url: 'https://velocitx.com/' },
   { name: 'Very Good Ventures', logo: '/logos/very-good-ventures.svg', url: 'https://verygood.ventures/' },
-  { name: 'Wrapped' },
+  { name: 'Wrapped', logo: '/logos/wrappt.png', url: 'https://wrappt.ai/', tone: 'dark-bg' },
 ];
 
 /** Existing marks plus every speaker company that was not already in the carousel. */

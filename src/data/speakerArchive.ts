@@ -279,7 +279,7 @@ const people = {
     name: 'Andrew Dahlberg',
     linkedin: 'https://www.linkedin.com/in/andrewdahlberg/',
     photo: '/speakers/andrew-dahlberg.webp',
-    companies: ['Talkition'],
+    companies: ['Talknician'],
   },
   blaiseThomas: {
     id: 'blaise-thomas',
@@ -673,7 +673,7 @@ export const pastEvents: PastEventRecord[] = [
     speakers: [
       line(people.urbasEkka, 'Hacker Sidekick'),
       line(people.sarahAntier, 'Univ. Paris-Saclay'),
-      line(people.andrewDahlberg, 'Talkition'),
+      line(people.andrewDahlberg, 'Talknician'),
     ],
   },
   {
