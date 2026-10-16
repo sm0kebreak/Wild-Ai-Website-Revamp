@@ -363,7 +363,10 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     'href',
     'https://www.linkedin.com/in/muhammad-shahid-moandco/',
   );
-  await expect(page.getByRole('link', { name: /Muhammad Shahid/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Muhammad Shahid/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/muhammad-shahid.jpg',
+  );
   await expect(page.locator('ul.grid > li p.font-display')).toHaveText([
     'Anushka Bhide',
     'Ben Long',
