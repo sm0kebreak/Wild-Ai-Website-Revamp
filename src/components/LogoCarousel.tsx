@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import LogoRail, { type LogoRailHandle } from '@/components/motion/LogoRail';
+import LogoRail from '@/components/motion/LogoRail';
 import Reveal from '@/components/motion/Reveal';
 import { logoFit, logos, type CompanyLogo } from '@/data/companyLogos';
 import { speakerCompanyCount } from '@/data/speakerArchive';
@@ -102,13 +101,6 @@ const LogoFilters = () => {
 /** Two counter-scrolling rows of companies represented at Wild AI events. */
 const LogoCarousel = () => {
   const [showAll, setShowAll] = useState(false);
-  const firstRail = useRef<LogoRailHandle>(null);
-  const secondRail = useRef<LogoRailHandle>(null);
-
-  const nudge = (direction: -1 | 1) => {
-    firstRail.current?.nudge(direction);
-    secondRail.current?.nudge(direction);
-  };
 
   return (
     <section id="companies" className="min-w-0 py-4 md:py-6">
@@ -141,7 +133,6 @@ const LogoCarousel = () => {
               ) : (
                 <>
                   <LogoRail
-                    ref={firstRail}
                     duration={70}
                     label="Company logos, first row. Scroll horizontally to browse."
                   >
@@ -151,7 +142,6 @@ const LogoCarousel = () => {
                   </LogoRail>
                   <div className="mx-5 h-px bg-border/40 md:mx-8" />
                   <LogoRail
-                    ref={secondRail}
                     duration={82}
                     reverse
                     label="Company logos, second row. Scroll horizontally to browse."
@@ -162,22 +152,6 @@ const LogoCarousel = () => {
                   </LogoRail>
                   <div className="logo-fade logo-fade-left" aria-hidden="true" />
                   <div className="logo-fade logo-fade-right" aria-hidden="true" />
-                  <button
-                    type="button"
-                    className="absolute left-2 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 text-foreground shadow-sm"
-                    aria-label="Show previous logos"
-                    onClick={() => nudge(-1)}
-                  >
-                    <ChevronLeft className="h-5 w-5" aria-hidden="true" />
-                  </button>
-                  <button
-                    type="button"
-                    className="absolute right-2 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 text-foreground shadow-sm"
-                    aria-label="Show next logos"
-                    onClick={() => nudge(1)}
-                  >
-                    <ChevronRight className="h-5 w-5" aria-hidden="true" />
-                  </button>
                 </>
               )}
             </div>

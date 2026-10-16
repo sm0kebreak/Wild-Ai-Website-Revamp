@@ -95,7 +95,11 @@ const PastEventsStrip = ({
         <div className="mb-3 flex items-end justify-between gap-4">
           <div>
             <p className="eyebrow mb-2">Archive</p>
-            <h2 className="font-display text-xl font-semibold tracking-tight md:text-2xl">Past events</h2>
+            {stacks ? (
+              <h2 className="font-display text-xl font-semibold tracking-tight md:text-2xl">Past events</h2>
+            ) : (
+              <h1 className="font-display text-xl font-semibold tracking-tight md:text-2xl">Past events</h1>
+            )}
           </div>
           {typeof limit === 'number' && pastMeetups.length > limit && (
             <Link to="/past-events" className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
