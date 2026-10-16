@@ -354,11 +354,16 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   );
   await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveCount(0);
   await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: /Micah P\./ })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: /Micah Peoples/ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/micahpeoples/',
   );
-  await expect(page.getByRole('link', { name: /Micah P\./ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Muhammad Shahid/ })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/muhammad-shahid-moandco/',
+  );
+  await expect(page.getByRole('link', { name: /Muhammad Shahid/ }).locator('img')).toHaveCount(0);
   await expect(page.locator('ul.grid > li p.font-display')).toHaveText([
     'Anushka Bhide',
     'Ben Long',
@@ -368,9 +373,10 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     'Kate Kuehl',
     'Maanas Taneja',
     'Matthew Osborn',
-    'Micah P.',
+    'Micah Peoples',
+    'Muhammad Shahid',
   ]);
-  await expect(page.getByText('Organizer', { exact: true })).toHaveCount(9);
+  await expect(page.getByText('Organizer', { exact: true })).toHaveCount(10);
   await expect(page.locator('body')).not.toContainText(/co-?founder/i);
 
   await openPath(page, '/');
