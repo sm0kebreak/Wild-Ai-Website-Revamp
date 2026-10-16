@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Upload, CheckCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { submitLead } from '@/lib/submitLead';
 
 const ShowAndTellForm = () => {
   const { toast } = useToast();
@@ -40,19 +41,33 @@ const ShowAndTellForm = () => {
     setSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke('submit-show-and-tell', {
-        body: {
+      await submitLead(
+        {
+          form: 'show-and-tell',
           name: form.name,
-          projectName: form.projectName,
-          description: form.description,
           email: form.email,
-          linkedinUrl: form.linkedinUrl,
-          imageBase64: preview,
-          imageName: imageFile?.name || 'image.png',
+          payload: {
+            projectName: form.projectName,
+            description: form.description,
+            linkedinUrl: form.linkedinUrl,
+            imageName: imageFile?.name || null,
+          },
         },
-      });
-
-      if (error) throw error;
+        async () => {
+          const { error } = await supabase.functions.invoke('submit-show-and-tell', {
+            body: {
+              name: form.name,
+              projectName: form.projectName,
+              description: form.description,
+              email: form.email,
+              linkedinUrl: form.linkedinUrl,
+              imageBase64: preview,
+              imageName: imageFile?.name || 'image.png',
+            },
+          });
+          return !error;
+        },
+      );
 
       setSubmitted(true);
       toast({ title: "You're in!", description: "We'll save a spot for your Show & Tell." });

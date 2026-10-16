@@ -9,7 +9,8 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "audit:preview": "node scripts/exhaustive-audit.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -43,6 +44,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@supabase/supabase-js": "^2.95.3",
     "@tanstack/react-query": "^5.56.2",
+    "@vercel/blob": "^2.8.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

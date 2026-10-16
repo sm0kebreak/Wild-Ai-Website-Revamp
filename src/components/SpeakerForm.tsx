@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
+import { submitLead } from '@/lib/submitLead';
 import { toast } from 'sonner';
 import { Loader2, CheckCircle2, Upload } from 'lucide-react';
 
@@ -42,16 +43,32 @@ const SpeakerForm = () => {
         image_base64 = await fileToBase64(imageFile);
         image_name = imageFile.name;
       }
-      const { data, error } = await supabase.functions.invoke('submit-speaker', {
-        body: { ...form, image_base64, image_name },
-      });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
+      const result = await submitLead(
+        {
+          form: 'speaker',
+          name: form.name,
+          email: form.email,
+          payload: {
+            phone: form.phone,
+            linkedin_url: form.linkedin_url,
+            description: form.description,
+            what_building: form.what_building,
+            image_name,
+          },
+        },
+        async () => {
+          const { data, error } = await supabase.functions.invoke('submit-speaker', {
+            body: { ...form, image_base64, image_name },
+          });
+          if (error || (data as { error?: string })?.error) return false;
+          return true;
+        },
+      );
       setDone(true);
-      toast.success('Application submitted!');
-    } catch (err: any) {
+      toast.success(result.emailed ? 'Application submitted. The organizers were emailed.' : 'Application submitted!');
+    } catch (err) {
       console.error(err);
-      toast.error(err?.message || 'Submission failed');
+      toast.error(err instanceof Error ? err.message : 'Submission failed');
     } finally {
       setSubmitting(false);
     }
@@ -63,8 +80,7 @@ const SpeakerForm = () => {
         <CheckCircle2 className="w-14 h-14 text-accent mb-4" />
         <h3 className="font-display text-xl font-semibold mb-3">Application received</h3>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Thanks for applying to speak at Wild AI. We&apos;ve sent a confirmation to your email and
-          the team will review your application shortly.
+          Thanks for applying to speak at Wild AI. The team has your application and will review it shortly.
         </p>
       </div>
     );

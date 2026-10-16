@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
+import { legacyInsert, submitLead } from '@/lib/submitLead';
 import { CheckCircle2, Handshake } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 
@@ -51,17 +51,30 @@ const Sponsor = () => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-    const { error: err } = await supabase.from('sponsor_leads').insert({
-      company: form.company,
-      name: form.name,
-      email: form.email,
-      tier: form.tier || null,
-      message: form.message || null,
-    });
-    if (err) {
-      setError('Something went wrong - please email us directly instead.');
-    } else {
+    try {
+      await submitLead(
+        {
+          form: 'sponsor',
+          name: form.name,
+          email: form.email,
+          payload: {
+            company: form.company,
+            tier: form.tier || null,
+            message: form.message || null,
+          },
+        },
+        () =>
+          legacyInsert('sponsor_leads', {
+            company: form.company,
+            name: form.name,
+            email: form.email,
+            tier: form.tier || null,
+            message: form.message || null,
+          }),
+      );
       setSubmitted(true);
+    } catch {
+      setError('Something went wrong - please email us directly instead.');
     }
     setSubmitting(false);
   };

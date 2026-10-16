@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
+import { legacyInsert, submitLead } from '@/lib/submitLead';
 import { useChapters } from '@/hooks/useChapters';
 import PageHero from '@/components/PageHero';
 import { CheckCircle2, Mail, Sparkles, CalendarDays } from 'lucide-react';
@@ -28,17 +28,25 @@ const Join = () => {
     e.preventDefault();
     setStatus('submitting');
     const chapter = (chapters ?? []).find((c) => c.slug === city);
-    const { error } = await supabase.from('chapter_subscribers').insert({
-      email: email.toLowerCase().trim(),
-      source: 'join',
-      chapter_id: chapter?.id ?? null,
-      city_requested: city || null,
-    });
-    // 23505 = already subscribed with this email + source; treat as success
-    if (error && error.code !== '23505') {
-      setStatus('error');
-    } else {
+    const normalized = email.toLowerCase().trim();
+    try {
+      await submitLead(
+        {
+          form: 'email',
+          email: normalized,
+          payload: { source: 'join', city: city || null, chapterId: chapter?.id ?? null },
+        },
+        () =>
+          legacyInsert('chapter_subscribers', {
+            email: normalized,
+            source: 'join',
+            chapter_id: chapter?.id ?? null,
+            city_requested: city || null,
+          }),
+      );
       setStatus('done');
+    } catch {
+      setStatus('error');
     }
   };
 

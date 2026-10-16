@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { legacyInsert, submitLead } from '@/lib/submitLead';
 import { Loader2, CheckCircle2, Mail } from 'lucide-react';
 
 interface EmailCaptureProps {
@@ -39,20 +39,26 @@ const EmailCapture = ({
     }
     setSubmitting(true);
     try {
-      const { error } = await supabase.from('chapter_subscribers').insert({
-        email: email.trim().toLowerCase(),
-        chapter_id: chapterId ?? null,
-        source,
-        city_requested: cityRequested ?? null,
-      });
-      if (error && error.code !== '23505') throw error;
-      setDone(true);
-      toast.success(
-        error?.code === '23505' ? "You're already on the list!" : "You're on the list!"
+      const normalized = email.trim().toLowerCase();
+      await submitLead(
+        {
+          form: 'email',
+          email: normalized,
+          payload: { source, chapterId: chapterId ?? null, cityRequested: cityRequested ?? null },
+        },
+        () =>
+          legacyInsert('chapter_subscribers', {
+            email: normalized,
+            chapter_id: chapterId ?? null,
+            source,
+            city_requested: cityRequested ?? null,
+          }),
       );
-    } catch (err: any) {
+      setDone(true);
+      toast.success("You're on the list!");
+    } catch (err) {
       console.error(err);
-      toast.error(err?.message || 'Signup failed - please try again');
+      toast.error(err instanceof Error ? err.message : 'Signup failed - please try again');
     } finally {
       setSubmitting(false);
     }

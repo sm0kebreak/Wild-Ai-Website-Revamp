@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { supabase } from '@/integrations/supabase/client';
+import { legacyInsert, submitLead } from '@/lib/submitLead';
 import { useChapters } from '@/hooks/useChapters';
 import { CheckCircle2, Rocket, Users, Map } from 'lucide-react';
 import PageHero from '@/components/PageHero';
@@ -23,17 +23,30 @@ const StartAChapter = () => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-    const { error: err } = await supabase.from('chapter_applications').insert({
-      city: form.city,
-      name: form.name,
-      email: form.email,
-      background: form.background || null,
-      message: form.message || null,
-    });
-    if (err) {
-      setError('Something went wrong - please try again in a moment.');
-    } else {
+    try {
+      await submitLead(
+        {
+          form: 'chapter',
+          name: form.name,
+          email: form.email,
+          payload: {
+            city: form.city,
+            background: form.background || null,
+            message: form.message || null,
+          },
+        },
+        () =>
+          legacyInsert('chapter_applications', {
+            city: form.city,
+            name: form.name,
+            email: form.email,
+            background: form.background || null,
+            message: form.message || null,
+          }),
+      );
       setSubmitted(true);
+    } catch {
+      setError('Something went wrong - please try again in a moment.');
     }
     setSubmitting(false);
   };

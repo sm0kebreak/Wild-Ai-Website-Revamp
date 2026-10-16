@@ -282,6 +282,13 @@ test('forms validate, and a mocked sponsor submit succeeds', async ({ page }) =>
     }
     await route.fulfill({ status: 200, contentType: 'application/json', body: 'null' });
   });
+  await page.route('**/api/lead', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true, id: 'test', emailed: false }),
+    });
+  });
   await page.locator('#sponsor-company').fill('Acme AI');
   await page.locator('#sponsor-name').fill('Ada Lovelace');
   await page.locator('#sponsor-email').fill('ada@acme.ai');
