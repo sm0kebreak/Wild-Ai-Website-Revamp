@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { legacyInsert, submitLead } from '@/lib/submitLead';
+import { submitLead } from '@/lib/submitLead';
 import { Loader2, CheckCircle2, Mail } from 'lucide-react';
 
 interface EmailCaptureProps {
@@ -16,8 +16,7 @@ interface EmailCaptureProps {
 }
 
 /**
- * Reusable email capture form. Writes to the chapter_subscribers table.
- * Duplicate emails for the same source are treated as already subscribed.
+ * Reusable email capture form. Posts to /api/lead, which stores the address privately.
  */
 const EmailCapture = ({
   source,
@@ -40,20 +39,11 @@ const EmailCapture = ({
     setSubmitting(true);
     try {
       const normalized = email.trim().toLowerCase();
-      await submitLead(
-        {
-          form: 'email',
-          email: normalized,
-          payload: { source, chapterId: chapterId ?? null, cityRequested: cityRequested ?? null },
-        },
-        () =>
-          legacyInsert('chapter_subscribers', {
-            email: normalized,
-            chapter_id: chapterId ?? null,
-            source,
-            city_requested: cityRequested ?? null,
-          }),
-      );
+      await submitLead({
+        form: 'email',
+        email: normalized,
+        payload: { source, chapterId: chapterId ?? null, cityRequested: cityRequested ?? null },
+      });
       setDone(true);
       toast.success("You're on the list!");
     } catch (err) {

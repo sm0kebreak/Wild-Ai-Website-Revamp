@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { legacyInsert, submitLead } from '@/lib/submitLead';
+import { submitLead } from '@/lib/submitLead';
 import { CheckCircle2, Handshake } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 
@@ -22,24 +22,15 @@ const Sponsor = () => {
     setSubmitting(true);
     setError(null);
     try {
-      await submitLead(
-        {
-          form: 'sponsor',
-          name: form.name,
-          email: form.email,
-          payload: {
-            company: form.company,
-            message: form.message || null,
-          },
+      await submitLead({
+        form: 'sponsor',
+        name: form.name,
+        email: form.email,
+        payload: {
+          company: form.company,
+          message: form.message || null,
         },
-        () =>
-          legacyInsert('sponsor_leads', {
-            company: form.company,
-            name: form.name,
-            email: form.email,
-            message: form.message || null,
-          }),
-      );
+      });
       setSubmitted(true);
     } catch {
       setError('Something went wrong - please email us directly instead.');

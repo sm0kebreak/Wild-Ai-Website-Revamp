@@ -3,16 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { supabase } from '@/integrations/supabase/client';
 import { submitLead } from '@/lib/submitLead';
 import { DEMO_SIGNUP } from '@/lib/meetupSchedule';
 import { toast } from 'sonner';
-import { Loader2, CheckCircle2, Upload } from 'lucide-react';
+import { Loader2, CheckCircle2 } from 'lucide-react';
 
 const SpeakerForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     name: '', email: '', phone: '', linkedin_url: '',
     description: '', what_building: '',
@@ -20,53 +18,28 @@ const SpeakerForm = () => {
 
   const update = (k: string, v: string) => setForm((p) => ({ ...p, [k]: v }));
 
-  const fileToBase64 = (file: File) =>
-    new Promise<string>((resolve, reject) => {
-      const r = new FileReader();
-      r.onload = () => resolve(r.result as string);
-      r.onerror = reject;
-      r.readAsDataURL(file);
-    });
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim()) return toast.error('Name required');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return toast.error('Valid email required');
     if (!form.description.trim()) return toast.error('Description required');
     if (!form.what_building.trim()) return toast.error("Tell us what you're building");
-    if (imageFile && imageFile.size > 5 * 1024 * 1024) return toast.error('Image must be under 5 MB');
 
     setSubmitting(true);
     try {
-      let image_base64: string | undefined;
-      let image_name: string | undefined;
-      if (imageFile) {
-        image_base64 = await fileToBase64(imageFile);
-        image_name = imageFile.name;
-      }
-      const result = await submitLead(
-        {
-          form: 'speaker',
-          name: form.name,
-          email: form.email,
-          payload: {
-            phone: form.phone,
-            linkedin_url: form.linkedin_url,
-            description: form.description,
-            what_building: form.what_building,
-            image_name,
-          },
+      await submitLead({
+        form: 'speaker',
+        name: form.name,
+        email: form.email,
+        payload: {
+          phone: form.phone,
+          linkedin_url: form.linkedin_url,
+          description: form.description,
+          what_building: form.what_building,
         },
-        async () => {
-          const { data, error } = await supabase.functions.invoke('submit-speaker', {
-            body: { ...form, image_base64, image_name },
-          });
-          if (error || (data as { error?: string })?.error) return false;
-          return true;
-        },
-      );
+      });
       setDone(true);
-      toast.success(result.emailed ? 'Jake was notified.' : 'Jake has your application.');
+      toast.success('Jake has your application.');
     } catch (err) {
       console.error(err);
       toast.error(err instanceof Error ? err.message : 'Submission failed');
@@ -129,22 +102,6 @@ const SpeakerForm = () => {
         <Label htmlFor="building">What are you building? *</Label>
         <Textarea id="building" value={form.what_building} onChange={(e) => update('what_building', e.target.value)} rows={4} required maxLength={5000}
           placeholder="The project, idea, or experiment you'd like to share." />
-      </div>
-
-      <div>
-        <Label htmlFor="image">Photo of you</Label>
-        <div className="flex items-center gap-3 mt-1">
-          <label className="flex items-center gap-2 px-4 py-2 bg-background border border-border rounded-md cursor-pointer hover:bg-secondary text-sm">
-            <Upload className="w-4 h-4" />
-            <span>{imageFile ? imageFile.name : 'Choose file'}</span>
-            <input id="image" type="file" accept="image/*" className="hidden"
-              onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
-          </label>
-          {imageFile && (
-            <Button type="button" variant="ghost" size="sm" onClick={() => setImageFile(null)}>Clear</Button>
-          )}
-        </div>
-        <p className="text-xs text-muted-foreground mt-1">Optional. Max 5 MB.</p>
       </div>
 
       <Button type="submit" disabled={submitting} className="mt-auto w-full py-6">

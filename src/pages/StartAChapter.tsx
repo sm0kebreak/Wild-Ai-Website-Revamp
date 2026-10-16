@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { legacyInsert, submitLead } from '@/lib/submitLead';
+import { submitLead } from '@/lib/submitLead';
 import { useChapters } from '@/hooks/useChapters';
 import { CheckCircle2, Rocket, Users, Map } from 'lucide-react';
 import PageHero from '@/components/PageHero';
@@ -24,26 +24,16 @@ const StartAChapter = () => {
     setSubmitting(true);
     setError(null);
     try {
-      await submitLead(
-        {
-          form: 'chapter',
-          name: form.name,
-          email: form.email,
-          payload: {
-            city: form.city,
-            background: form.background || null,
-            message: form.message || null,
-          },
+      await submitLead({
+        form: 'chapter',
+        name: form.name,
+        email: form.email,
+        payload: {
+          city: form.city,
+          background: form.background || null,
+          message: form.message || null,
         },
-        () =>
-          legacyInsert('chapter_applications', {
-            city: form.city,
-            name: form.name,
-            email: form.email,
-            background: form.background || null,
-            message: form.message || null,
-          }),
-      );
+      });
       setSubmitted(true);
     } catch {
       setError('Something went wrong - please try again in a moment.');

@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { legacyInsert, submitLead } from '@/lib/submitLead';
+import { submitLead } from '@/lib/submitLead';
 import { useChapters } from '@/hooks/useChapters';
 import PageHero from '@/components/PageHero';
 import { CheckCircle2, Mail, Sparkles, CalendarDays } from 'lucide-react';
@@ -30,20 +30,11 @@ const Join = () => {
     const chapter = (chapters ?? []).find((c) => c.slug === city);
     const normalized = email.toLowerCase().trim();
     try {
-      await submitLead(
-        {
-          form: 'email',
-          email: normalized,
-          payload: { source: 'join', city: city || null, chapterId: chapter?.id ?? null },
-        },
-        () =>
-          legacyInsert('chapter_subscribers', {
-            email: normalized,
-            source: 'join',
-            chapter_id: chapter?.id ?? null,
-            city_requested: city || null,
-          }),
-      );
+      await submitLead({
+        form: 'email',
+        email: normalized,
+        payload: { source: 'join', city: city || null, chapterId: chapter?.id ?? null },
+      });
       setStatus('done');
     } catch {
       setStatus('error');
