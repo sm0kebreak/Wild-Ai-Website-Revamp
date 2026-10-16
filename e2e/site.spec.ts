@@ -2,6 +2,8 @@ import { expect, test, type Page } from '@playwright/test';
 
 const LUMA_EVENT = 'https://luma.com/50wo8gm8';
 const LUMA_CALENDAR = 'https://luma.com/wildai';
+const DEMO_LINE =
+  'Sign up to demo: 15 minutes on the mic. Demo to the room what you built, then take questions and feedback from the audience.';
 const LUMA_URLS = new Set([LUMA_EVENT, LUMA_CALENDAR]);
 
 const routes: { path: string; heading: RegExp; redirect?: string }[] = [
@@ -285,6 +287,60 @@ test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
   await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
   await expect(page.getByText(/first high schooler ever/i)).toBeVisible();
   await expect(page.getByRole('link', { name: 'Register' }).first()).toHaveAttribute('href', LUMA_EVENT);
+});
+
+test('Jake content: demo copy, sponsor price, team, and socials', async ({ page }) => {
+  await openPath(page, '/speak');
+  await expect(page.getByText(DEMO_LINE).first()).toBeVisible();
+  await expect(page.getByLabel('LinkedIn or X URL')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'PAST SPEAKERS' })).toHaveCount(0);
+  await expect(page.locator('body')).not.toContainText(/fire talks?|lightning talks?/i);
+
+  let posted: { form?: string; payload?: { linkedin_url?: string } } | null = null;
+  await page.route('**/api/lead', async (route) => {
+    posted = route.request().postDataJSON();
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true, id: 'test', emailed: false }),
+    });
+  });
+  await page.locator('#name').fill('Test Builder');
+  await page.locator('#email').fill('builder@example.com');
+  await page.locator('#linkedin').fill('https://x.com/example');
+  await page.locator('#description').fill('Builds demos.');
+  await page.locator('#building').fill('A demo');
+  await page.getByRole('button', { name: 'Submit application' }).click();
+  await expect(page.getByText('Application received')).toBeVisible();
+  expect(posted?.form).toBe('speaker');
+  expect(posted?.payload?.linkedin_url).toBe('https://x.com/example');
+
+  await openPath(page, '/sponsor');
+  await expect(page.getByText('$500 per event').first()).toBeVisible();
+  await expect(page.locator('body')).not.toContainText(/free pass|sponsorship tier|placeholder pricing/i);
+
+  await openPath(page, '/about');
+  await expect(page.getByText('DayBlock Brewing')).toBeVisible();
+  await expect(page.getByText('Slides are banned')).toBeVisible();
+  await expect(page.getByRole('link', { name: /Anushka Bhide/ })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/anushka-b-9a253998/',
+  );
+  await expect(page.getByRole('link', { name: /Jake Brindley/ })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/jacob-brindley-452a44264/',
+  );
+  await expect(page.getByRole('link', { name: /Judd Larson/ })).toHaveCount(0);
+  await expect(page.getByText('Judd Larson')).toBeVisible();
+
+  await openPath(page, '/');
+  const meetupLinks = page.locator('footer').getByRole('link', { name: 'Wild AI on Meetup' });
+  await expect(meetupLinks).toHaveCount(2);
+  await expect(meetupLinks.first()).toHaveAttribute('href', 'https://www.meetup.com/wild-ai/');
+  await expect(meetupLinks.nth(1)).toHaveAttribute('href', 'https://www.meetup.com/wild-ai/');
+  const lumaLinks = page.locator('footer').getByRole('link', { name: 'Wild AI on Luma' });
+  await expect(lumaLinks.first()).toHaveAttribute('href', 'https://luma.com/wildai');
+  await expect(lumaLinks.nth(1)).toHaveAttribute('href', 'https://luma.com/wildai');
 });
 
 test('anchors scroll to the named section', async ({ page }) => {

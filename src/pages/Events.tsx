@@ -65,7 +65,7 @@ const Events = () => {
           eyebrow="On the calendar"
           icon={CalendarDays}
           title={<>Wild AI <span>events</span>.</>}
-          lede="Every gathering, every city - upcoming and archived."
+          lede="Every gathering, every city. 15-minute demos, no slides. All ages. Free. Register on Luma."
         />
         <div className="container mx-auto px-4 pt-12">
           {/* Filter bar */}

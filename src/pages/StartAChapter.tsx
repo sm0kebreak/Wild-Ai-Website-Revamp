@@ -79,7 +79,7 @@ const StartAChapter = () => {
             <div className="surface p-6 md:p-8">
               <h2 className="text-xl font-display font-semibold text-wildai-mint mb-4">WHAT YOU GET</h2>
               <ul className="space-y-4 text-muted-foreground">
-                <li className="flex items-start"><Users className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />A proven format: fire talks, demo nights, real networking</li>
+                <li className="flex items-start"><Users className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />A proven format: 15-minute demos, no slides, then networking</li>
                 <li className="flex items-start"><Map className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />Brand, event templates, and a page on this site for your city</li>
                 <li className="flex items-start"><Users className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />A network of organizers who've done it before, on call</li>
               </ul>

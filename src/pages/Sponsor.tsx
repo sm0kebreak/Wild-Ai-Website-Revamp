@@ -7,42 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { legacyInsert, submitLead } from '@/lib/submitLead';
 import { CheckCircle2, Handshake } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 
-const tiers = [
-  {
-    name: 'COMMUNITY',
-    price: '$500 / event',
-    perks: ['Logo on event page', 'Shoutout from the podium', '2 free passes'],
-  },
-  {
-    name: 'SUPPORTING',
-    price: '$1,500 / event',
-    perks: ['Everything in Community', 'Booth table at the venue', 'Logo in recap emails'],
-  },
-  {
-    name: 'HEADLINE',
-    price: 'Custom',
-    perks: [
-      'Everything in Supporting',
-      'Named demo-night sponsor',
-      'Dedicated recruitment slot',
-      'City-wide or network-wide exclusivity',
-    ],
-  },
-];
-
 const Sponsor = () => {
-  const [form, setForm] = useState({ company: '', name: '', email: '', tier: '', message: '' });
+  const [form, setForm] = useState({ company: '', name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -59,7 +29,6 @@ const Sponsor = () => {
           email: form.email,
           payload: {
             company: form.company,
-            tier: form.tier || null,
             message: form.message || null,
           },
         },
@@ -68,7 +37,6 @@ const Sponsor = () => {
             company: form.company,
             name: form.name,
             email: form.email,
-            tier: form.tier || null,
             message: form.message || null,
           }),
       );
@@ -112,28 +80,9 @@ const Sponsor = () => {
             </ul>
           </div>
 
-          {/* Tiers */}
-          <div className="max-w-4xl mx-auto mb-16">
-            <h2 className="section-title text-center">SPONSORSHIP TIERS</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {tiers.map((t) => (
-                <div key={t.name} className="surface p-6 flex flex-col">
-                  <h3 className="text-lg font-display font-semibold text-wildai-mint mb-1">{t.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">{t.price}</p>
-                  <ul className="space-y-2 text-sm text-muted-foreground flex-grow">
-                    {t.perks.map((p) => (
-                      <li key={p} className="flex items-start">
-                        <CheckCircle2 className="w-4 h-4 text-wildai-mint mr-2 mt-0.5 flex-shrink-0" />
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <p className="text-center text-xs text-muted-foreground mt-4">
-              Placeholder pricing - final tiers are confirmed with sponsors directly.
-            </p>
+          <div className="max-w-xl mx-auto mb-16 text-center">
+            <h2 className="section-title">SPONSORSHIP</h2>
+            <p className="font-display text-4xl font-semibold text-wildai-mint">$500 per event</p>
           </div>
 
           {/* Sponsors + photos */}
@@ -144,9 +93,9 @@ const Sponsor = () => {
 
           {/* Lead form */}
           <div className="max-w-xl mx-auto">
-            <h2 className="section-title text-center">GET THE SPONSOR DECK</h2>
+            <h2 className="section-title text-center">SPONSOR AN EVENT</h2>
             <p className="text-center text-muted-foreground mb-8">
-              Tell us who you are and we'll send pricing, audience data, and available dates.
+              Sponsorship is $500 per event. Tell us about your company and we will follow up.
             </p>
             {submitted ? (
               <div className="surface p-6 md:p-8 text-center">
@@ -190,20 +139,6 @@ const Sponsor = () => {
                     placeholder="jane@acme.ai"
                     className="bg-surface-deep/70"
                   />
-                </div>
-                <div className="space-y-2">
-                  <Label>Tier of interest</Label>
-                  <Select value={form.tier} onValueChange={(v) => setForm({ ...form, tier: v })}>
-                    <SelectTrigger className="bg-surface-deep/70">
-                      <SelectValue placeholder="Choose a tier (optional)" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="community">Community</SelectItem>
-                      <SelectItem value="supporting">Supporting</SelectItem>
-                      <SelectItem value="headline">Headline</SelectItem>
-                      <SelectItem value="unsure">Not sure yet</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="sponsor-message">Message</Label>

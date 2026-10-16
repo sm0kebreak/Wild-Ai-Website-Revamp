@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Mic2, Handshake } from 'lucide-react';
+import { DEMO_SIGNUP } from '@/lib/meetupSchedule';
 
 const actions = [
   {
     key: 'demo',
     kicker: 'Demo',
     title: 'Sign up to demo',
-    pitch: 'Five minutes on the mic. Show the room what you built.',
+    pitch: DEMO_SIGNUP,
     href: '/speak',
     cta: 'Sign up to demo',
     icon: Mic2,

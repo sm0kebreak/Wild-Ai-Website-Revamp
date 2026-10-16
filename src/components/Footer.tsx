@@ -31,6 +31,8 @@ const Footer = () => {
               />
             </div>
 
+            {/* TODO: Instagram. No verified Minneapolis Wild AI meetup account was found.
+                @wildaiapp belongs to a different company (wild.ai). Do not guess a handle. */}
             <div className="flex space-x-4">
               <a
                 href="https://www.linkedin.com/company/wild-ai"
@@ -40,6 +42,34 @@ const Footer = () => {
                 className="w-10 h-10 rounded-md border border-border bg-background flex items-center justify-center hover:border-primary transition-colors"
               >
                 <Linkedin className="w-5 h-5 text-foreground" />
+              </a>
+              <a
+                href="https://www.meetup.com/wild-ai/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Wild AI on Meetup"
+                className="w-10 h-10 rounded-md border border-border bg-background flex items-center justify-center hover:border-primary transition-colors"
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5 text-foreground" aria-hidden="true">
+                  <path
+                    fill="currentColor"
+                    d="M7.2 16.8 4.2 8.4h2.2l1.9 5.4 1.9-5.4h2.1l-3 8.4H7.2zm6.6 0V10.7l-2.1 2.6h-.2l.2-2.6h1.8V7.6h2.4v3.1l2 3.1h.1l.1-3.1H20v9.2h-2.1l-2-3.1h-.1l.1 3.1h-2.1z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://luma.com/wildai"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Wild AI on Luma"
+                className="w-10 h-10 rounded-md border border-border bg-background flex items-center justify-center hover:border-primary transition-colors"
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5 text-foreground" aria-hidden="true">
+                  <path
+                    fill="currentColor"
+                    d="M12 2.8 13.7 8.6 19.6 10.4 13.7 12.2 12 18 10.3 12.2 4.4 10.4 10.3 8.6 12 2.8Zm6.2 11.2.7 2.3 2.3.7-2.3.7-.7 2.3-.7-2.3-2.3-.7 2.3-.7.7-2.3Z"
+                  />
+                </svg>
               </a>
               <a
                 href="https://www.youtube.com/@WildAI-US"
@@ -124,6 +154,16 @@ const Footer = () => {
             <div>
               <h4 className="signal-label mb-4">Community</h4>
               <ul className="space-y-2">
+                <li>
+                  <a
+                    href="https://www.meetup.com/wild-ai/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Wild AI on Meetup
+                  </a>
+                </li>
                 <li>
                   <a
                     href="https://luma.com/wildai"

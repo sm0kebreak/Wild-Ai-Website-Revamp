@@ -16,8 +16,12 @@ export const MEETUP_CADENCE = 'Third Monday of every month. Doors 6:00 PM CT, de
 /** One line for heroes and cards, so a doors time never hides the demo start. */
 export const MEETUP_TIME_LINE = 'Doors 6:00 PM · Demos 6:40 PM · Until 9 PM CT';
 
+/** Exact demo-signup line. Use this on every signup surface. */
+export const DEMO_SIGNUP =
+  'Sign up to demo: 15 minutes on the mic. Demo to the room what you built, then take questions and feedback from the audience.';
+
 export const meetupFormatCopy =
-  'Doors open at 6:00 PM CT. Live demos start at 6:40 PM. Networking until 9.';
+  'Doors open at 6:00 PM CT. Live demos start at 6:40 PM. Networking until 9. 15-minute demos, no slides. All ages. Free.';
 
 /** Wild AI Luma calendar. Nights without their own event page register here. */
 export const LUMA_CALENDAR_URL = 'https://luma.com/wildai';
@@ -57,12 +61,15 @@ export const confirmedMeetupDates = (from = new Date()): string[] => {
 
 export const meetupAgenda = [
   { time: '6:00 PM', label: 'Doors open (CT)' },
-  { time: '6:40 PM', label: 'Live demos start' },
+  {
+    time: '6:40 PM',
+    label: 'Demos start. About 10 minutes to demo, then about 5 minutes of questions and feedback. No slides.',
+  },
   { time: 'Until 9 PM', label: 'Networking' },
 ];
 
 export const meetupBlurb =
-  'Doors open at 6:00 PM CT at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Live demos start at 6:40 PM CT. Networking until 9.';
+  'Doors open at 6:00 PM CT at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Live demos start at 6:40 PM CT. Networking until 9. Each demo is 15 minutes with no slides: about 10 minutes to show what you built, then about 5 minutes of questions and feedback. All ages. Free.';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const toYmd = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Mic2, ArrowRight } from 'lucide-react';
+import { DEMO_SIGNUP } from '@/lib/meetupSchedule';
 import Reveal from '@/components/motion/Reveal';
 
 /** Full-width speaker recruitment band. */
@@ -21,8 +22,7 @@ const SpeakerCtaBand = () => (
               </p>
               <h2 className="section-title max-w-xl text-balance">Want to demo?</h2>
               <p className="section-lede">
-                We&apos;re always looking for builders, researchers, and tinkerers to give 5-minute,
-                no-slides fire talks at any chapter. Show the community what you&apos;re working on.
+                {DEMO_SIGNUP} No slides. All ages. Free.
               </p>
             </div>
             <Link to="/speak" className="flex-shrink-0">

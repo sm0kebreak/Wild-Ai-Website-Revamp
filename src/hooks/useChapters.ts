@@ -120,16 +120,19 @@ const mergePublicChapters = (remote: Chapter[]): Chapter[] =>
 const homeChapter = (chapter: Chapter | null | undefined): Chapter =>
   chapter ? withMeetupVenue(chapter) : withMeetupVenue(FALLBACK_HOME_CHAPTER);
 
-/** The recurring venue lives in code, so every surface agrees on it. */
-const withMeetupVenue = (chapter: Chapter): Chapter =>
-  chapter.slug === HOME_CHAPTER
-    ? {
-        ...chapter,
-        cadence: MEETUP_CADENCE,
-        venue_name: MEETUP_VENUE.name,
-        venue_address: MEETUP_VENUE.address,
-      }
-    : chapter;
+/** The recurring venue and format copy live in code, so every surface agrees on them. */
+const withMeetupVenue = (chapter: Chapter): Chapter => {
+  if (chapter.slug !== HOME_CHAPTER) return chapter;
+  const copy = PUBLIC_CHAPTER_RECORDS.find((item) => item.slug === HOME_CHAPTER);
+  return {
+    ...chapter,
+    cadence: MEETUP_CADENCE,
+    venue_name: MEETUP_VENUE.name,
+    venue_address: MEETUP_VENUE.address,
+    tagline: copy?.tagline ?? chapter.tagline,
+    about_text: copy?.about_text ?? chapter.about_text,
+  };
+};
 
 const CITY_SLUG: Record<string, string> = {
   Minneapolis: 'minneapolis',

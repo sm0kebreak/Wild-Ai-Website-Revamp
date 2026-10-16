@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { submitLead } from '@/lib/submitLead';
+import { DEMO_SIGNUP } from '@/lib/meetupSchedule';
 import { toast } from 'sonner';
 import { Loader2, CheckCircle2, Upload } from 'lucide-react';
 
@@ -92,7 +93,7 @@ const SpeakerForm = () => {
         <p className="kicker">Take the mic</p>
         <h3 className="mt-3 font-display text-xl font-semibold">Apply to speak</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Lightning talks are 5 minutes, no slides - just you, your work, and why it matters.
+          {DEMO_SIGNUP} No slides. All ages. Free.
         </p>
       </div>
 
@@ -113,8 +114,8 @@ const SpeakerForm = () => {
           <Input id="phone" type="tel" value={form.phone} onChange={(e) => update('phone', e.target.value)} maxLength={40} />
         </div>
         <div>
-          <Label htmlFor="linkedin">LinkedIn URL</Label>
-          <Input id="linkedin" type="url" value={form.linkedin_url} onChange={(e) => update('linkedin_url', e.target.value)} placeholder="https://linkedin.com/in/…" maxLength={500} />
+          <Label htmlFor="linkedin">LinkedIn or X URL</Label>
+          <Input id="linkedin" type="url" name="linkedin_url" value={form.linkedin_url} onChange={(e) => update('linkedin_url', e.target.value)} placeholder="https://linkedin.com/in/… or https://x.com/…" maxLength={500} />
         </div>
       </div>
 

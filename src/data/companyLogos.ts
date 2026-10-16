@@ -52,7 +52,7 @@ const existingLogos: CompanyLogo[] = [
   url: 'https://caparra.ai/'
 }, {
   name: 'Chosn',
-  logo: '/lovable-uploads/chosn-logo.png?v=3',
+  logo: '/lovable-uploads/chosn-logo.png?v=4',
   url: 'https://www.chosn.io/'
 }, {
   name: 'Crucible Energy',
@@ -117,7 +117,7 @@ const existingLogos: CompanyLogo[] = [
 }, {
   name: 'Rainmaker',
   tone: 'light-ink',
-  logo: '/lovable-uploads/rainmaker-logo.png?v=2',
+  logo: '/lovable-uploads/rainmaker-logo.png?v=4',
   url: 'https://www.rainmakergrows.com/'
 }, {
   name: 'Remarketspace',
@@ -137,7 +137,7 @@ const existingLogos: CompanyLogo[] = [
   url: 'https://www.stthomas.edu/'
 }, {
   name: 'Submitta',
-  logo: '/lovable-uploads/submitta-logo.png?v=3',
+  logo: '/lovable-uploads/submitta-logo.png?v=4',
   url: 'https://www.linkedin.com/company/submitta/'
 }, {
   name: 'Talknician',
@@ -168,7 +168,7 @@ const existingLogos: CompanyLogo[] = [
 }, {
   name: 'VirtualGo',
   tone: 'dark-bg',
-  logo: '/lovable-uploads/virtualgo-logo.png?v=3',
+  logo: '/lovable-uploads/virtualgo-logo.png?v=4',
   url: 'https://www.virtualgoreality.com/'
 }, {
   name: 'We Network Now',

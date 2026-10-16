@@ -76,8 +76,8 @@ const Hero = () => {
               className="rise mt-7 hidden max-w-xl text-base leading-relaxed text-muted-foreground md:block md:text-lg"
               style={{ ['--rise-delay' as string]: '720ms' }}
             >
-              Hear from local AI leaders. Network with researchers and builders. Share ideas that
-              shape what&apos;s next.
+              15-minute demos. No slides. All ages, and free. Doors at 6:00, demos at 6:40,
+              networking until 9.
             </p>
 
             <div

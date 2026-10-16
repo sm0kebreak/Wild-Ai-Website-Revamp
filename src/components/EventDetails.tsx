@@ -12,10 +12,10 @@ import {
 import { formatDate } from '@/hooks/useChapters';
 
 const expectations = [
-  'Cutting-edge AI discussions',
-  'Connect with local AI professionals',
-  'Share your projects and ideas',
-  'Casual, inclusive environment',
+  '15-minute demos. No slides.',
+  'About 10 minutes to demo, then about 5 minutes of questions and feedback.',
+  'Doors at 6:00, demos at 6:40, networking until 9.',
+  'All ages. Free. Register on Luma.',
 ];
 
 const scheduleIcons = [Clock, MessageSquare, Users];

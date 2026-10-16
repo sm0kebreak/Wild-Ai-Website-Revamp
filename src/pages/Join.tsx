@@ -68,7 +68,7 @@ const Join = () => {
         <PageHero
           eyebrow="Get on the list"
           title={<>Join <span>Wild AI</span>.</>}
-          lede="One email per event. No spam, no cringe - just fire-talk lineups, demo nights, and recaps from the builders around you."
+          lede="One email per event. Demo lineups and recaps from the builders around you. All ages. Free."
         />
         <div className="container mx-auto px-4 pt-14">
 
@@ -170,7 +170,7 @@ const Join = () => {
               <div className="bg-primary/25 surface p-6">
                 <h3 className="font-display font-semibold text-wildai-mint mb-1">WANT TO DO MORE THAN ATTEND?</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Fire talks and chapter organizing are open to everyone on the list.
+                  Demos and chapter organizing are open to everyone on the list.
                 </p>
                 <div className="flex gap-2 flex-wrap">
                   <Link to="/speak">

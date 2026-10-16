@@ -27,7 +27,7 @@ import {
   formatDate,
   formatTime,
 } from '@/hooks/useChapters';
-import { meetupAgenda, rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
+import { DEMO_SIGNUP, meetupAgenda, rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
 import { upcomingLineups } from '@/data/speakerArchive';
 import SpeakerRow from '@/components/SpeakerRow';
 
@@ -66,7 +66,7 @@ const ChapterPage = () => {
         <title>Wild AI {chapter.city} - AI meetup & demo nights</title>
         <meta
           name="description"
-          content={`Wild AI ${chapter.city}: ${chapter.tagline ?? 'monthly AI meetups with fire talks and networking'}. See the next event and RSVP.`}
+          content={`Wild AI ${chapter.city}: ${chapter.tagline ?? 'monthly AI meetups with 15-minute demos and networking'}. All ages. Free. See the next event and RSVP.`}
         />
         <meta property="og:title" content={`Wild AI ${chapter.city}`} />
         <meta property="og:type" content="website" />
@@ -173,9 +173,9 @@ const ChapterPage = () => {
                   ))
                 ) : (
                   <>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Time to settle in</li>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Live demos from builders</li>
-                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Networking</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> 15-minute demos, no slides</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> About 10 minutes to demo, then about 5 minutes of questions and feedback</li>
+                    <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> All ages. Free.</li>
                   </>
                 )}
               </ul>
@@ -303,7 +303,7 @@ const ChapterPage = () => {
               DEMO AT WILD AI {chapter.city.toUpperCase()}
             </h2>
             <p className="text-muted-foreground mb-5 max-w-xl mx-auto">
-              Have something to show? Submit to give a 5-minute fire talk at this chapter.
+              {DEMO_SIGNUP} No slides. All ages. Free.
             </p>
             <Link to="/speak">
               <Button >
