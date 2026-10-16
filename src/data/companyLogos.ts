@@ -1,13 +1,13 @@
 export interface CompanyLogo {
   name: string;
-  logo: string;
-  url: string;
-  /** 'dark-bg': light art on an opaque dark box. 'light-ink': light art on transparency. */
-  tone?: 'dark-bg' | 'deep-bg' | 'light-ink';
+  logo?: string;
+  url?: string;
+  /** 'dark-bg': light art on an opaque dark box. 'light-ink': light art on transparency. 'plain': a single-color mark drawn in bone. */
+  tone?: 'dark-bg' | 'deep-bg' | 'light-ink' | 'plain';
 }
 
-/** Companies represented at Wild AI events. */
-export const logos: CompanyLogo[] = [
+/** Logos already on the site before the speaker-company pass. */
+const existingLogos: CompanyLogo[] = [
 {
   name: 'Adile Diagnostic',
   logo: '/lovable-uploads/adile-logo.png',
@@ -183,3 +183,46 @@ export const logos: CompanyLogo[] = [
   logo: '/lovable-uploads/xcelenergy-logo.png',
   url: 'https://www.xcelenergy.com/'
 }];
+
+/**
+ * Speaker companies that are not already in `existingLogos`.
+ * A logo is used when a real mark was available. Otherwise the carousel draws a wordmark.
+ */
+export const speakerStageLogos: CompanyLogo[] = [
+  { name: '3M', logo: '/lovable-uploads/3m-logo.svg', url: 'https://www.3m.com/', tone: 'plain' },
+  { name: 'Agora', url: 'https://www.agora.io/' },
+  { name: 'Altruistic Intelligence' },
+  { name: 'CareSupport' },
+  { name: 'ChatLPO' },
+  { name: 'Chickensoft' },
+  { name: 'Cloudflare', logo: '/lovable-uploads/cloudflare-logo.svg', url: 'https://www.cloudflare.com/', tone: 'plain' },
+  { name: 'Custom AI Studio' },
+  { name: 'Deep Render' },
+  { name: 'Famelia' },
+  { name: 'Invene' },
+  { name: 'Luminal' },
+  { name: 'Mayo Clinic', logo: '/lovable-uploads/mayo-clinic-logo.svg', url: 'https://www.mayoclinic.org/', tone: 'plain' },
+  { name: 'Memory Atlas' },
+  { name: 'NASA', logo: '/lovable-uploads/nasa-logo.svg', url: 'https://www.nasa.gov/', tone: 'plain' },
+  { name: 'Nerdery', url: 'https://www.nerdery.com/' },
+  { name: 'Omega Point' },
+  { name: 'Onni Health' },
+  { name: 'Optum', url: 'https://www.optum.com/' },
+  { name: 'Ovicounter AI' },
+  { name: 'Parallax' },
+  { name: 'Quickly' },
+  { name: 'Rosenblatt AI' },
+  { name: 'Satori' },
+  { name: 'Simple Lead AI', url: 'https://siimplelead.com/' },
+  { name: 'smallest.ai', url: 'https://smallest.ai/' },
+  { name: 'Talkition' },
+  { name: 'Target', logo: '/lovable-uploads/target-logo.svg', url: 'https://www.target.com/', tone: 'plain' },
+  { name: 'Tortus' },
+  { name: 'UW-River Falls', url: 'https://www.uwrf.edu/' },
+  { name: 'VelociTx' },
+  { name: 'Very Good Ventures', url: 'https://verygood.ventures/' },
+  { name: 'Wrapped' },
+];
+
+/** Existing marks plus every speaker company that was not already in the carousel. */
+export const logos: CompanyLogo[] = [...existingLogos, ...speakerStageLogos];

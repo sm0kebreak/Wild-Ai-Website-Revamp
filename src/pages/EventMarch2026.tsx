@@ -4,12 +4,10 @@ import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink, PartyPopper, Laptop } from 'lucide-react';
 import ShowAndTellForm from '@/components/ShowAndTellForm';
 import { Helmet } from 'react-helmet-async';
+import { pastEventByDate } from '@/data/speakerArchive';
+import SpeakerRow from '@/components/SpeakerRow';
 
-const speakers = [
-  { name: "Speaker TBA", title: "To be announced" },
-  { name: "Speaker TBA", title: "To be announced" },
-  { name: "Speaker TBA", title: "To be announced" },
-];
+const speakers = pastEventByDate('2026-03-16')?.speakers ?? [];
 
 const EventMarch2026 = () => {
   return (
@@ -97,22 +95,8 @@ const EventMarch2026 = () => {
             <Users className="w-5 h-5 text-wildai-mint" />
             SPEAKERS
           </h2>
-          <div className="grid gap-4 mb-10">
-            {speakers.map((speaker, index) => (
-              <div key={index} className="surface p-5 flex items-center gap-4">
-                {/* Profile picture placeholder */}
-                <div className="w-12 h-12 rounded-full border-2 border-dashed border-wildai-mint/40 flex items-center justify-center flex-shrink-0 bg-wildai-mint/5">
-                  <Users className="w-5 h-5 text-wildai-mint/40" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg text-muted-foreground">{speaker.name}</h3>
-                  <p className="text-muted-foreground/60 text-sm">{speaker.title}</p>
-                </div>
-              </div>
-            ))}
-            <p className="text-sm text-muted-foreground text-center mt-2 font-mono">
-              Speakers will be announced soon - stay tuned!
-            </p>
+          <div className="surface mb-10 p-5">
+            <SpeakerRow speakers={speakers} detailed />
           </div>
 
           {/* Schedule */}

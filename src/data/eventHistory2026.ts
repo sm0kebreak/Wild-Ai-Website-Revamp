@@ -77,8 +77,24 @@ export const eventHistory2026: EventHistoryEntry[] = [
     date: '2026-07-20',
     displayDate: 'July 20, 2026',
     venue: 'Dangerous Man Brewing - back room',
-    note: 'The only published post was a same-day reminder; no speaker lineup was listed.',
-    speakers: [],
+    speakers: [
+      {
+        id: 'sage-faraday',
+        name: 'Sage Faraday',
+        role: 'Partner and CTO, Rosenblatt AI',
+        topic: 'Autonomous AI swarms.',
+      },
+      {
+        id: 'charlie-divine',
+        name: 'Charlie Divine',
+        topic: 'A small AI company for trading and market prediction.',
+      },
+      {
+        id: 'anton-priborkin',
+        name: 'Anton Priborkin',
+        topic: 'Moved to July from the June lineup.',
+      },
+    ],
   },
   {
     id: '2026-06-19',
@@ -122,6 +138,11 @@ export const eventHistory2026: EventHistoryEntry[] = [
         name: 'Yaniv Ben-Ami',
         topic:
           'Live demos of GPT Realtime 2: real-time AI that can hold a conversation and handle more than just text.',
+      },
+      {
+        id: 'gerard-beaubrun',
+        name: 'Gérard Beaubrun',
+        topic: 'Co-presented the GPT Realtime voice-agent demos with Yaniv Ben-Ami.',
       },
       {
         id: 'lyndon-carlson',

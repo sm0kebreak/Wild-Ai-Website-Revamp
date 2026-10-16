@@ -12,6 +12,8 @@ import {
   meetupTitle,
   rsvpUrlFor,
 } from '@/lib/meetupSchedule';
+import { upcomingLineups } from '@/data/speakerArchive';
+import SpeakerRow from '@/components/SpeakerRow';
 
 const dateParts = (dateIso: string) => {
   const date = new Date(`${dateIso}T00:00:00`);
@@ -25,6 +27,7 @@ const dateParts = (dateIso: string) => {
 const MeetupCard = ({ dateIso, featured }: { dateIso: string; featured?: boolean }) => {
   const parts = dateParts(dateIso);
   const rsvpUrl = rsvpUrlFor(dateIso);
+  const lineup = upcomingLineups[dateIso];
 
   return (
     <article
@@ -41,6 +44,12 @@ const MeetupCard = ({ dateIso, featured }: { dateIso: string; featured?: boolean
         </h3>
         <p className="mt-1 text-sm text-muted-foreground">{formatDate(dateIso)}</p>
         <p className="mt-1 text-sm text-muted-foreground">6:00 PM CT</p>
+        {lineup && (
+          <div className="mt-3">
+            <p className="kicker mb-2">Speaking</p>
+            <SpeakerRow speakers={lineup} />
+          </div>
+        )}
         <p className="mt-3 flex items-start gap-2 text-sm">
           <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
           <span>
