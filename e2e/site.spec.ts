@@ -295,6 +295,7 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   await openPath(page, '/speak');
   await expect(page.getByText(DEMO_LINE).first()).toBeVisible();
   await expect(page.getByLabel('LinkedIn or X URL')).toBeVisible();
+  await expect(page.locator('input[type="file"]')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'PAST SPEAKERS' })).toHaveCount(0);
   await expect(page.locator('body')).not.toContainText(/fire talks?|lightning talks?/i);
 
@@ -314,8 +315,10 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   await page.locator('#building').fill('A demo');
   await page.getByRole('button', { name: 'Submit application' }).click();
   await expect(page.getByRole('heading', { name: 'Application received' })).toBeVisible();
+  await expect(page.locator('body')).not.toContainText(/email was sent|Jake was notified|we emailed/i);
   expect(posted?.form).toBe('speaker');
   expect(posted?.payload?.linkedin_url).toBe('https://x.com/example');
+  expect(posted?.payload && 'image_base64' in posted.payload).toBe(false);
 
   await openPath(page, '/sponsor');
   await expect(page.getByText('$500 per event').first()).toBeVisible();
@@ -420,6 +423,8 @@ test('forms validate, and a mocked sponsor submit succeeds', async ({ page }) =>
 
   await openPath(page, '/events/march-2026');
   const showForm = page.locator('form').filter({ has: page.locator('#sat-name') });
+  await expect(showForm.getByLabel('LinkedIn or X URL')).toBeVisible();
+  await expect(showForm.locator('input[type="file"]')).toHaveCount(0);
   await showForm.getByRole('button', { name: 'Reserve My Spot' }).click();
   await expect(page.getByText('Please fill in all fields', { exact: true })).toBeVisible();
 });
