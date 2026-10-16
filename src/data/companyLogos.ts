@@ -213,7 +213,7 @@ export const speakerStageLogos: CompanyLogo[] = [
   { name: 'Quickly' },
   { name: 'Quinoa', logo: '/lovable-uploads/quinoa-logo.png', url: 'https://quinoa.health' },
   { name: 'Rosenblatt AI', logo: '/logos/rosenblatt.svg', url: 'https://www.rosenblatt.ai/', tone: 'light-ink' },
-  { name: 'Satori', logo: '/logos/satori.png', url: 'https://satori.sh/' },
+  { name: 'Satori', logo: '/logos/satori.png', url: 'https://satori.sh/', tone: 'light-ink' },
   { name: 'Simple Lead AI', logo: '/logos/simple-lead.png', url: 'https://siimplelead.com/' },
   { name: 'smallest.ai', logo: '/logos/smallest.png', url: 'https://smallest.ai/' },
   { name: 'Target', logo: '/logos/target.png', url: 'https://www.target.com/' },
