@@ -763,9 +763,6 @@
 }
 
 @media (max-width: 767px) {
-  .display-title {
-    font-size: clamp(2.1rem, 9.6vw, 3.25rem);
-  }
   .page-hero {
     padding: calc(6.25rem + env(safe-area-inset-top)) 0 2.75rem;
   }
@@ -775,13 +772,16 @@
   .section-title {
     font-size: 1.625rem;
   }
-  /* Hero runs edge to edge, under the status bar and browser toolbar. */
+  /* Keep the hero inside the visible viewport, above the browser toolbar. */
   .hero-stage {
     min-height: 0;
     height: 100svh;
-    height: 100lvh;
+    height: 100dvh;
     padding-top: calc(4rem + env(safe-area-inset-top));
-    padding-bottom: calc(100lvh - 100svh);
+    padding-bottom: max(1.75rem, env(safe-area-inset-bottom));
+  }
+  .display-title {
+    font-size: clamp(1.85rem, 8.4vw, 2.6rem);
   }
   .intro-logo {
     width: min(68vw, 360px);
@@ -791,6 +791,34 @@
   .hero-compact-hide {
     display: none;
   }
+}
+
+/* Phones scroll natively: no smoothed document scrolling, no blurred wash, no frosted header. */
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .hero-wash {
+    animation: none;
+    filter: none;
+  }
+  .site-header.border-border {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: hsl(var(--background));
+  }
+}
+html[data-native-scroll] {
+  scroll-behavior: auto;
+}
+html[data-native-scroll] .hero-wash {
+  animation: none;
+  filter: none;
+}
+html[data-native-scroll] .site-header.border-border {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background-color: hsl(var(--background));
 }
 
 @media (prefers-reduced-motion: reduce) {

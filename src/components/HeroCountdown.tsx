@@ -12,11 +12,11 @@ import {
 import { formatDate } from '@/hooks/useChapters';
 
 const Cell = ({ value, label }: { value: number; label: string }) => (
-  <div className="flex flex-col items-center gap-1.5 md:gap-2">
-    <span className="w-full rounded-lg border border-border/70 bg-surface-deep/60 py-3 text-center font-mono text-2xl font-medium md:py-4 tabular-nums text-foreground md:text-4xl">
+  <div className="flex flex-col items-center gap-1 md:gap-2">
+    <span className="w-full rounded-md border border-border/70 bg-surface-deep/60 py-1.5 text-center font-mono text-lg font-medium tabular-nums text-foreground md:rounded-lg md:py-4 md:text-4xl">
       {String(value).padStart(2, '0')}
     </span>
-    <span className="kicker">{label}</span>
+    <span className="kicker text-[0.5625rem] md:text-[0.6875rem]">{label}</span>
   </div>
 );
 
@@ -42,30 +42,31 @@ const HeroCountdown = ({ spent }: { spent?: boolean }) => {
       </p>
 
       {cells ? (
-        <div className="mt-4 grid grid-cols-4 gap-2 md:mt-6 md:gap-2.5">
+        <div className="mt-2.5 grid grid-cols-4 gap-1.5 md:mt-6 md:gap-2.5">
           {cells.map((c) => (
             <Cell key={c.label} value={c.value} label={c.label} />
           ))}
         </div>
       ) : (
-        <p className="mt-6 font-display text-2xl text-foreground">Doors are open</p>
+        <p className="mt-4 font-display text-2xl text-foreground md:mt-6">Doors are open</p>
       )}
-
-      <p className="mt-5 font-display text-lg font-semibold md:mt-7 md:text-xl">{meetupTitle(date)}</p>
-      <p className="mt-2.5 flex items-center justify-center gap-2 text-[0.9375rem] text-muted-foreground">
-        <CalendarDays className="h-4 w-4" /> {formatDate(date)} · 6:00 PM CT
-      </p>
-      <p className="hero-compact-hide mt-1.5 flex items-center justify-center gap-2 text-[0.9375rem] text-muted-foreground">
-        <MapPin className="h-4 w-4" /> {MEETUP_VENUE.name}
-      </p>
 
       <Link
         to={`/events/${meetupSlug(date)}`}
         tabIndex={spent ? -1 : undefined}
-        className="group mt-4 inline-flex md:mt-7 items-center gap-2 text-[0.9375rem] font-semibold text-accent"
+        className="group mx-auto mt-2 flex w-full max-w-xs flex-col items-center rounded-xl px-3 py-1 text-center md:mt-7 md:max-w-none md:py-2"
       >
-        Event details
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        <span className="font-display text-base font-semibold md:text-xl">{meetupTitle(date)}</span>
+        <span className="mt-1 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+          <CalendarDays className="h-4 w-4" /> {formatDate(date)} · 6:00 PM CT
+        </span>
+        <span className="hero-compact-hide mt-1.5 hidden items-center justify-center gap-2 text-[0.9375rem] text-muted-foreground md:flex">
+          <MapPin className="h-4 w-4" /> {MEETUP_VENUE.name}
+        </span>
+        <span className="mt-0.5 inline-flex min-h-11 items-center gap-2 px-3 text-[0.9375rem] font-semibold text-accent">
+          Event details
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </span>
       </Link>
     </div>
   );

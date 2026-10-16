@@ -1,13 +1,15 @@
 import React from 'react';
-import { useScrollProgress, ramp } from '@/hooks/useScrollProgress';
+import { prefersNativeScroll, ramp, useScrollProgress } from '@/hooks/useScrollProgress';
 
 /**
  * Wraps the page body so it lags behind the scroll at first, then catches up.
  * Paired with the hero sinking away, the content reads as rising out of it.
+ * Touch scrolling leaves the panel in place so the page scrolls natively.
  */
 const HeroHandoff = ({ children }: { children: React.ReactNode }) => {
   const progress = useScrollProgress(1.25);
-  const settled = progress >= 1;
+  const native = prefersNativeScroll();
+  const settled = native || progress >= 1;
 
   /* 1 = still tucked behind the hero, 0 = fully in place. */
   const lag = 1 - ramp(progress, 0.02, 0.86);
@@ -18,7 +20,11 @@ const HeroHandoff = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className="relative z-10 shadow-[0_-40px_90px_-30px_hsl(191_40%_3%/0.95)]"
+      className={
+        native
+          ? 'relative z-10'
+          : 'relative z-10 shadow-[0_-40px_90px_-30px_hsl(191_40%_3%/0.95)]'
+      }
       style={
         settled
           ? undefined

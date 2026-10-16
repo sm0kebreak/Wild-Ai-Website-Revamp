@@ -14,6 +14,7 @@ import Logo from '@/components/Logo';
 import CommandPalette, { useCommandPalette } from '@/components/CommandPalette';
 import { publicChapters } from '@/data/chapters';
 import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
+import { prefersNativeScroll } from '@/hooks/useScrollProgress';
 
 const navLinks = [
   { to: '/chapters', label: 'Chapters' },
@@ -33,14 +34,24 @@ const Navbar = () => {
   const rsvpUrl = rsvpUrlFor(nextMeetupDate());
 
   useEffect(() => {
+    let frame = 0;
     const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? window.scrollY / max : 0);
-      setScrolled(window.scrollY > 12);
+      const next = window.scrollY > 12;
+      setScrolled((prev) => (prev === next ? prev : next));
+      if (prefersNativeScroll()) return;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        setProgress(max > 0 ? window.scrollY / max : 0);
+      });
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   return (
@@ -117,9 +128,11 @@ const Navbar = () => {
               </DropdownMenu>
             )}
 
-            <a href={rsvpUrl ?? '/#next-event'} target={rsvpUrl ? '_blank' : undefined} rel={rsvpUrl ? 'noopener noreferrer' : undefined}>
-              <Button size={isMobile ? 'sm' : 'default'}>Register</Button>
-            </a>
+            <Button asChild size={isMobile ? 'sm' : 'default'} className="min-h-11 px-4 md:min-h-10">
+              <a href={rsvpUrl} target="_blank" rel="noopener noreferrer">
+                Register
+              </a>
+            </Button>
           </div>
         </div>
 
