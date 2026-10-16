@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronDown } from 'lucide-react';
-import { pastMeetups } from '@/data/pastMeetups';
+import { pastMeetups, type PastMeetup } from '@/data/pastMeetups';
 import SpeakerRow, { SpeakerFace } from '@/components/SpeakerRow';
 import type { LineupSpeaker } from '@/data/speakerArchive';
 
