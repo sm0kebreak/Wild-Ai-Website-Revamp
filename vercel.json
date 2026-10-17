@@ -1,7 +1,18 @@
 {
   "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.wildai.us" }],
+      "destination": "https://wildai.us/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.wildai.us" }],
+      "destination": "https://wildai.us/:path*",
+      "permanent": true
+    },
     { "source": "/admin", "destination": "/", "permanent": false },
     { "source": "/admin/:path*", "destination": "/", "permanent": false }
-  ],
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
+  ]
 }

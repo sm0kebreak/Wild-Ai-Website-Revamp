@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -22,16 +22,11 @@ const About = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>About Wild AI - The AI meetup for people who ship</title>
-        <meta
-          name="description"
-          content="Wild AI is a community-run meetup network for AI builders. Our story, values, team, and code of conduct."
-        />
-        <meta property="og:title" content="About Wild AI" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="About | Wild AI"
+        description="What Wild AI is, who runs it, and how a meetup night works."
+        path="/about"
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">

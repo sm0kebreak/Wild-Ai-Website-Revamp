@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -43,16 +43,11 @@ const Join = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Join Wild AI - Get AI meetup invites for your city</title>
-        <meta
-          name="description"
-          content="Get Wild AI event invites for Minneapolis, San Francisco, Toronto, Chicago, and Austin."
-        />
-        <meta property="og:title" content="Join Wild AI" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="Join | Wild AI"
+        description="Get the next Wild AI invite for your city."
+        path="/join"
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">

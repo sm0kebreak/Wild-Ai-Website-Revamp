@@ -66,6 +66,7 @@ const Hero = () => {
       </div>
       <div className="tesla-copy">
         <h1 className="tesla-title">
+          <span className="sr-only">Wild AI</span>
           <span className="block">Minneapolis</span>
           <span className="block">{headlineFor(date)}</span>
         </h1>

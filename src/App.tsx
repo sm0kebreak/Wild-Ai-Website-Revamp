@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import SiteJsonLd from "./components/SiteJsonLd";
 import Index from "./pages/Index";
 import PreviousEvents from "./pages/PreviousEvents";
 import EventFebruary2026 from "./pages/EventFebruary2026";
@@ -35,6 +36,7 @@ const App = () => {
   return (
     <React.StrictMode>
       <HelmetProvider>
+        <SiteJsonLd />
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
             <Toaster />

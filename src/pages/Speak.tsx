@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SpeakerForm from '@/components/SpeakerForm';
@@ -36,16 +36,11 @@ const faqs = [
 
 const Speak = () => (
   <div className="flex flex-col min-h-screen">
-    <Helmet>
-      <title>Speak at Wild AI - Sign up to demo</title>
-      <meta
-        name="description"
-        content="Sign up to demo at Wild AI. 15 minutes on the mic, no slides: about 10 minutes to demo, then about 5 minutes of questions and feedback. All ages. Free."
-      />
-      <meta property="og:title" content="Speak at Wild AI" />
-      <meta property="og:type" content="website" />
-      <meta name="twitter:card" content="summary" />
-    </Helmet>
+    <Seo
+      title="Demo at Wild AI"
+      description="Sign up to demo at Wild AI. 15 minutes on the mic, no slides, then questions and feedback from the room."
+      path="/speak"
+    />
     <Navbar />
 
     <main className="pb-20 flex-grow">

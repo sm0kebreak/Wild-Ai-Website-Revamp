@@ -2,17 +2,22 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink, Car, Ticket, Presentation, FlaskConical, Rocket } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
+import { useLocation } from 'react-router-dom';
 import RoutePhoto from '@/components/RoutePhoto';
 import EventPhotoGallery from '@/components/EventPhotoGallery';
 
 const GopherAIConference = () => {
+  const path = useLocation().pathname.startsWith('/events/gopher-ai-conference')
+    ? '/events/gopher-ai-conference'
+    : '/events/gopher-ai-demo-night';
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Gopher AI Demo Night - April 9, 2026 | UMN x Wild AI</title>
-        <meta name="description" content="Gopher AI Demo Night on April 9, 2026 at CMU Mississippi Room. See demos from students, researchers, and local startups. Free and open to the public." />
-      </Helmet>
+      <Seo
+        title="Gopher AI Demo Night | Wild AI"
+        description="Gopher AI Demo Night on April 9, 2026 at Coffman Memorial Union, University of Minnesota."
+        path={path}
+      />
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">

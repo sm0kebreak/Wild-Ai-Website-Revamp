@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -43,16 +43,11 @@ const StartAChapter = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Start a Wild AI Chapter - Bring AI meetups to your city</title>
-        <meta
-          name="description"
-          content="Bring Wild AI to your city. We provide the playbook, brand, and network - you provide the local energy. Apply to start a chapter."
-        />
-        <meta property="og:title" content="Start a Wild AI Chapter" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="Start a chapter | Wild AI"
+        description="Start a Wild AI chapter in your city."
+        path="/start-a-chapter"
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">

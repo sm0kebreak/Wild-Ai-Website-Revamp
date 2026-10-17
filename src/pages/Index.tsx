@@ -10,9 +10,11 @@ import EventPhotoGallery from '@/components/EventPhotoGallery';
 import EmailCapture from '@/components/EmailCapture';
 import Footer from '@/components/Footer';
 import { photoSrc } from '@/data/sitePhotos';
+import Seo, { HOME_DESCRIPTION, HOME_TITLE } from '@/components/Seo';
 const Index = () => {
   return (
     <div className="tesla-home flex min-h-screen flex-col">
+      <Seo title={HOME_TITLE} description={HOME_DESCRIPTION} path="/" />
       <Intro />
       <Navbar />
       <main className="min-w-0">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import LogoCarousel from '@/components/LogoCarousel';
@@ -40,16 +40,11 @@ const Sponsor = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Sponsor Wild AI - Reach working AI builders</title>
-        <meta
-          name="description"
-          content="Sponsor a Wild AI meetup and meet builders in person. Minneapolis is on the calendar, with chapters opening in San Francisco, Toronto, Chicago, and Austin."
-        />
-        <meta property="og:title" content="Sponsor Wild AI" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="Sponsor | Wild AI"
+        description="Sponsor a Wild AI night. $500 per event, in Minneapolis and the other chapters."
+        path="/sponsor"
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">

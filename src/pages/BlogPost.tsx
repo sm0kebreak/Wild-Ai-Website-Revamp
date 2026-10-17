@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useBlogPost } from '@/hooks/useBlogPosts';
@@ -76,18 +76,12 @@ const BlogPost = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{post.title} | Wild AI Blog</title>
-        <meta name="description" content={post.meta_description || post.excerpt} />
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.meta_description || post.excerpt} />
-        <meta property="og:type" content="article" />
-        {post.og_image_url && <meta property="og:image" content={post.og_image_url} />}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={post.title} />
-        <meta name="twitter:description" content={post.meta_description || post.excerpt} />
-        {post.og_image_url && <meta name="twitter:image" content={post.og_image_url} />}
-      </Helmet>
+      <Seo
+        title={`${post.title} | Wild AI`}
+        description={post.meta_description || post.excerpt || 'A note from Wild AI.'}
+        path={`/blog/${post.slug}`}
+        type="article"
+      />
 
       <div className="flex flex-col min-h-screen">
         <Navbar />

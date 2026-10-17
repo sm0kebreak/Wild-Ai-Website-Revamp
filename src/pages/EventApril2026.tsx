@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink, Linkedin } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import RoutePhoto from '@/components/RoutePhoto';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
@@ -33,10 +33,11 @@ const speakers = [
 const EventApril2026 = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Wild AI Meetup - April 20, 2026 | Improving Minneapolis</title>
-        <meta name="description" content="Wild AI on April 20, 2026 at Improving Minneapolis (6–8 PM). Talks from Kaushik Suresh, Joe LaChance, and Mamady Konneh." />
-      </Helmet>
+      <Seo
+        title="April 20, 2026 | Wild AI"
+        description="Wild AI on April 20, 2026 at Improving Minneapolis."
+        path="/events/april-2026"
+      />
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">

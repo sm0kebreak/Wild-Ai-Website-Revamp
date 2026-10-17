@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import RoutePhoto from '@/components/RoutePhoto';
 import Footer from '@/components/Footer';
@@ -82,13 +82,11 @@ const EventDetail = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>{event.title} - Wild AI {event.chapter?.city}</title>
-        <meta name="description" content={event.description ?? undefined} />
-        <meta property="og:title" content={event.title} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title={`${event.title} | Wild AI`}
+        description={event.description || `${event.title} at Wild AI.`}
+        path={`/events/${event.slug}`}
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">

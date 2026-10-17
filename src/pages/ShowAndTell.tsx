@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import { ExternalLink } from 'lucide-react';
 import RoutePhoto from '@/components/RoutePhoto';
 import { supabase } from '@/integrations/supabase/client';
@@ -35,10 +35,11 @@ const ShowAndTell = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Show & Tell - Wild AI</title>
-        <meta name="description" content="Check out AI projects built by the Wild AI community. From side projects to startup MVPs, see what builders are creating." />
-      </Helmet>
+      <Seo
+        title="Show and tell | Wild AI"
+        description="Projects people have shown at Wild AI."
+        path="/show-and-tell"
+      />
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">

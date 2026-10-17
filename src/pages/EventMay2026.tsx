@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import RoutePhoto from '@/components/RoutePhoto';
 import EventSpeakers from '@/components/EventSpeakers';
 import { getEventHistoryByDate } from '@/data/eventHistory2026';
@@ -11,10 +11,11 @@ const EventMay2026 = () => {
   const mayHistory = getEventHistoryByDate('2026-05-18');
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Wild AI - May 18, 2026 | Live Demos at Improving Minneapolis</title>
-        <meta name="description" content="Wild AI is back May 18, 2026 (6 PM) at the Improving office in Minneapolis. Quick, snappy 10-minute demos from Yaniv Ben-Ami, Lyndon Carlson, Jimmy, and Joanna May." />
-      </Helmet>
+      <Seo
+        title="May 18, 2026 | Wild AI"
+        description="Wild AI on May 18, 2026 at Improving Minneapolis."
+        path="/events/may-2026"
+      />
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">

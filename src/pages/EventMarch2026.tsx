@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink, Laptop } from 'lucide-react';
 import ShowAndTellForm from '@/components/ShowAndTellForm';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import RoutePhoto from '@/components/RoutePhoto';
 import { pastEventByDate } from '@/data/speakerArchive';
 import SpeakerRow from '@/components/SpeakerRow';
@@ -13,10 +13,11 @@ const speakers = pastEventByDate('2026-03-16')?.speakers ?? [];
 const EventMarch2026 = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Wild AI Meetup - March 16, 2026 | Anniversary Show & Tell</title>
-        <meta name="description" content="Celebrate Wild AI's anniversary on March 16, 2026! Bring your AI projects for show & tell and hear from amazing speakers." />
-      </Helmet>
+      <Seo
+        title="March 16, 2026 | Wild AI"
+        description="Wild AI on March 16, 2026."
+        path="/events/march-2026"
+      />
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">

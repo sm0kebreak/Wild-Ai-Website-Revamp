@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogPostCard from '@/components/BlogPostCard';
@@ -12,13 +12,7 @@ const Blog = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Blog | Wild AI</title>
-        <meta name="description" content="Stay updated with the latest insights on AI development, research, and community events from Wild AI." />
-        <meta property="og:title" content="Blog | Wild AI" />
-        <meta property="og:description" content="Stay updated with the latest insights on AI development, research, and community events from Wild AI." />
-        <meta property="og:type" content="website" />
-      </Helmet>
+      <Seo title="Blog | Wild AI" description="Notes from Wild AI meetups." path="/blog" />
       
       <div className="flex flex-col min-h-screen">
         <Navbar />
