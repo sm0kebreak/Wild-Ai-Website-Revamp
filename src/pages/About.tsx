@@ -1,72 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { formatMemberCount, useChapters } from '@/hooks/useChapters';
 import { Flame, ArrowRight } from 'lucide-react';
 import PageHero from '@/components/PageHero';
-
-type TeamMember = {
-  name: string;
-  linkedin?: string;
-  photo?: string;
-};
-
-/**
- * LinkedIn URLs and photos are used only when the page or a public profile
- * confirms this is the Wild AI person. Missing photo or URL stays blank.
- */
-const team: TeamMember[] = [
-  {
-    name: 'Anushka Bhide',
-    linkedin: 'https://www.linkedin.com/in/anushka-b-9a253998/',
-    photo: '/speakers/anushka-b.webp',
-  },
-  {
-    name: 'Ben Long',
-    linkedin: 'https://www.linkedin.com/in/benjamin-long-31165616b/',
-    photo: '/speakers/benjamin-long.webp',
-  },
-  {
-    name: 'Jake Brindley',
-    linkedin: 'https://www.linkedin.com/in/jacob-brindley-452a44264/',
-    photo: '/speakers/jake-brindley.webp',
-  },
-  {
-    name: 'Judd Larson',
-    linkedin: 'https://www.linkedin.com/in/judd-larson/',
-    photo: '/team/judd-larson.jpg',
-  },
-  {
-    name: 'Justin Bosco',
-    linkedin: 'https://www.linkedin.com/in/justin14/',
-  },
-  {
-    name: 'Kate Kuehl',
-    linkedin: 'https://www.linkedin.com/in/katekuehl/',
-    photo: '/speakers/kate-kuehl.webp',
-  },
-  {
-    name: 'Maanas Taneja',
-    linkedin: 'https://www.linkedin.com/in/maanas-taneja',
-  },
-  {
-    name: 'Matthew Osborn',
-    linkedin: 'https://www.linkedin.com/in/mattjosborn/',
-    photo: '/speakers/matt-josborn.webp',
-  },
-  {
-    name: 'Micah Peoples',
-    linkedin: 'https://www.linkedin.com/in/micahpeoples/',
-  },
-  {
-    name: 'Muhammad Shahid',
-    linkedin: 'https://www.linkedin.com/in/muhammad-shahid-moandco/',
-    photo: '/team/muhammad-shahid.jpg',
-  },
-];
+import { team } from '@/data/team';
 
 const initials = (name: string) =>
   name
@@ -81,16 +22,11 @@ const About = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>About Wild AI - The AI meetup for people who ship</title>
-        <meta
-          name="description"
-          content="Wild AI is a community-run meetup network for AI builders. Our story, values, team, and code of conduct."
-        />
-        <meta property="og:title" content="About Wild AI" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="About | Wild AI"
+        description="What Wild AI is, who runs it, and how a meetup night works."
+        path="/about"
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">
@@ -145,7 +81,9 @@ const About = () => {
                       <img
                         src={person.photo}
                         alt=""
-                        className="mx-auto h-20 w-20 rounded-full object-cover"
+                        className="avatar-photo mx-auto h-20 w-20"
+                        width={256}
+                        height={256}
                       />
                     ) : (
                       <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-secondary font-display text-lg font-semibold text-foreground">

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { MapPin, Calendar, Users, ExternalLink, Mic, Search } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -165,6 +166,7 @@ const PastEventCard = ({ event }: { event: WildAiEvent }) => {
 };
 
 const Location = () => {
+  const path = useLocation().pathname === '/locations' ? '/locations' : '/location';
   const [query, setQuery] = useState('');
   const [year, setYear] = useState<'all' | string>('all');
 
@@ -203,14 +205,11 @@ const Location = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <Helmet>
-        <title>Wild AI Locations - Past Venues & Events in Minneapolis</title>
-        <meta
-          name="description"
-          content="A historical view of every venue Wild AI has met at - past events, locations, and speaker formats from the Minneapolis AI community."
-        />
-        <link rel="canonical" href="https://wildai.us/location" />
-      </Helmet>
+      <Seo
+        title="Locations | Wild AI"
+        description="Places Wild AI has met in Minneapolis."
+        path={path}
+      />
 
       <Navbar />
 

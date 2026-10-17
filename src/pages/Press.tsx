@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -25,23 +25,18 @@ const mentions = [
 const facts = [
   ['Founded', '2021, Minneapolis'],
   ['Format', '15-minute demos, no slides, monthly on third Mondays. All ages. Free.'],
-  ['Chapters', 'Minneapolis (active), San Francisco & Toronto (launching 2026)'],
+  ['Chapters', 'Minneapolis (active), San Francisco (active), Toronto (launching 2026)'],
   ['Community', '790+ members across chapters'],
   ['Typical attendance', '80–120 builders per event'],
 ];
 
 const Press = () => (
   <div className="flex flex-col min-h-screen">
-    <Helmet>
-      <title>Press - Wild AI</title>
-      <meta
-        name="description"
-        content="Press resources for Wild AI: brand assets, boilerplate, fact sheet, and media contact."
-      />
-      <meta property="og:title" content="Wild AI Press" />
-      <meta property="og:type" content="website" />
-      <meta name="twitter:card" content="summary" />
-    </Helmet>
+    <Seo
+      title="Press | Wild AI"
+      description="Press notes for Wild AI: what the meetup is, and who to contact."
+      path="/press"
+    />
     <Navbar />
 
     <main className="pb-20 flex-grow">

@@ -59,7 +59,15 @@ const EventSpeakers = ({ eventDate, emptyMessage }: Props) => {
         <div key={s.id} className="surface p-5 border border-border">
           <div className="flex items-start gap-4">
             {s.image_url ? (
-              <img src={s.image_url} alt={s.name} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+              <img
+                src={s.image_url}
+                alt={s.name}
+                width={160}
+                height={160}
+                loading="lazy"
+                decoding="async"
+                className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+              />
             ) : (
               <div className="w-20 h-20 rounded-lg bg-wildai-mint/10 flex items-center justify-center flex-shrink-0">
                 <Users className="w-8 h-8 text-wildai-mint" />

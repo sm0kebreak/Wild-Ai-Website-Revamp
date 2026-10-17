@@ -10,6 +10,7 @@ import {
   withConfirmedMeetup,
 } from '@/lib/meetupSchedule';
 import { pastEvents } from '@/data/speakerArchive';
+import { chicagoYmd, currentDate } from '@/lib/now';
 
 /* Site copy avoids em dashes; stored text still has some. */
 const noEmDash = <T,>(value: T): T =>
@@ -215,6 +216,7 @@ const withScheduledMeetups = (events: ChapterEvent[], chapter: Chapter): Chapter
 export const useChapters = () =>
   useQuery({
     queryKey: ['chapters'],
+    initialData: PUBLIC_CHAPTER_RECORDS,
     queryFn: async (): Promise<Chapter[]> => {
       try {
         const { data, error } = await supabase
@@ -230,10 +232,12 @@ export const useChapters = () =>
     },
   });
 
-export const useChapter = (slug: string | undefined) =>
-  useQuery({
+export const useChapter = (slug: string | undefined) => {
+  const local = PUBLIC_CHAPTER_RECORDS.find((chapter) => chapter.slug === slug);
+  return useQuery({
     queryKey: ['chapter', slug],
     enabled: !!slug,
+    ...(local ? { initialData: local } : {}),
     queryFn: async (): Promise<Chapter | null> => {
       try {
         const { data, error } = await supabase
@@ -255,6 +259,7 @@ export const useChapter = (slug: string | undefined) =>
       }
     },
   });
+};
 
 export const useChapterOrganizers = (chapterId: string | undefined) =>
   useQuery({
@@ -275,6 +280,7 @@ export const useChapterEvents = (chapter: Chapter | null | undefined) =>
   useQuery({
     queryKey: ['chapter-events', chapter?.id],
     enabled: !!chapter,
+    ...(chapter?.slug === HOME_CHAPTER ? { initialData: scheduledMeetups(chapter) } : {}),
     queryFn: async (): Promise<ChapterEvent[]> => {
       try {
         const { data, error } = await supabase
@@ -296,6 +302,7 @@ export const useChapterEvents = (chapter: Chapter | null | undefined) =>
 export const useAllEvents = () =>
   useQuery({
     queryKey: ['all-chapter-events'],
+    initialData: () => withArchive(scheduledMeetups(homeChapter(null))),
     queryFn: async (): Promise<ChapterEvent[]> => {
       try {
         const [eventsResult, chaptersResult] = await Promise.all([
@@ -316,11 +323,7 @@ export const useAllEvents = () =>
     },
   });
 
-export const isUpcoming = (dateIso: string) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return new Date(dateIso + 'T00:00:00') >= today;
-};
+export const isUpcoming = (dateIso: string, from = currentDate()) => dateIso >= chicagoYmd(from);
 
 export const formatDate = (dateIso: string) =>
   new Date(dateIso + 'T00:00:00').toLocaleDateString('en-US', {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -43,23 +43,18 @@ const Join = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Join Wild AI - Get AI meetup invites for your city</title>
-        <meta
-          name="description"
-          content="Get Wild AI event invites for Minneapolis, San Francisco, Toronto, Chicago, and Austin."
-        />
-        <meta property="og:title" content="Join Wild AI" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="Join | Wild AI"
+        description="Get the next Wild AI invite for your city."
+        path="/join"
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">
         <PageHero
           eyebrow="Get on the list"
           title={<>Join <span>Wild AI</span>.</>}
-          lede="One email per event. Demo lineups and recaps from the builders around you. All ages. Free."
+          lede="Join the email list. Demo lineups and recaps from the builders around you. All ages. Free."
         />
         <div className="container mx-auto px-4 pt-14">
 
@@ -67,7 +62,7 @@ const Join = () => {
             {/* Signup form */}
             <div className="surface p-6 md:p-8">
               {status === 'done' ? (
-                <div className="text-center py-10">
+                <div className="form-success py-10 text-center">
                   <CheckCircle2 className="w-12 h-12 text-wildai-mint mx-auto mb-4" />
                   <h2 className="text-xl font-display font-semibold mb-2">YOU'RE IN</h2>
                   <p className="text-muted-foreground mb-6">

@@ -9,7 +9,7 @@ export type PublicChapter = {
   about: string;
 };
 
-/** The public chapter list. Only Minneapolis has a scheduled event. */
+/** The public chapter list. Minneapolis is the only chapter with a scheduled date. */
 export const publicChapters: PublicChapter[] = [
   {
     slug: 'minneapolis',
@@ -17,18 +17,19 @@ export const publicChapters: PublicChapter[] = [
     label: 'Minneapolis',
     region: 'Minnesota',
     status: 'active',
-    tagline: 'Third Monday of the month. Doors 6:00 PM CT, demos at 6:40 PM.',
+    tagline: 'Doors 6:00 PM · Three demos starting at 6:40 · Networking until 9 PM',
     about:
-      'The original Wild AI room. 15-minute demos, no slides: about 10 minutes to show what you built, then about 5 minutes of questions and feedback. Doors at 6:00 PM CT, demos at 6:40, networking until 9 at Dangerous Man Brewing. All ages. Free.',
+      'The original Wild AI room. 15-minute demos, no slides: about 10 minutes to show what you built, then about 5 minutes of questions and feedback. Doors 6:00 PM · Three demos starting at 6:40 · Networking until 9 PM at Dangerous Man Brewing. All ages. Free.',
   },
   {
     slug: 'san-francisco',
     city: 'San Francisco',
     label: 'San Francisco',
     region: 'California',
-    status: 'launching',
+    status: 'active',
     tagline: 'Next event coming soon.',
-    about: 'A San Francisco chapter is on the way. Leave your email and we will send the first date.',
+    about:
+      'Wild AI San Francisco launched August 5, 2026 at Frontier Tower. The next date is not set yet.',
   },
   {
     slug: 'toronto',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import EmailCapture from '@/components/EmailCapture';
@@ -15,6 +15,7 @@ import {
 } from '@/hooks/useChapters';
 import PageHero from '@/components/PageHero';
 import { CHAPTER_SEO_CITIES } from '@/data/chapters';
+import { nextChapterNight } from '@/data/chapterNights';
 
 const Chapters = () => {
   const { data: chapters, isLoading } = useChapters();
@@ -27,20 +28,11 @@ const Chapters = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Wild AI chapters - {CHAPTER_SEO_CITIES}</title>
-        <meta
-          name="description"
-          content={`Find a Wild AI meetup in ${CHAPTER_SEO_CITIES}. See the next event in your city, or get notified when a date is set.`}
-        />
-        <meta property="og:title" content="Find a Wild AI chapter" />
-        <meta
-          property="og:description"
-          content={`Wild AI meetups in ${CHAPTER_SEO_CITIES}. Pick a city and see what is next.`}
-        />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="Chapters | Wild AI"
+        description={`Wild AI chapters in ${CHAPTER_SEO_CITIES}.`}
+        path="/chapters"
+      />
       <Navbar />
       <main className="pb-20 flex-grow">
         <PageHero
@@ -67,6 +59,7 @@ const Chapters = () => {
               ))}
             {(chapters ?? []).map((chapter) => {
               const next = nextEventFor(chapter.id);
+              const night = next ? null : nextChapterNight(chapter.slug);
               const members = formatMemberCount(chapter.member_count);
               return (
                 <Link
@@ -91,13 +84,18 @@ const Chapters = () => {
                         Next: {formatDate(next.event_date)}
                         {next.venue_name ? ` · ${next.venue_name}` : ''}
                       </span>
+                    ) : night ? (
+                      <span>
+                        Next: {formatDate(night.date)}
+                        {night.venueName ? ` · ${night.venueName}` : ''}
+                      </span>
                     ) : (
                       <span>Next event coming soon</span>
                     )}
                   </p>
                   {members && <p className="mt-3 text-xs text-muted-foreground">{members}</p>}
                   <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
-                    {next ? 'View event' : 'Get notified'}
+                    {next || night ? 'View event' : 'Get notified'}
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </Link>

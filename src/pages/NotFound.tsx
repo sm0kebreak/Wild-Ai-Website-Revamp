@@ -1,6 +1,9 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { SitePhoto } from "@/components/RoutePhoto";
+import Seo from "@/components/Seo";
+import Navbar from "@/components/Navbar";
 
 const NotFound = () => {
   const location = useLocation();
@@ -13,9 +16,15 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="page-hero flex min-h-[100svh] items-center">
-      <div className="page-hero__wash" aria-hidden="true" />
-      <div className="hero-grain" aria-hidden="true" />
+    <div className="page-hero page-hero-fill">
+      <Seo
+        title="Page not found | Wild AI"
+        description="That page is not on Wild AI."
+        path="/404"
+        noindex
+      />
+      <Navbar />
+      <SitePhoto stem="2026-10-afterparty-04" />
       <div className="container relative mx-auto px-4 text-center">
         <p className="eyebrow mb-5 justify-center">Error 404</p>
         <h1 className="page-hero__title mb-4">

@@ -1,29 +1,26 @@
-import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import LogoRail from '@/components/motion/LogoRail';
 import Reveal from '@/components/motion/Reveal';
 import { logoFit, logos, type CompanyLogo } from '@/data/companyLogos';
+import { logoBox } from '@/data/logoDimensions';
 import { speakerCompanyCount } from '@/data/speakerArchive';
 
-const logosByName = [...logos].sort((a, b) => a.name.localeCompare(b.name));
 const rowSplit = Math.ceil(logos.length / 2);
 const logoRows = [logos.slice(0, rowSplit), logos.slice(rowSplit)] as const;
 
-const LogoMark = ({ company, grid = false }: { company: CompanyLogo; grid?: boolean }) => {
+const LogoMark = ({ company }: { company: CompanyLogo }) => {
   const fit = logoFit[company.name] ?? 'lockup';
-  const className =
-    'logo-mark group flex h-20 items-center justify-center md:h-24 ' +
-    (grid
-      ? 'w-full min-w-0 px-2' + (fit === 'word' || fit === 'wide' ? ' col-span-2' : '')
-      : 'w-max shrink-0 px-4 md:px-6');
+  const className = 'logo-mark logo-mark-rail group flex items-center justify-center';
 
   const mark = company.logo ? (
     <img
       src={company.logo}
       alt={company.name}
-      loading={grid ? 'lazy' : 'eager'}
+      loading="eager"
       decoding="async"
       draggable={false}
+      {...logoBox(company.logo)}
       className={company.tone === 'plain' ? 'brightness-0 invert' : undefined}
       style={
         company.tone === 'plain'
@@ -59,10 +56,8 @@ const LogoMark = ({ company, grid = false }: { company: CompanyLogo; grid?: bool
   );
 };
 
-const LogoFilters = () => {
-  if (typeof document === 'undefined') return null;
-  return createPortal(
-    <svg aria-hidden="true" width="0" height="0" style={{ position: 'absolute' }}>
+export const LogoFilters = () => (
+  <svg aria-hidden="true" width="0" height="0" style={{ position: 'absolute' }}>
       <filter id="logo-mono" colorInterpolationFilters="sRGB">
         <feColorMatrix
           type="matrix"
@@ -93,15 +88,11 @@ const LogoFilters = () => {
           values="0 0 0 0 0.93  0 0 0 0 0.96  0 0 0 0 0.95  1.7 5.72 0.58 0 -0.35"
         />
       </filter>
-    </svg>,
-    document.body,
-  );
-};
+    </svg>
+);
 
 /** Two counter-scrolling rows of companies represented at Wild AI events. */
 const LogoCarousel = () => {
-  const [showAll, setShowAll] = useState(false);
-
   return (
     <section id="companies" className="min-w-0 py-4 md:py-6">
       <LogoFilters />
@@ -112,48 +103,35 @@ const LogoCarousel = () => {
               <p className="font-display text-base font-semibold leading-snug md:text-lg">
                 {speakerCompanyCount} companies have taken the stage at Wild AI
               </p>
-              <button
-                type="button"
+              <Link
+                to="/companies"
                 className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-accent/50 bg-accent/15 px-4 text-sm font-semibold text-accent"
-                aria-expanded={showAll}
-                aria-controls="company-logos"
-                onClick={() => setShowAll((open) => !open)}
               >
-                {showAll ? 'Show the carousel' : 'See all companies'}
-              </button>
+                See all companies
+              </Link>
             </div>
 
-            <div id="company-logos" className="relative min-w-0 py-3 md:py-4">
-              {showAll ? (
-                <div className="grid grid-cols-2 gap-x-2 gap-y-1 px-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                  {logosByName.map((company) => (
-                    <LogoMark key={company.name} company={company} grid />
-                  ))}
-                </div>
-              ) : (
-                <>
-                  <LogoRail
-                    duration={70}
-                    label="Company logos, first row. Scroll horizontally to browse."
-                  >
-                    {logoRows[0].map((company) => (
-                      <LogoMark key={company.name} company={company} />
-                    ))}
-                  </LogoRail>
-                  <div className="mx-5 h-px bg-border/40 md:mx-8" />
-                  <LogoRail
-                    duration={82}
-                    reverse
-                    label="Company logos, second row. Scroll horizontally to browse."
-                  >
-                    {logoRows[1].map((company) => (
-                      <LogoMark key={company.name} company={company} />
-                    ))}
-                  </LogoRail>
-                  <div className="logo-fade logo-fade-left" aria-hidden="true" />
-                  <div className="logo-fade logo-fade-right" aria-hidden="true" />
-                </>
-              )}
+            <div id="company-logos" className="relative min-w-0">
+              <LogoRail
+                duration={70}
+                label="Company logos, first row. Scroll horizontally to browse."
+              >
+                {logoRows[0].map((company) => (
+                  <LogoMark key={company.name} company={company} />
+                ))}
+              </LogoRail>
+              <div className="logo-divider mx-5 md:mx-8" />
+              <LogoRail
+                duration={82}
+                reverse
+                label="Company logos, second row. Scroll horizontally to browse."
+              >
+                {logoRows[1].map((company) => (
+                  <LogoMark key={company.name} company={company} />
+                ))}
+              </LogoRail>
+              <div className="logo-fade logo-fade-left" aria-hidden="true" />
+              <div className="logo-fade logo-fade-right" aria-hidden="true" />
             </div>
           </div>
         </Reveal>

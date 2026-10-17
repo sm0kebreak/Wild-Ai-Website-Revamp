@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { currentDate } from '@/lib/now';
 
 export interface Countdown {
   days: number;
@@ -7,8 +8,8 @@ export interface Countdown {
   sec: number;
 }
 
-const diffFrom = (target: number): Countdown | null => {
-  const ms = target - Date.now();
+const diffFrom = (target: number, now = Date.now()): Countdown | null => {
+  const ms = target - now;
   if (ms <= 0) return null;
   return {
     days: Math.floor(ms / 86_400_000),
@@ -21,7 +22,7 @@ const diffFrom = (target: number): Countdown | null => {
 /** Ticks once a second until the target passes, then returns null. */
 export const useCountdown = (target: Date) => {
   const time = target.getTime();
-  const [diff, setDiff] = useState(() => diffFrom(time));
+  const [diff, setDiff] = useState(() => diffFrom(time, currentDate().getTime()));
 
   useEffect(() => {
     setDiff(diffFrom(time));

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import EmailCapture from '@/components/EmailCapture';
@@ -49,16 +49,11 @@ const Events = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Wild AI Events - Upcoming AI meetups & demo nights</title>
-        <meta
-          name="description"
-          content="Upcoming and past Wild AI events in Minneapolis, San Francisco, Toronto, Chicago, and Austin."
-        />
-        <meta property="og:title" content="Wild AI Events" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="Events | Wild AI"
+        description="Upcoming and past Wild AI meetups."
+        path="/events"
+      />
       <Navbar />
       <main className="pb-20 flex-grow">
         <PageHero

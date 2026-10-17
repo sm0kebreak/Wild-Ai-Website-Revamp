@@ -279,7 +279,7 @@ const LogoRail = forwardRef<LogoRailHandle, LogoRailProps>(
             <div
               key={copy}
               data-logo-set={copy === 0 ? 'true' : undefined}
-              className="flex shrink-0 items-center"
+              className="logo-set flex shrink-0 items-center"
               aria-hidden={copy === 0 ? undefined : true}
               {...(copy === 0 ? {} : { inert: '' })}
             >

@@ -14,7 +14,7 @@ import { formatDate } from '@/hooks/useChapters';
 const expectations = [
   '15-minute demos. No slides.',
   'About 10 minutes to demo, then about 5 minutes of questions and feedback.',
-  'Doors at 6:00, demos at 6:40, networking until 9.',
+  'Doors 6:00 PM · Three demos starting at 6:40 · Networking until 9 PM.',
   'All ages. Free. Register on Luma.',
 ];
 

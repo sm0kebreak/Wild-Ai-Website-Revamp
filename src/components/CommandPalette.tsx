@@ -12,6 +12,7 @@ import {
 import { useChapters } from '@/hooks/useChapters';
 import {
   CalendarDays,
+  Building2,
   Handshake,
   Info,
   MapPin,
@@ -27,6 +28,7 @@ const pages = [
   { to: '/speak', label: 'Speak at Wild AI', icon: Mic2 },
   { to: '/sponsor', label: 'Sponsor', icon: Handshake },
   { to: '/about', label: 'About', icon: Info },
+  { to: '/companies', label: 'Companies', icon: Building2 },
   { to: '/join', label: 'Join the list', icon: Users },
   { to: '/start-a-chapter', label: 'Start a chapter', icon: Rocket },
 ];

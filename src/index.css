@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Metric-matched stand-in so a late Space Grotesk swap cannot resize headlines. */
+@font-face {
+  font-family: 'Space Grotesk Fallback';
+  src: local('Arial');
+  size-adjust: 104.5%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
 /*
   Two themes live side by side:
   - the default (slate) theme for dark bands
@@ -10,6 +20,11 @@
 */
 @layer base {
   :root {
+    --space-inline: 1.25rem;
+    --space-section: 2.5rem;
+    --space-stack: 1rem;
+    --space-actions: 1.5rem;
+    --space-grid: 1rem;
     --background: 190 13% 14%;
     --foreground: 160 14% 95%;
 
@@ -111,7 +126,9 @@
     text-rendering: optimizeLegibility;
   }
   html {
-    scroll-behavior: smooth;
+    /* Native scrolling. Smooth scroll interpolates on the main thread and
+       stutters once the page is long. */
+    scroll-behavior: auto;
     -webkit-text-size-adjust: 100%;
   }
   html,
@@ -177,7 +194,6 @@
     background:
       radial-gradient(38% 42% at 14% 12%, hsl(179 78% 16% / 0.55), transparent 66%),
       radial-gradient(34% 40% at 88% 78%, hsl(186 42% 22% / 0.42), transparent 68%);
-    filter: blur(30px);
   }
   .band-glow > * {
     position: relative;
@@ -200,9 +216,7 @@
   .glass-plate {
     @apply relative rounded-[var(--radius)];
     border: 1px solid hsl(0 0% 100% / 0.14);
-    background: linear-gradient(158deg, hsl(0 0% 100% / 0.82), hsl(0 0% 100% / 0.6));
-    backdrop-filter: blur(16px) saturate(120%);
-    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    background: linear-gradient(158deg, hsl(0 0% 100% / 0.94), hsl(0 0% 100% / 0.88));
     box-shadow:
       inset 0 1px 0 hsl(0 0% 100% / 0.55),
       0 22px 44px -34px hsl(191 45% 3% / 0.9);
@@ -214,20 +228,48 @@
     border-color: hsl(var(--accent) / 0.45);
   }
 
+  .logo-rail {
+    --logo-gap: 2.5rem;
+  }
   .logo-mark {
+    --logo-slot: 3rem;
     --logo-h: 2.5rem;
+    --logo-max: 9rem;
   }
   .logo-mark[data-fit='icon'] {
     --logo-h: 3rem;
+    --logo-max: 3rem;
   }
-  .logo-mark[data-fit='word'],
-  .logo-mark[data-fit='wide'] {
+  .logo-mark[data-fit='lockup'] {
+    --logo-h: 2.7rem;
+    --logo-max: 9.5rem;
+  }
+  .logo-mark[data-fit='word'] {
     --logo-h: 2.125rem;
+    --logo-max: 10.5rem;
+  }
+  .logo-mark[data-fit='wide'] {
+    --logo-h: 1.9rem;
+    --logo-max: 12.5rem;
+  }
+  .logo-mark-rail {
+    height: var(--logo-slot);
+    width: max-content;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+  }
+  .logo-set {
+    gap: var(--logo-gap);
+    /* The trailing pad is the seam. It matches the gap, and it sits inside the measured set. */
+    padding-inline-end: var(--logo-gap);
   }
   .logo-mark img {
-    height: var(--logo-h);
+    display: block;
     width: auto;
-    max-width: 100%;
+    height: auto;
+    max-height: var(--logo-h);
+    max-width: var(--logo-max);
     object-fit: contain;
     opacity: 0.55;
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -244,6 +286,8 @@
     width: 100%;
     min-width: 0;
     max-width: 100%;
+    box-sizing: border-box;
+    padding-block: var(--logo-gap);
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: auto;
@@ -277,15 +321,29 @@
     background: linear-gradient(to left, hsl(var(--card)), transparent);
   }
   @media (min-width: 768px) {
+    .logo-rail {
+      --logo-gap: 3.25rem;
+    }
     .logo-mark {
+      --logo-slot: 3.75rem;
       --logo-h: 3.25rem;
+      --logo-max: 11rem;
     }
     .logo-mark[data-fit='icon'] {
       --logo-h: 3.75rem;
+      --logo-max: 3.75rem;
     }
-    .logo-mark[data-fit='word'],
-    .logo-mark[data-fit='wide'] {
+    .logo-mark[data-fit='lockup'] {
+      --logo-h: 3.4rem;
+      --logo-max: 11rem;
+    }
+    .logo-mark[data-fit='word'] {
       --logo-h: 2.875rem;
+      --logo-max: 12rem;
+    }
+    .logo-mark[data-fit='wide'] {
+      --logo-h: 2.5rem;
+      --logo-max: 14rem;
     }
   }
   @media (pointer: coarse) {
@@ -496,11 +554,6 @@
   [data-intro] [data-nav-logo] {
     opacity: 0;
   }
-  /* Keep scrolled-away scrollbar width reserved for flow and fixed layers. */
-  [data-intro] body,
-  [data-intro] .site-header {
-    padding-right: var(--scroll-lock-gap, 0px);
-  }
   /* Hold the hero entrance until the curtain starts lifting. */
   [data-intro='active'] .rise {
     animation-play-state: paused;
@@ -508,41 +561,49 @@
 
   /* ---------- Hero stage ---------- */
   .hero-stage {
-    height: 100svh;
-    min-height: 640px;
-    @apply sticky top-0 flex items-center overflow-hidden;
-    background: hsl(var(--surface-deep));
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    background: #070908;
   }
-  /* Slow duotone wash — replaces the generic particle field. */
+  .hero-pin,
+  .hero-handoff {
+    height: auto;
+    min-height: 0;
+    margin-top: 0;
+  }
+  /* Static wash. A blurred, infinitely animated layer under a sticky hero
+     repaints the whole scroll, worst when photos pass the footer. */
   .hero-wash {
     position: absolute;
-    inset: -20%;
+    inset: 0;
     background:
-      radial-gradient(48% 52% at 22% 28%, hsl(179 78% 16% / 0.85), transparent 62%),
-      radial-gradient(44% 48% at 78% 68%, hsl(186 40% 20% / 0.75), transparent 62%),
-      radial-gradient(60% 60% at 60% 12%, hsl(172 18% 76% / 0.08), transparent 68%);
-    filter: blur(28px);
-    animation: hero-wash 26s ease-in-out infinite alternate;
+      radial-gradient(56% 58% at 22% 28%, hsl(179 78% 16% / 0.9), transparent 72%),
+      radial-gradient(52% 54% at 78% 68%, hsl(186 40% 20% / 0.78), transparent 74%),
+      radial-gradient(64% 64% at 60% 12%, hsl(172 18% 76% / 0.1), transparent 76%);
   }
-  @keyframes hero-wash {
-    0% {
-      transform: translate3d(-3%, -2%, 0) scale(1.02);
-    }
-    100% {
-      transform: translate3d(3%, 2%, 0) scale(1.1);
-    }
+  .hero-stage[data-spent='true'] .hero-wash,
+  .hero-stage[data-spent='true'] .hero-grain {
+    display: none;
   }
   /* Fine grain keeps the large flat areas from looking synthetic. */
   .hero-grain {
     position: absolute;
     inset: 0;
-    opacity: 0.32;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.18;
+    pointer-events: none;
+    background-image: radial-gradient(hsl(160 14% 95% / 0.28) 0.6px, transparent 0.6px);
+    background-size: 3px 3px;
   }
   .hero-rule {
     height: 1px;
     background: linear-gradient(to right, hsl(var(--accent) / 0.5), hsl(var(--accent) / 0));
+  }
+  .countdown-figures {
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1, "zero" 0;
   }
 
   /* Staggered entrance for hero lines. */
@@ -824,25 +885,6 @@
   }
 }
 
-/* ---------- Scroll reveal ---------- */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-[data-reveal='shown'] {
-  opacity: 1;
-  transform: none;
-}
-@media (pointer: coarse) {
-  [data-reveal] {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 @media (max-width: 767px) {
   .page-hero {
     padding: calc(6.25rem + env(safe-area-inset-top)) 0 2.75rem;
@@ -857,9 +899,17 @@
   .hero-stage {
     min-height: 0;
     height: 100svh;
-    height: 100dvh;
     padding-top: calc(4rem + env(safe-area-inset-top));
     padding-bottom: max(1.75rem, env(safe-area-inset-bottom));
+    position: relative;
+    top: auto;
+  }
+  .hero-pin {
+    height: auto;
+    min-height: 0;
+  }
+  .hero-handoff {
+    margin-top: 0;
   }
   .display-title {
     font-size: clamp(1.85rem, 8.4vw, 2.6rem);
@@ -874,10 +924,22 @@
   }
 }
 
-/* Phones scroll natively: no smoothed document scrolling, no blurred wash, no frosted header. */
+/* Touch and reduced motion scroll natively: the hero does not pin, and the
+   header stays a solid bar instead of blurring whatever passes underneath. */
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .hero-stage {
+    position: relative;
+    top: auto;
+  }
+  .hero-pin {
+    height: auto;
+    min-height: 0;
+  }
+  .hero-handoff {
+    margin-top: 0;
   }
   .hero-wash {
     animation: none;
@@ -889,19 +951,6 @@
     background-color: hsl(var(--background));
   }
 }
-html[data-native-scroll] {
-  scroll-behavior: auto;
-}
-html[data-native-scroll] .hero-wash {
-  animation: none;
-  filter: none;
-}
-html[data-native-scroll] .site-header.border-border {
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  background-color: hsl(var(--background));
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -910,10 +959,6 @@ html[data-native-scroll] .site-header.border-border {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-  [data-reveal] {
-    opacity: 1;
-    transform: none;
   }
   .rise {
     opacity: 1;
@@ -924,4 +969,770 @@ html[data-native-scroll] .site-header.border-border {
     opacity: 1;
     filter: none;
   }
+}
+
+/* Page shells use the small viewport so the iOS toolbar does not jump the fold. */
+.min-h-screen {
+  min-height: 100svh;
+}
+
+/* Headshots stay square. Cover crops the photo; it does not stretch it. */
+.avatar-photo {
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+/* Full photos, stacked. Nothing in the gallery is cropped. */
+.photo-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.photo-grid button {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.photo-grid img {
+  position: static;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+@media (min-width: 768px) {
+  .photo-grid {
+    display: block;
+    columns: 2;
+    column-gap: 0.75rem;
+  }
+  .photo-grid li {
+    break-inside: avoid;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Horizontal night carousel. Snap stays on this scroller, never the page. */
+.photo-section .tesla-title {
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1;
+}
+.photo-carousel-frame {
+  position: relative;
+}
+.photo-carousel {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  height: min(70vw, 60svh);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.75rem;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  position: relative;
+}
+.photo-carousel::-webkit-scrollbar {
+  display: none;
+}
+.photo-carousel:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.photo-slide {
+  flex: 0 0 auto;
+  height: 100%;
+  margin: 0;
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+}
+.photo-slide img {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+}
+.photo-next-event {
+  min-width: min(16rem, 72vw);
+  padding: 0 1.5rem;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+.photo-arrow {
+  position: absolute;
+  top: calc(50% - 1.1rem);
+  z-index: 2;
+  display: inline-flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  background: rgba(7, 9, 8, 0.72);
+  color: #fff;
+}
+.photo-arrow-prev {
+  left: 0.75rem;
+}
+.photo-arrow-next {
+  right: 0.75rem;
+}
+.photo-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.photo-counter {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.88);
+}
+@media (max-width: 767px) {
+  .photo-section .tesla-title {
+    font-size: clamp(1.85rem, 7vw, 2.4rem);
+  }
+  .photo-arrow {
+    display: none;
+  }
+}
+
+/* ---------- Tesla homepage ---------- */
+.site-header {
+  color: #fff;
+  background: #070908;
+  border: 0;
+}
+.tesla-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+  color: #fff;
+  background: #070908;
+}
+.tesla-panel-flow {
+  height: auto;
+  min-height: 0;
+  justify-content: flex-start;
+  overflow: visible;
+}
+.tesla-home .hero-stage {
+  position: relative;
+  top: auto;
+  height: auto;
+  min-height: 0;
+  padding: calc(3.5rem + env(safe-area-inset-top)) 0 0;
+  background: #070908;
+}
+.tesla-media,
+.page-hero__media {
+  position: relative;
+  width: 100%;
+  background: #070908;
+}
+/* Short top blend. The homepage crossfade is excluded so faces in that frame stay clear. */
+.tesla-media:not(.hero-fade)::before,
+.page-hero__media::before,
+.hero-fade-frame[data-fit='contain']::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2.25rem;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(7, 9, 8, 0.5) 0%, rgba(7, 9, 8, 0) 100%);
+}
+.tesla-media::after,
+.page-hero__media::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5.5rem;
+  background: linear-gradient(to bottom, rgba(7, 9, 8, 0), #070908 86%);
+  pointer-events: none;
+  z-index: 1;
+}
+.tesla-photo,
+.page-hero__photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center center;
+  animation: none;
+  transform: none;
+}
+.hero-fade-frame {
+  position: relative;
+  width: min(100%, calc(52svh * 4 / 3));
+  aspect-ratio: 4 / 3;
+  max-height: 52svh;
+  margin-inline: auto;
+  background: #070908;
+}
+.hero-fade {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  isolation: isolate;
+  overflow: hidden;
+  background: #070908;
+}
+.hero-fade::before,
+.hero-fade::after {
+  content: none;
+}
+.hero-fade-veil {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: 2;
+  height: calc(5.5rem + 2px);
+  background: linear-gradient(to bottom, rgba(7, 9, 8, 0), #070908 86%);
+  pointer-events: none;
+}
+.hero-fade .tesla-photo {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  max-width: none;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 0;
+  visibility: hidden;
+  transform: none;
+  animation: none;
+  transition: opacity 1s ease, visibility 0s linear 1s;
+}
+.hero-fade .tesla-photo[data-active='true'] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1s ease;
+}
+/* A still hero shows the whole frame. Cover would clip whoever stands at the edge. */
+.hero-fade-frame[data-fit='contain'] {
+  width: 100%;
+  max-height: none;
+  aspect-ratio: auto;
+  height: auto;
+}
+.hero-fade-frame[data-fit='contain'] .hero-fade {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.hero-fade-frame[data-fit='contain'] .tesla-photo {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center center;
+}
+.tesla-copy {
+  position: relative;
+  z-index: 1;
+  width: min(68rem, 100%);
+  margin-inline: auto;
+  padding: var(--space-stack) var(--space-inline) var(--space-section);
+  background: #070908;
+  text-align: center;
+  text-shadow: none;
+}
+/* The homepage hero has to keep Register on the first screen at 800px tall. */
+@media (min-width: 768px) {
+  .hero-stage .tesla-copy {
+    padding-top: 0.5rem;
+  }
+}
+.tesla-copy-wide {
+  width: min(76rem, 100%);
+}
+.tesla-panel .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.88);
+}
+.tesla-title {
+  display: block;
+  font-family: 'Space Grotesk', 'Space Grotesk Fallback', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  font-size: clamp(3.4rem, 8.6vw, 7.4rem);
+}
+.hero-stage .tesla-title {
+  font-size: clamp(2.35rem, 4.6vw, 4rem);
+}
+.tesla-title-sentence {
+  max-width: 16ch;
+  margin-inline: auto;
+  font-size: clamp(2.2rem, 5.6vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.038em;
+}
+.tesla-sub {
+  margin-top: var(--space-stack);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+.tesla-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: var(--space-actions);
+}
+.tesla-actions-start {
+  justify-content: flex-start;
+}
+.tesla-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 1.35rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  text-shadow: none;
+}
+.tesla-pill-primary {
+  background: #fff;
+  color: #111;
+}
+.tesla-pill-primary:hover {
+  background: #f2f2f2;
+}
+.tesla-pill-secondary {
+  background: #111;
+  color: #fff;
+  box-shadow: inset 0 0 0 1.5px #fff;
+}
+.tesla-pill-secondary:hover {
+  background: #1c1c1c;
+}
+.tesla-home .city-pill {
+  border: 0;
+  background: #111;
+  color: #fff;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.9);
+}
+.tesla-home .city-pill[data-selected='true'] {
+  background: #fff;
+  color: #111;
+  box-shadow: none;
+}
+.tesla-home #past-events li {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.tesla-companies .glass {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.tesla-companies .border-b {
+  border-bottom-color: transparent;
+}
+@media (max-width: 767px) {
+  .tesla-panel,
+  .tesla-home .hero-stage {
+    height: auto;
+    min-height: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0;
+    overflow: visible;
+  }
+  .tesla-home .hero-stage {
+    padding-top: calc(3.5rem + env(safe-area-inset-top));
+  }
+  .hero-fade-frame {
+    width: 100%;
+    max-height: none;
+    aspect-ratio: 4 / 3;
+  }
+  .tesla-copy {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: none;
+    padding: var(--space-stack) var(--space-inline) calc(var(--space-section) + env(safe-area-inset-bottom));
+    background: #070908;
+    text-shadow: none;
+  }
+  .tesla-sub {
+    margin-top: var(--space-stack);
+    font-size: 1.0625rem;
+    line-height: 1.25;
+  }
+  .tesla-actions {
+    margin-top: var(--space-actions);
+  }
+  .countdown-figures {
+    margin-top: 0.55rem;
+  }
+  .tesla-panel-flow .tesla-copy {
+    justify-content: flex-start;
+    padding-top: var(--space-section);
+    background: #070908;
+  }
+  .tesla-title {
+    font-size: clamp(2.35rem, 10vw, 3.6rem);
+  }
+  .tesla-title-sentence {
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
+  }
+}
+@media (max-height: 700px) {
+  .tesla-panel {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+}
+.speak-manifesto {
+  position: relative;
+  overflow: visible;
+  color: #fff;
+  background: #070908;
+}
+.speak-manifesto-copy {
+  position: relative;
+  z-index: 1;
+  width: min(40rem, 100%);
+  margin-inline: auto;
+  padding: 1.5rem 1.25rem 3.75rem;
+}
+.speak-manifesto-copy ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.speak-manifesto-copy li,
+.speak-manifesto-copy p {
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+}
+.speak-manifesto-copy li + li {
+  margin-top: 0.7rem;
+}
+.speak-manifesto-copy p {
+  margin-top: 1.5rem;
+}
+.speak-manifesto-copy .speak-manifesto-format {
+  font-family: Inter, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: #fff;
+}
+@media (max-width: 767px) {
+  .speak-manifesto-copy {
+    padding: 2.75rem 1.15rem 2.5rem;
+  }
+  .speak-manifesto-copy li,
+  .speak-manifesto-copy p {
+    font-size: 1.3rem;
+  }
+}
+
+/* Company marks sit in their own band, larger than the old panel crop. */
+.logo-band {
+  background: #070908;
+  color: #fff;
+  padding-block: var(--space-section);
+}
+.logo-band .glass,
+.logo-band .logo-card {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #fff;
+}
+.logo-band .border-b {
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+}
+.logo-divider {
+  height: 1px;
+  background: hsl(var(--border) / 0.4);
+}
+.logo-band .logo-rail {
+  --logo-gap: 2.5rem;
+}
+.logo-band .logo-divider {
+  background: rgba(255, 255, 255, 0.14);
+}
+.logo-band .logo-mark {
+  height: var(--logo-slot);
+  min-height: var(--logo-slot);
+  --logo-slot: 4.15rem;
+  --logo-h: 3.35rem;
+  --logo-max: 10rem;
+}
+.logo-band .logo-mark[data-fit='icon'] {
+  --logo-h: 4.15rem;
+  --logo-max: 4.15rem;
+}
+.logo-band .logo-mark[data-fit='lockup'] {
+  --logo-h: 3.6rem;
+  --logo-max: 10.5rem;
+}
+.logo-band .logo-mark[data-fit='word'] {
+  --logo-h: 2.9rem;
+  --logo-max: 11.5rem;
+}
+.logo-band .logo-mark[data-fit='wide'] {
+  --logo-h: 2.55rem;
+  --logo-max: 13.5rem;
+}
+.logo-band > section,
+.logo-band #company-logos {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+@media (min-width: 768px) {
+  .logo-band .logo-rail {
+    --logo-gap: 3.5rem;
+  }
+  .logo-band .logo-mark {
+    --logo-slot: 5.5rem;
+    --logo-h: 4.75rem;
+    --logo-max: 12rem;
+  }
+  .logo-band .logo-mark[data-fit='icon'] {
+    --logo-h: 5.5rem;
+    --logo-max: 5.5rem;
+  }
+  .logo-band .logo-mark[data-fit='lockup'] {
+    --logo-h: 4.9rem;
+    --logo-max: 12.5rem;
+  }
+  .logo-band .logo-mark[data-fit='word'] {
+    --logo-h: 4rem;
+    --logo-max: 13.5rem;
+  }
+  .logo-band .logo-mark[data-fit='wide'] {
+    --logo-h: 3.5rem;
+    --logo-max: 16rem;
+  }
+}
+
+/* Shared photo header for every route that is not the homepage. */
+.page-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+  padding: calc(3.5rem + env(safe-area-inset-top)) 0 2.75rem;
+  border: 0;
+  background: #070908;
+  color: #fff;
+}
+.page-hero-fill {
+  min-height: 100svh;
+}
+.page-hero__wash,
+.page-hero .hero-grain {
+  display: none;
+}
+.page-hero > * {
+  position: relative;
+  z-index: 1;
+}
+.page-hero__title,
+.page-hero__title span {
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  font-size: clamp(2.6rem, 6vw, 4.75rem);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.page-hero__lede,
+.page-hero .text-muted-foreground,
+.page-hero .signal-label,
+.page-hero .eyebrow {
+  color: rgba(255, 255, 255, 0.9);
+}
+.page-hero__lede {
+  max-width: 40rem;
+  margin-top: 0.9rem;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.page-hero__aside {
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: none;
+}
+.page-hero__aside strong {
+  color: #fff;
+}
+.page-hero .text-wildai-mint {
+  color: #fff;
+}
+@media (max-width: 767px) {
+  .page-hero {
+    min-height: 0;
+    padding: calc(3.5rem + env(safe-area-inset-top)) 0 2rem;
+  }
+  .page-hero-fill {
+    min-height: 100svh;
+  }
+  .page-hero__title,
+  .page-hero__title span {
+    font-size: clamp(2.15rem, 10vw, 3rem);
+  }
+}
+
+.company-page {
+  background: #070908;
+  color: #fff;
+}
+.company-hero .page-hero__title {
+  max-width: 16ch;
+  font-size: clamp(1.85rem, 4.4vw, 3.25rem);
+  line-height: 1.05;
+}
+.company-grid {
+  list-style: none;
+  width: min(76rem, 100%);
+  margin: 0 auto;
+  padding: var(--space-section) var(--space-inline) calc(var(--space-section) * 1.5);
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.company-card {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: var(--space-stack);
+  align-items: start;
+  padding: var(--space-stack) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.company-slot {
+  display: grid;
+  width: 4.75rem;
+  height: 4.75rem;
+  place-items: center;
+}
+.company-slot img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.company-slot span {
+  font-size: 0.7rem;
+  line-height: 1.2;
+  text-align: center;
+}
+.company-name {
+  font-family: 'Space Grotesk', 'Space Grotesk Fallback', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-decoration: none;
+}
+.company-name:hover,
+.company-name:focus-visible {
+  text-decoration: underline;
+}
+.company-bio,
+.company-demo {
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+}
+.company-demo a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+@media (min-width: 800px) {
+  .company-grid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-section);
+  }
+}
+@media (min-width: 1180px) {
+  .company-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.form-success {
+  background: #111;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 1rem;
+}
+.form-success .text-wildai-mint,
+.form-success .text-muted-foreground,
+.form-success .text-accent {
+  color: #fff;
 }

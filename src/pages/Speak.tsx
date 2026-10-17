@@ -1,11 +1,13 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SpeakerForm from '@/components/SpeakerForm';
-import { Mic2, Clock, Sparkles } from 'lucide-react';
+import { Mic2 } from 'lucide-react';
 import PageHero from '@/components/PageHero';
-import { DEMO_SIGNUP, LUMA_CALENDAR_URL } from '@/lib/meetupSchedule';
+import { SitePhoto } from '@/components/RoutePhoto';
+import { MANIFESTO_STEM } from '@/data/sitePhotos';
+import { DEMO_SIGNUP, LUMA_CALENDAR_URL, MEETUP_TIME_LINE, MEETUP_VENUE } from '@/lib/meetupSchedule';
 
 const OCTOBER_LUMA = 'https://luma.com/50wo8gm8';
 
@@ -34,16 +36,11 @@ const faqs = [
 
 const Speak = () => (
   <div className="flex flex-col min-h-screen">
-    <Helmet>
-      <title>Speak at Wild AI - Sign up to demo</title>
-      <meta
-        name="description"
-        content="Sign up to demo at Wild AI. 15 minutes on the mic, no slides: about 10 minutes to demo, then about 5 minutes of questions and feedback. All ages. Free."
-      />
-      <meta property="og:title" content="Speak at Wild AI" />
-      <meta property="og:type" content="website" />
-      <meta name="twitter:card" content="summary" />
-    </Helmet>
+    <Seo
+      title="Demo at Wild AI"
+      description="Sign up to demo at Wild AI. 15 minutes on the mic, no slides, then questions and feedback from the room."
+      path="/speak"
+    />
     <Navbar />
 
     <main className="pb-20 flex-grow">
@@ -51,53 +48,30 @@ const Speak = () => (
         eyebrow="Demos"
         icon={Mic2}
         title={<>Demo at <span>Wild AI</span>.</>}
-        lede={DEMO_SIGNUP}
       />
-      <div className="container mx-auto px-4 pt-14">
 
-        {/* What we're looking for + what to expect */}
-        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 mb-16">
-          <div className="surface p-6 md:p-8">
-            <h2 className="text-xl font-display font-semibold text-wildai-mint mb-4">WHAT WE'RE LOOKING FOR</h2>
-            <ul className="space-y-4 text-muted-foreground">
-              <li className="flex items-start">
-                <Sparkles className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                A live demo of something you built - even half-built
-              </li>
-              <li className="flex items-start">
-                <Sparkles className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                A hard-won lesson from shipping with AI
-              </li>
-              <li className="flex items-start">
-                <Sparkles className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                Research or tooling our builder audience can actually use
-              </li>
-            </ul>
-          </div>
-          <div className="surface p-6 md:p-8">
-            <h2 className="text-xl font-display font-semibold text-wildai-mint mb-4">WHAT TO EXPECT</h2>
-            <ul className="space-y-4 text-muted-foreground">
-              <li className="flex items-start">
-                <Clock className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                15 minutes on the mic. No slides.
-              </li>
-              <li className="flex items-start">
-                <Clock className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                About 10 minutes to demo what you built, then about 5 minutes of questions and feedback from the audience.
-              </li>
-              <li className="flex items-start">
-                <Clock className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
-                Doors at 6:00, demos at 6:40, networking until 9. All ages. Free.
-              </li>
-            </ul>
-          </div>
+      <section className="speak-manifesto" aria-label="Show us">
+        <SitePhoto stem={MANIFESTO_STEM} />
+        <div className="speak-manifesto-copy">
+          <ul>
+            <li>What&apos;s a new way to think about a problem?</li>
+            <li>What&apos;s a new way to apply AI?</li>
+            <li>What&apos;s a new way to build with it?</li>
+          </ul>
+          <p>Show us your tech. Show us your stack. Show us the project, at any stage.</p>
+          <p>The more raw, the better. Get real questions and feedback from the room.</p>
+          <p className="speak-manifesto-format">
+            {DEMO_SIGNUP} No slides. {MEETUP_TIME_LINE}. {MEETUP_VENUE.name}. All ages. Free.
+          </p>
         </div>
+      </section>
 
+      <div className="container mx-auto px-4 pt-14">
         {/* Form */}
         <div className="max-w-2xl mx-auto mb-16">
-          <h2 className="section-title text-center">SUBMIT YOUR TALK</h2>
+          <h2 className="section-title text-center">Come show us</h2>
           <p className="text-center text-muted-foreground mb-8">
-            Tell us what you're building and we'll match you with a city and a date.
+            Tell us what you&apos;re building and we&apos;ll match you with a city and a date.
           </p>
           <SpeakerForm />
         </div>

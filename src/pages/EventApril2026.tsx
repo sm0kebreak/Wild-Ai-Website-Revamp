@@ -2,7 +2,8 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink, Linkedin } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
+import RoutePhoto from '@/components/RoutePhoto';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const speakers = [
@@ -32,14 +33,20 @@ const speakers = [
 const EventApril2026 = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Wild AI Meetup - April 20, 2026 | Improving Minneapolis</title>
-        <meta name="description" content="Wild AI on April 20, 2026 at Improving Minneapolis (6–8 PM). Talks from Kaushik Suresh, Joe LaChance, and Mamady Konneh." />
-      </Helmet>
+      <Seo
+        title="April 20, 2026 | Wild AI"
+        description="Wild AI on April 20, 2026 at Improving Minneapolis."
+        path="/events/april-2026"
+      />
       <Navbar />
-      <main className="pt-24 pb-20 flex-grow">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-gradient font-display mb-10">APRIL 2026 MEETUP</h1>
+      <main className="pb-20 flex-grow">
+        <header className="page-hero">
+          <RoutePhoto />
+          <div className="container relative mx-auto px-4">
+            <h1 className="page-hero__title">APRIL 2026 MEETUP</h1>
+          </div>
+        </header>
+        <div className="container mx-auto px-4 max-w-3xl pt-12">
 
           {/* Date & Time */}
           <div className="grid sm:grid-cols-2 gap-6 mb-10">
