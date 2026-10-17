@@ -1660,101 +1660,68 @@
   margin: 0 auto;
   padding: var(--space-section) var(--space-inline) calc(var(--space-section) * 1.5);
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-grid);
+  grid-template-columns: 1fr;
 }
-.company-grid > li {
-  display: flex;
-  min-width: 0;
-  min-height: 0;
-  aspect-ratio: 1;
-}
-.company-tile {
+.company-card {
   display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: var(--space-stack);
+  align-items: start;
+  padding: var(--space-stack) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.company-slot {
+  display: grid;
+  width: 4.75rem;
+  height: 4.75rem;
   place-items: center;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  padding: var(--space-stack);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: transparent;
+}
+.company-slot img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.company-slot span {
+  font-size: 0.7rem;
+  line-height: 1.2;
+  text-align: center;
+}
+.company-name {
+  font-family: 'Space Grotesk', 'Space Grotesk Fallback', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: #fff;
   text-decoration: none;
-  /* Same optical weights as the carousel, scaled to the tile. */
-  --logo-h: 68%;
-  --logo-max: 100%;
 }
-.company-tile[data-fit='icon'] {
-  --logo-h: 78%;
-  --logo-max: 78%;
+.company-name:hover,
+.company-name:focus-visible {
+  text-decoration: underline;
 }
-.company-tile[data-fit='lockup'] {
-  --logo-h: 68%;
-  --logo-max: 100%;
-}
-.company-tile[data-fit='word'] {
-  --logo-h: 52%;
-  --logo-max: 100%;
-}
-.company-tile[data-fit='wide'] {
-  --logo-h: 42%;
-  --logo-max: 100%;
-}
-.company-tile img {
-  display: block;
-  width: var(--logo-max);
-  height: var(--logo-h);
-  min-width: 0;
-  min-height: 0;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: center;
-  opacity: 0.78;
-}
-a.company-tile {
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-}
-a.company-tile img {
-  transition: opacity 0.2s ease;
-}
-a.company-tile:hover,
-a.company-tile:focus-visible {
-  border-color: rgba(255, 255, 255, 0.5);
-  outline: none;
-}
-a.company-tile:hover img,
-a.company-tile:focus-visible img {
-  opacity: 1;
-}
-.company-word {
-  max-width: 100%;
-  text-align: center;
-  font-family: 'Space Grotesk', 'Space Grotesk Fallback', sans-serif;
+.company-bio,
+.company-demo {
+  margin-top: 0.35rem;
   font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
 }
-@media (min-width: 700px) {
+.company-demo a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+@media (min-width: 800px) {
   .company-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-section);
   }
 }
-@media (min-width: 900px) {
+@media (min-width: 1180px) {
   .company-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1200px) {
-  .company-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1500px) {
-  .company-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 

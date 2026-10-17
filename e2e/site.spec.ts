@@ -209,19 +209,16 @@ test('See all companies opens /companies and the carousel has no arrows', async 
   await link.click();
   await expect(page).toHaveURL(/\/companies$/);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('companies have taken the stage at Wild AI');
-  await expect(page.getByText(/Demoed by/)).toHaveCount(0);
-  const tiles = page.locator('.company-tile');
-  const names = await tiles.evaluateAll((elements) => elements.map((element) => element.getAttribute('title')));
+  const names = await page.locator('.company-name').allTextContents();
   expect(names.length).toBeGreaterThan(60);
-  expect(names).toEqual([...names].sort((a, b) => (a ?? '').localeCompare(b ?? '', 'en')));
-  const amazon = page.locator('a.company-tile[data-company="Amazon"]');
-  await expect(amazon).toHaveAttribute('href', 'https://www.amazon.com/');
-  await expect(amazon).toHaveAttribute('target', '_blank');
-  await expect(amazon).toHaveAttribute('rel', /noopener/);
-  await expect(amazon).toHaveAttribute('aria-label', 'Amazon');
-  const columns = await page.locator('.company-grid').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ').length);
-  const width = page.viewportSize()?.width ?? 0;
-  expect(columns).toBe(width < 700 ? 2 : 5);
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'en')));
+  await expect(page.locator('[data-company="Amazon"] .company-bio')).toContainText('Amazon sells');
+  await expect(page.locator('[data-company="Ovicounter AI"] .company-bio')).toHaveCount(0);
+  await expect(page.locator('[data-company="Amazon"] .company-demo')).toHaveCount(0);
+  await expect(page.locator('[data-company="Attentio"] .company-demo a').first()).toHaveAttribute(
+    'href',
+    '/events/archive-2026-08-05',
+  );
 });
 
 test('events Upcoming and Past filters', async ({ page }) => {
