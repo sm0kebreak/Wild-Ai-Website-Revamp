@@ -146,18 +146,29 @@ const PastEventsStrip = ({
   detailed = false,
   stacks = false,
   cinema = false,
+  page = false,
 }: {
   limit?: number;
   detailed?: boolean;
   stacks?: boolean;
   cinema?: boolean;
+  page?: boolean;
 }) => {
   const events = typeof limit === 'number' ? pastMeetups.slice(0, limit) : pastMeetups;
   const Heading = stacks || cinema ? 'h2' : 'h1';
 
   return (
+    <>
+    {page ? (
+      <header className="page-hero">
+        <div className="container relative mx-auto px-4">
+          <h1 className="page-hero__title">Past events</h1>
+        </div>
+      </header>
+    ) : null}
     <section id="past-events" className={cinema ? '' : stacks ? 'py-6 md:py-8' : 'py-12 md:py-16'}>
       <div className={cinema ? 'mx-auto max-w-3xl' : 'container mx-auto px-4'}>
+        {page ? null : (
         <div className={cinema ? 'text-center' : 'mb-3 flex items-end justify-between gap-4'}>
           <div>
             {!cinema && <p className="eyebrow mb-2">Archive</p>}
@@ -175,6 +186,7 @@ const PastEventsStrip = ({
             </Link>
           )}
         </div>
+        )}
 
         <div className={cinema ? 'mt-8 text-left' : 'overflow-hidden rounded-xl border border-border bg-card'}>
           {!stacks && (
@@ -192,6 +204,7 @@ const PastEventsStrip = ({
         </div>
       </div>
     </section>
+    </>
   );
 };
 

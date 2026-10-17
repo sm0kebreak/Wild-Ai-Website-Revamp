@@ -67,7 +67,7 @@ const Join = () => {
             {/* Signup form */}
             <div className="surface p-6 md:p-8">
               {status === 'done' ? (
-                <div className="text-center py-10">
+                <div className="form-success py-10 text-center">
                   <CheckCircle2 className="w-12 h-12 text-wildai-mint mx-auto mb-4" />
                   <h2 className="text-xl font-display font-semibold mb-2">YOU'RE IN</h2>
                   <p className="text-muted-foreground mb-6">

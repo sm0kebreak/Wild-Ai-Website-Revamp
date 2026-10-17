@@ -50,7 +50,7 @@ const ShowAndTellForm = () => {
 
   if (submitted) {
     return (
-      <div className="p-6 md:p-8 surface text-center">
+      <div className="form-success surface p-6 text-center md:p-8">
         <CheckCircle className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
         <h3 className="text-xl font-display font-semibold mb-2">YOU'RE IN!</h3>
         <p className="text-muted-foreground">Jake has your Show & Tell signup.</p>

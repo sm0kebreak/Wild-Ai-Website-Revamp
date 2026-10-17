@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { MapPin, Clock, Calendar, Users, ExternalLink, PartyPopper, Laptop } from 'lucide-react';
+import { MapPin, Clock, Calendar, Users, ExternalLink, Laptop } from 'lucide-react';
 import ShowAndTellForm from '@/components/ShowAndTellForm';
 import { Helmet } from 'react-helmet-async';
 import { pastEventByDate } from '@/data/speakerArchive';
@@ -17,13 +17,14 @@ const EventMarch2026 = () => {
         <meta name="description" content="Celebrate Wild AI's anniversary on March 16, 2026! Bring your AI projects for show & tell and hear from amazing speakers." />
       </Helmet>
       <Navbar />
-      <main className="pt-24 pb-20 flex-grow">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl md:text-4xl font-bold text-gradient font-display">MARCH 2026 MEETUP</h1>
-            <PartyPopper className="w-7 h-7 text-wildai-mint flex-shrink-0" />
+      <main className="pb-20 flex-grow">
+        <header className="page-hero">
+          <div className="container relative mx-auto px-4">
+            <h1 className="page-hero__title">MARCH 2026 MEETUP</h1>
+            <p className="page-hero__lede">Anniversary Edition - Show & Tell</p>
           </div>
-          <p className="text-muted-foreground mb-10">Anniversary Edition - Show & Tell</p>
+        </header>
+        <div className="container mx-auto px-4 max-w-3xl pt-12">
 
           {/* Anniversary Banner */}
           <div className="bg-gradient-to-r from-wildai-mint/10 via-accent/10 to-wildai-mint/10 border border-wildai-mint/30 p-5 rounded-lg mb-10 text-center">

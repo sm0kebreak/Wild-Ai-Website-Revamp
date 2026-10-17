@@ -30,10 +30,14 @@ const EventFebruary2026 = () => {
         <meta name="description" content="Join us February 16, 2026 for an evening of AI talks and networking with Blaise Thomas, Jason Haupt, and Ahmet Ersin A." />
       </Helmet>
       <Navbar />
-      <main className="pt-24 pb-20 flex-grow">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2 text-gradient font-display">FEBRUARY 2026 MEETUP</h1>
-          <p className="text-muted-foreground mb-10">Monthly Wild AI gathering</p>
+      <main className="pb-20 flex-grow">
+        <header className="page-hero">
+          <div className="container relative mx-auto px-4">
+            <h1 className="page-hero__title">FEBRUARY 2026 MEETUP</h1>
+            <p className="page-hero__lede">Monthly Wild AI gathering</p>
+          </div>
+        </header>
+        <div className="container mx-auto px-4 max-w-3xl pt-12">
 
           {/* Date & Time */}
           <div className="grid sm:grid-cols-2 gap-6 mb-10">

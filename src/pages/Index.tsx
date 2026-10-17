@@ -9,9 +9,6 @@ import PastEventsStrip from '@/components/PastEventsStrip';
 import EventPhotoGallery from '@/components/EventPhotoGallery';
 import EmailCapture from '@/components/EmailCapture';
 import Footer from '@/components/Footer';
-import { team } from '@/data/team';
-import { Link } from 'react-router-dom';
-
 const Index = () => {
   return (
     <div className="tesla-home flex min-h-screen flex-col">
@@ -19,6 +16,10 @@ const Index = () => {
       <Navbar />
       <main className="min-w-0">
         <Hero />
+
+        <section className="logo-band" aria-label="Companies">
+          <LogoCarousel />
+        </section>
 
         <TeslaPanel
           sentence
@@ -56,63 +57,8 @@ const Index = () => {
           <EventPhotoGallery cinema />
         </TeslaPanel>
 
-        <TeslaPanel flow focus="center 32%" image="/event-photos/2026-08-minneapolis-06-1280.webp" title="Team" subline="Organizers.">
-          <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-5">
-            {team.map((person) => {
-              const body = (
-                <>
-                  {person.photo ? (
-                    <img
-                      src={person.photo}
-                      alt=""
-                      className="avatar-photo mx-auto h-24 w-24 md:h-28 md:w-28"
-                      width={100}
-                      height={100}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : null}
-                  <p className="mt-3 font-display text-sm font-semibold leading-tight md:text-base">{person.name}</p>
-                  <p className="mt-1 text-xs text-white/85">Organizer</p>
-                </>
-              );
-              return (
-                <li key={person.name}>
-                  {person.linkedin ? (
-                    <a
-                      href={person.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${person.name} on LinkedIn`}
-                      className="block"
-                    >
-                      {body}
-                    </a>
-                  ) : (
-                    body
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-          <div className="tesla-actions">
-            <Link className="tesla-pill tesla-pill-primary" to="/about">
-              About
-            </Link>
-            <Link className="tesla-pill tesla-pill-secondary" to="/join">
-              Join
-            </Link>
-          </div>
-        </TeslaPanel>
-
         <TeslaPanel flow focus="center 40%" image="/event-photos/2026-08-minneapolis-04-1280.webp">
           <PastEventsStrip limit={4} stacks cinema />
-        </TeslaPanel>
-
-        <TeslaPanel flow wide focus="center 46%" image="/event-photos/2026-08-minneapolis-02-1280.webp">
-          <div className="tesla-companies">
-            <LogoCarousel />
-          </div>
         </TeslaPanel>
 
         <TeslaPanel

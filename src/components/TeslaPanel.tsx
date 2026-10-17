@@ -7,6 +7,13 @@ type Pill = {
   external?: boolean;
 };
 
+/** 480/960/1280 derivatives share the same stem as the 1280 frame. */
+const responsiveSrc = (src: string) => {
+  const match = src.match(/^(.*)-\d+\.webp$/);
+  if (!match) return undefined;
+  return [480, 960, 1280].map((width) => `${match[1]}-${width}.webp ${width}w`).join(', ');
+};
+
 const PillLink = ({ action, kind }: { action: Pill; kind: 'primary' | 'secondary' }) => {
   const className = `tesla-pill tesla-pill-${kind}`;
   if (action.external || /^https?:\/\//.test(action.href)) {
@@ -70,6 +77,8 @@ const TeslaPanel = ({
         <img
           className="tesla-photo"
           src={image}
+          srcSet={responsiveSrc(image)}
+          sizes="100vw"
           alt={imageAlt}
           width={1280}
           height={960}

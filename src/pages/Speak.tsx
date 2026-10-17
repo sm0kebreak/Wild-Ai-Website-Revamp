@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import SpeakerForm from '@/components/SpeakerForm';
 import { Mic2 } from 'lucide-react';
 import PageHero from '@/components/PageHero';
-import { DEMO_SIGNUP, LUMA_CALENDAR_URL } from '@/lib/meetupSchedule';
+import { DEMO_SIGNUP, LUMA_CALENDAR_URL, MEETUP_TIME_LINE, MEETUP_VENUE } from '@/lib/meetupSchedule';
 
 const OCTOBER_LUMA = 'https://luma.com/50wo8gm8';
 
@@ -71,7 +71,7 @@ const Speak = () => (
           <p>Show us your tech. Show us your stack. Show us the project, at any stage.</p>
           <p>The more raw, the better. Get real questions and feedback from the room.</p>
           <p className="speak-manifesto-format">
-            {DEMO_SIGNUP} No slides. Doors 6:00 PM, demos at 6:40, until 9. All ages. Free.
+            {DEMO_SIGNUP} No slides. {MEETUP_TIME_LINE}. {MEETUP_VENUE.name}. All ages. Free.
           </p>
         </div>
       </section>

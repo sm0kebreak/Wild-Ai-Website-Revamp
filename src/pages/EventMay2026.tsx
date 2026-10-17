@@ -15,9 +15,13 @@ const EventMay2026 = () => {
         <meta name="description" content="Wild AI is back May 18, 2026 (6 PM) at the Improving office in Minneapolis. Quick, snappy 10-minute demos from Yaniv Ben-Ami, Lyndon Carlson, Jimmy, and Joanna May." />
       </Helmet>
       <Navbar />
-      <main className="pt-24 pb-20 flex-grow">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-gradient font-display mb-6">MAY 2026 MEETUP</h1>
+      <main className="pb-20 flex-grow">
+        <header className="page-hero">
+          <div className="container relative mx-auto px-4">
+            <h1 className="page-hero__title">MAY 2026 MEETUP</h1>
+          </div>
+        </header>
+        <div className="container mx-auto px-4 max-w-3xl pt-12">
 
           {/* Intro */}
           <div className="surface p-6 mb-10 space-y-4">

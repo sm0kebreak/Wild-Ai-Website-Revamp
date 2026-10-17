@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import HeroCountdown from '@/components/HeroCountdown';
-import { MEETUP_VENUE, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
+import { MEETUP_TIME_LINE, MEETUP_VENUE, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 const headlineFor = (dateIso: string) =>
   new Date(`${dateIso}T00:00:00`).toLocaleDateString('en-US', {
@@ -37,7 +37,7 @@ const Hero = () => {
           <span className="block">{headlineFor(date)}</span>
         </h1>
         <p className="tesla-sub">
-          Doors 6:00 PM · Demos 6:40 · {MEETUP_VENUE.name}
+          {MEETUP_TIME_LINE} · {MEETUP_VENUE.name}
         </p>
         <HeroCountdown />
         <div className="tesla-actions">

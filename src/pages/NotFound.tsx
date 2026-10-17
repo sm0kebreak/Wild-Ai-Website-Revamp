@@ -13,7 +13,7 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="page-hero flex min-h-[100svh] items-center">
+    <div className="page-hero page-hero-fill">
       <div className="page-hero__wash" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
       <div className="container relative mx-auto px-4 text-center">

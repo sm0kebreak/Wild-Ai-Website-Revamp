@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Helmet } from 'react-helmet-async';
-import { ExternalLink, Laptop } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Submission {
@@ -39,13 +39,14 @@ const ShowAndTell = () => {
         <meta name="description" content="Check out AI projects built by the Wild AI community. From side projects to startup MVPs, see what builders are creating." />
       </Helmet>
       <Navbar />
-      <main className="pt-24 pb-20 flex-grow">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl md:text-4xl font-bold text-gradient font-display">SHOW & TELL</h1>
-            <Laptop className="w-7 h-7 text-wildai-mint flex-shrink-0" />
+      <main className="pb-20 flex-grow">
+        <header className="page-hero">
+          <div className="container relative mx-auto px-4">
+            <h1 className="page-hero__title">SHOW & TELL</h1>
+            <p className="page-hero__lede">Projects from the Wild AI community</p>
           </div>
-          <p className="text-muted-foreground mb-10">Projects from the Wild AI community</p>
+        </header>
+        <div className="container mx-auto px-4 max-w-4xl pt-12">
 
           {loading ? (
             <div className="text-center py-20 text-muted-foreground">Loading projects...</div>

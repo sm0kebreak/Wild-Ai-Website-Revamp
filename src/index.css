@@ -959,9 +959,6 @@ html[data-native-scroll] .site-header.border-border {
     opacity: 1;
     filter: none;
   }
-  html:has(.tesla-home) {
-    scroll-snap-type: none;
-  }
 }
 
 /* Page shells use the small viewport so the iOS toolbar does not jump the fold. */
@@ -1013,17 +1010,10 @@ html[data-native-scroll] .site-header.border-border {
 }
 
 /* ---------- Tesla homepage ---------- */
-html:has(.tesla-home) {
-  scroll-snap-type: y proximity;
-}
 .site-header {
   color: #fff;
-  background: transparent;
+  background: #070908;
   border: 0;
-  transition: background-color 180ms ease;
-}
-.site-header[data-scrolled='true'] {
-  background: hsl(var(--background));
 }
 .tesla-panel {
   position: relative;
@@ -1036,12 +1026,11 @@ html:has(.tesla-home) {
   padding: calc(4.5rem + env(safe-area-inset-top)) 1.25rem calc(2.5rem + env(safe-area-inset-bottom));
   overflow: hidden;
   color: #fff;
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
   background: #000;
 }
 .tesla-panel-flow {
   height: auto;
+  min-height: 0;
   justify-content: center;
   overflow: visible;
 }
@@ -1196,6 +1185,9 @@ html:has(.tesla-home) {
     padding: 0;
     overflow: visible;
   }
+  .tesla-panel-flow {
+    min-height: 0;
+  }
   .tesla-media {
     position: relative;
     inset: auto;
@@ -1203,6 +1195,16 @@ html:has(.tesla-home) {
     width: 100%;
     aspect-ratio: 3 / 4;
     max-height: 58svh;
+  }
+  /* The words sit on the solid band, so the photograph itself stays bright. */
+  .tesla-panel .tesla-scrim,
+  .tesla-panel-flow .tesla-scrim {
+    background-color: transparent;
+    background-image: none;
+  }
+  .hero-stage .tesla-scrim {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.28) 12%, transparent 26%);
   }
   .tesla-copy {
     display: flex;
@@ -1243,6 +1245,9 @@ html:has(.tesla-home) {
     height: auto;
     min-height: 100svh;
     overflow: visible;
+  }
+  .tesla-panel-flow {
+    min-height: 0;
   }
   .tesla-title {
     font-size: clamp(2.35rem, 9vw, 3.6rem);
@@ -1326,4 +1331,144 @@ html:has(.tesla-home) {
     padding-top: 0.75rem;
     padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
   }
+}
+
+/* Company marks sit in their own band, larger than the old panel crop. */
+.logo-band {
+  background: #070908;
+  color: #fff;
+  padding: 1.75rem 0 0.5rem;
+}
+.logo-band .glass,
+.logo-band .logo-card {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #fff;
+}
+.logo-band .border-b {
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+}
+.logo-band .logo-mark {
+  height: auto;
+  min-height: calc(var(--logo-h) + 0.75rem);
+  --logo-h: 3.35rem;
+}
+.logo-band .logo-mark[data-fit='icon'] {
+  --logo-h: 4.15rem;
+}
+.logo-band .logo-mark[data-fit='word'],
+.logo-band .logo-mark[data-fit='wide'] {
+  --logo-h: 2.9rem;
+}
+@media (min-width: 768px) {
+  .logo-band {
+    padding: 2.25rem 0 0.75rem;
+  }
+  .logo-band .logo-mark {
+    --logo-h: 4.75rem;
+  }
+  .logo-band .logo-mark[data-fit='icon'] {
+    --logo-h: 5.5rem;
+  }
+  .logo-band .logo-mark[data-fit='word'],
+  .logo-band .logo-mark[data-fit='wide'] {
+    --logo-h: 4rem;
+  }
+}
+
+/* Shared photo header for every route that is not the homepage. */
+.page-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  min-height: 46svh;
+  padding: calc(6.25rem + env(safe-area-inset-top)) 0 2.75rem;
+  border: 0;
+  background: #070908;
+  color: #fff;
+}
+.page-hero-fill {
+  align-items: center;
+  min-height: 100svh;
+}
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(7, 9, 8, 0.92) 0%, rgba(0, 0, 0, 0.62) 42%, rgba(0, 0, 0, 0.34) 100%),
+    url('/event-photos/2026-09-minneapolis-01-1280.webp') center 42% / cover no-repeat;
+}
+.page-hero__wash,
+.page-hero .hero-grain {
+  display: none;
+}
+.page-hero > * {
+  position: relative;
+  z-index: 1;
+}
+.page-hero__title,
+.page-hero__title span {
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  font-size: clamp(2.6rem, 6vw, 4.75rem);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.page-hero__lede,
+.page-hero .text-muted-foreground,
+.page-hero .signal-label,
+.page-hero .eyebrow {
+  color: rgba(255, 255, 255, 0.9);
+}
+.page-hero__lede {
+  max-width: 40rem;
+  margin-top: 0.9rem;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.page-hero__aside {
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: none;
+}
+.page-hero__aside strong {
+  color: #fff;
+}
+.page-hero .text-wildai-mint {
+  color: #fff;
+}
+@media (max-width: 767px) {
+  .page-hero {
+    min-height: 42svh;
+    padding: calc(5.25rem + env(safe-area-inset-top)) 0 2rem;
+  }
+  .page-hero-fill {
+    min-height: 100svh;
+  }
+  .page-hero__title,
+  .page-hero__title span {
+    font-size: clamp(2.15rem, 10vw, 3rem);
+  }
+}
+
+.form-success {
+  background: #111;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 1rem;
+}
+.form-success .text-wildai-mint,
+.form-success .text-muted-foreground,
+.form-success .text-accent {
+  color: #fff;
 }

@@ -12,35 +12,28 @@ const GopherAIConference = () => {
         <meta name="description" content="Gopher AI Demo Night on April 9, 2026 at CMU Mississippi Room. See demos from students, researchers, and local startups. Free and open to the public." />
       </Helmet>
       <Navbar />
-      <main className="pt-24 pb-20 flex-grow">
-        <div className="container mx-auto px-4 max-w-3xl">
-
-          {/* Hero */}
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-6 md:gap-10 mb-8">
-              <div className="flex-1 flex items-center justify-end">
-                <img
-                  src="/lovable-uploads/umn-logo.svg"
-                  alt="University of Minnesota logo"
-                  className="w-36 md:w-52 h-auto"
-                />
-              </div>
-              <span className="text-4xl md:text-6xl flex-shrink-0">🤝</span>
-              <div className="flex-1 flex items-center justify-start">
-                <img
-                  src="/lovable-uploads/wildai-w-logo.png"
-                  alt="Wild AI Logo"
-                  className="w-24 md:w-36 h-auto"
-                />
-              </div>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-display font-semibold mb-4">
+      <main className="pb-20 flex-grow">
+        <header className="page-hero">
+          <div className="container relative mx-auto px-4 text-center">
+            <h1 className="page-hero__title">
               GOPHER AI<br />DEMO NIGHT
             </h1>
-            <p className="text-lg text-muted-foreground mb-6">Startups, Research, & Technical Systems</p>
-            <div className="inline-block bg-wildai-mint/10 border border-wildai-mint/30 rounded-lg px-6 py-3">
-              <p className="font-mono text-wildai-mint font-bold">FREE & OPEN TO THE PUBLIC</p>
-            </div>
+            <p className="page-hero__lede mx-auto">Startups, Research, & Technical Systems</p>
+            <p className="mt-5 font-mono text-sm font-bold tracking-wide text-white">FREE & OPEN TO THE PUBLIC</p>
+          </div>
+        </header>
+        <div className="container mx-auto px-4 max-w-3xl pt-12">
+          <div className="mb-10 flex items-center justify-center gap-8">
+            <img
+              src="/lovable-uploads/umn-logo.svg"
+              alt="University of Minnesota logo"
+              className="h-auto w-36 brightness-0 invert md:w-48"
+            />
+            <img
+              src="/lovable-uploads/wildai-w-logo.png"
+              alt="Wild AI Logo"
+              className="h-auto w-24 md:w-32"
+            />
           </div>
 
           {/* Date, Time, Location */}

@@ -89,7 +89,7 @@ const Sponsor = () => {
               Sponsorship is $500 per event. Tell us about your company and we will follow up.
             </p>
             {submitted ? (
-              <div className="surface p-6 md:p-8 text-center">
+              <div className="form-success surface p-6 text-center md:p-8">
                 <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
                 <p className="font-bold">Thanks. Jake has your request and will follow up.</p>
               </div>

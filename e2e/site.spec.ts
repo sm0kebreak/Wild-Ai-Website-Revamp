@@ -250,7 +250,8 @@ const BILLY_LINKEDIN = 'https://www.linkedin.com/in/billy-walker';
 test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
   await openPath(page, '/');
   const next = page.locator('#next-event');
-  await expect(next.getByText('6:40 PM')).toBeVisible();
+  await expect(next.getByText('Three demos starting at 6:40')).toBeVisible();
+  await expect(next.getByText('Dangerous Man Brewing')).toBeVisible();
   await expect(next.getByText('Vikas Sabbi')).toBeVisible();
   await expect(next.getByText('Eric Phillips')).toBeVisible();
   await expect(next.getByText('Billy Walker')).toBeVisible();
@@ -266,11 +267,12 @@ test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
   await expect(next.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
 
   await openPath(page, '/events/msp-october-2026');
-  await expect(page.getByText('6:40 PM').first()).toBeVisible();
+  await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
+  await expect(page.getByText('Dangerous Man Brewing').first()).toBeVisible();
   await expect(page.getByText('6:30')).toHaveCount(0);
   await expect(page.locator('meta[data-rh="true"][name="description"]')).toHaveAttribute(
     'content',
-    /Live demos start at 6:40 PM CT\. Networking until 9\./,
+    /Three demos starting at 6:40 · Networking until 9 PM at Dangerous Man Brewing/,
   );
   const lineup = page.locator('div.surface').filter({ has: page.getByRole('heading', { name: 'SPEAKER LINEUP' }) });
   await expect(lineup.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
@@ -281,14 +283,15 @@ test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'RSVP NOW' })).toHaveAttribute('href', LUMA_EVENT);
 
   await openPath(page, '/events');
-  await expect(page.getByText('Demos 6:40 PM').first()).toBeVisible();
+  await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
   await expect(page.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
   await expect(page.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
   await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
   await expect(page.getByText('Eric Phillips')).toBeVisible();
 
   await openPath(page, '/minneapolis');
-  await expect(page.getByText('6:40 PM').first()).toBeVisible();
+  await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
+  await expect(page.getByText('Dangerous Man Brewing').first()).toBeVisible();
   await expect(page.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
   await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
   await expect(page.getByText(/first high schooler ever/i)).toBeVisible();

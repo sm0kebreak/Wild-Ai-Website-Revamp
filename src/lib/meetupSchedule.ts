@@ -11,17 +11,17 @@ export const MEETUP_VENUE = {
 export const MEETUP_START_TIME = '18:00';
 /** Networking runs until 9:00 PM. Doors stay at 18:00. */
 export const MEETUP_END_TIME = '21:00';
-export const MEETUP_CADENCE = 'Doors 6:00 PM CT, demos at 6:40 PM.';
+export const MEETUP_CADENCE = 'Doors 6:00 PM · Three demos starting at 6:40 · Networking until 9 PM';
 
-/** One line for heroes and cards, so a doors time never hides the demo start. */
-export const MEETUP_TIME_LINE = 'Doors 6:00 PM · Demos 6:40 PM · Until 9 PM CT';
+/** One line for heroes, cards, and format copy. */
+export const MEETUP_TIME_LINE = 'Doors 6:00 PM · Three demos starting at 6:40 · Networking until 9 PM';
 
 /** Exact demo-signup line. Use this on every signup surface. */
 export const DEMO_SIGNUP =
   'Sign up to demo: 15 minutes on the mic. Demo to the room what you built, then take questions and feedback from the audience.';
 
 export const meetupFormatCopy =
-  'Doors open at 6:00 PM CT. Live demos start at 6:40 PM. Networking until 9. 15-minute demos, no slides. All ages. Free.';
+  'Doors 6:00 PM · Three demos starting at 6:40 · Networking until 9 PM. 15-minute demos, no slides. All ages. Free.';
 
 /** Wild AI Luma calendar. Nights without their own event page register here. */
 export const LUMA_CALENDAR_URL = 'https://luma.com/wildai';
@@ -63,13 +63,13 @@ export const meetupAgenda = [
   { time: '6:00 PM', label: 'Doors open (CT)' },
   {
     time: '6:40 PM',
-    label: 'Demos start. About 10 minutes to demo, then about 5 minutes of questions and feedback. No slides.',
+    label: 'Three demos start. About 10 minutes to demo, then about 5 minutes of questions and feedback. No slides.',
   },
   { time: 'Until 9 PM', label: 'Networking' },
 ];
 
 export const meetupBlurb =
-  'Doors open at 6:00 PM CT at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Live demos start at 6:40 PM CT. Networking until 9. Each demo is 15 minutes with no slides: about 10 minutes to show what you built, then about 5 minutes of questions and feedback. All ages. Free.';
+  'Doors 6:00 PM · Three demos starting at 6:40 · Networking until 9 PM at Dangerous Man Brewing, 861 E Hennepin Ave #100, Minneapolis. Each demo is 15 minutes with no slides: about 10 minutes to show what you built, then about 5 minutes of questions and feedback. All ages. Free.';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const toYmd = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

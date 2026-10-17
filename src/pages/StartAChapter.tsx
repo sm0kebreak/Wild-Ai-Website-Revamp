@@ -121,7 +121,7 @@ const StartAChapter = () => {
               Tell us about your city and why you want to build its AI community.
             </p>
             {submitted ? (
-              <div className="surface p-6 md:p-8 text-center">
+              <div className="form-success surface p-6 text-center md:p-8">
                 <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
                 <p className="font-bold mb-2">Application received.</p>
                 <p className="text-sm text-muted-foreground">
