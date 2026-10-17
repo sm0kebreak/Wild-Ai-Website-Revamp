@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /** Touch and reduced-motion sessions keep the browser's own scroll. */
 export const nativeScrollQuery = '(pointer: coarse), (prefers-reduced-motion: reduce)';
@@ -63,6 +63,57 @@ export const useScrollProgress = (spanRatio = 1, smoothing = 0.12) => {
   }, [spanRatio, smoothing]);
 
   return progress;
+};
+
+/**
+ * Drives a scroll-linked effect without React state. Callers write transforms
+ * on refs. A per-frame setState here re-rendered the whole homepage, including
+ * the photo grid, for as long as the damped value was still catching up.
+ */
+export const useScrollDriver = (onFrame: (progress: number) => void) => {
+  const onFrameRef = useRef(onFrame);
+  onFrameRef.current = onFrame;
+
+  useEffect(() => {
+    if (prefersNativeScroll()) {
+      document.documentElement.dataset.nativeScroll = 'true';
+      onFrameRef.current(0);
+      return;
+    }
+
+    let frame = 0;
+    let current = 0;
+    let target = 0;
+
+    const readTarget = () => {
+      const span = window.innerHeight * 1.25;
+      target = span > 0 ? Math.min(window.scrollY / span, 1) : 0;
+    };
+
+    const tick = () => {
+      current += (target - current) * 0.12;
+      if (Math.abs(target - current) < 0.0004) current = target;
+      onFrameRef.current(current);
+      frame = current === target ? 0 : requestAnimationFrame(tick);
+    };
+
+    const onScroll = () => {
+      readTarget();
+      if (!frame && current !== target) frame = requestAnimationFrame(tick);
+    };
+
+    readTarget();
+    current = target;
+    onFrameRef.current(target);
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
 };
 
 /** Smoothstep easing - no hard starts or stops. */

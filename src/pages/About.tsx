@@ -42,6 +42,7 @@ const team: TeamMember[] = [
   {
     name: 'Justin Bosco',
     linkedin: 'https://www.linkedin.com/in/justin14/',
+    photo: '/team/justin-bosco.jpg',
   },
   {
     name: 'Kate Kuehl',
@@ -51,6 +52,7 @@ const team: TeamMember[] = [
   {
     name: 'Maanas Taneja',
     linkedin: 'https://www.linkedin.com/in/maanas-taneja',
+    photo: '/team/maanas-taneja.jpg',
   },
   {
     name: 'Matthew Osborn',
@@ -60,6 +62,7 @@ const team: TeamMember[] = [
   {
     name: 'Micah Peoples',
     linkedin: 'https://www.linkedin.com/in/micahpeoples/',
+    photo: '/team/micah-peoples.jpg',
   },
   {
     name: 'Muhammad Shahid',

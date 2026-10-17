@@ -111,7 +111,9 @@
     text-rendering: optimizeLegibility;
   }
   html {
-    scroll-behavior: smooth;
+    /* Native scrolling. Smooth scroll interpolates on the main thread and
+       stutters once the page is long. */
+    scroll-behavior: auto;
     -webkit-text-size-adjust: 100%;
   }
   html,
@@ -513,36 +515,48 @@
     @apply sticky top-0 flex items-center overflow-hidden;
     background: hsl(var(--surface-deep));
   }
-  /* Slow duotone wash — replaces the generic particle field. */
+  /* The hero only sticks through the opening handoff. After that it leaves
+     with the pin, instead of staying composited under the rest of the page. */
+  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .hero-pin {
+      height: calc(100svh + 125vh);
+      min-height: calc(640px + 125vh);
+    }
+    .hero-handoff {
+      margin-top: -125vh;
+    }
+  }
+  /* Static wash. A blurred, infinitely animated layer under a sticky hero
+     repaints the whole scroll, worst when photos pass the footer. */
   .hero-wash {
     position: absolute;
-    inset: -20%;
+    inset: 0;
     background:
-      radial-gradient(48% 52% at 22% 28%, hsl(179 78% 16% / 0.85), transparent 62%),
-      radial-gradient(44% 48% at 78% 68%, hsl(186 40% 20% / 0.75), transparent 62%),
-      radial-gradient(60% 60% at 60% 12%, hsl(172 18% 76% / 0.08), transparent 68%);
-    filter: blur(28px);
-    animation: hero-wash 26s ease-in-out infinite alternate;
+      radial-gradient(56% 58% at 22% 28%, hsl(179 78% 16% / 0.9), transparent 72%),
+      radial-gradient(52% 54% at 78% 68%, hsl(186 40% 20% / 0.78), transparent 74%),
+      radial-gradient(64% 64% at 60% 12%, hsl(172 18% 76% / 0.1), transparent 76%);
   }
-  @keyframes hero-wash {
-    0% {
-      transform: translate3d(-3%, -2%, 0) scale(1.02);
-    }
-    100% {
-      transform: translate3d(3%, 2%, 0) scale(1.1);
-    }
+  .hero-stage[data-spent='true'] .hero-wash,
+  .hero-stage[data-spent='true'] .hero-grain {
+    display: none;
   }
   /* Fine grain keeps the large flat areas from looking synthetic. */
   .hero-grain {
     position: absolute;
     inset: 0;
-    opacity: 0.32;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.18;
+    pointer-events: none;
+    background-image: radial-gradient(hsl(160 14% 95% / 0.28) 0.6px, transparent 0.6px);
+    background-size: 3px 3px;
   }
   .hero-rule {
     height: 1px;
     background: linear-gradient(to right, hsl(var(--accent) / 0.5), hsl(var(--accent) / 0));
+  }
+  .countdown-figures {
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1, "zero" 0;
   }
 
   /* Staggered entrance for hero lines. */
@@ -860,6 +874,15 @@
     height: 100dvh;
     padding-top: calc(4rem + env(safe-area-inset-top));
     padding-bottom: max(1.75rem, env(safe-area-inset-bottom));
+    position: relative;
+    top: auto;
+  }
+  .hero-pin {
+    height: auto;
+    min-height: 0;
+  }
+  .hero-handoff {
+    margin-top: 0;
   }
   .display-title {
     font-size: clamp(1.85rem, 8.4vw, 2.6rem);
@@ -874,10 +897,22 @@
   }
 }
 
-/* Phones scroll natively: no smoothed document scrolling, no blurred wash, no frosted header. */
+/* Touch and reduced motion scroll natively: the hero does not pin, and the
+   header stays a solid bar instead of blurring whatever passes underneath. */
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .hero-stage {
+    position: relative;
+    top: auto;
+  }
+  .hero-pin {
+    height: auto;
+    min-height: 0;
+  }
+  .hero-handoff {
+    margin-top: 0;
   }
   .hero-wash {
     animation: none;

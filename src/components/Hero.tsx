@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowDown } from 'lucide-react';
-import { prefersNativeScroll, ramp, useScrollProgress } from '@/hooks/useScrollProgress';
+import { prefersNativeScroll, ramp, useScrollDriver } from '@/hooks/useScrollProgress';
 import HeroCountdown from '@/components/HeroCountdown';
 import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
@@ -11,36 +11,53 @@ import { nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
  * scrolls up over it while the hero sinks away underneath.
  */
 const Hero = () => {
-  /* Stretched past one viewport so the exit never feels rushed. */
-  const progress = useScrollProgress(1.25);
   const rsvpUrl = rsvpUrlFor(nextMeetupDate());
   const native = prefersNativeScroll();
+  const sectionRef = useRef<HTMLElement>(null);
+  const washRef = useRef<HTMLDivElement>(null);
+  const copyRef = useRef<HTMLDivElement>(null);
+  const cueRef = useRef<HTMLDivElement>(null);
+  const [spent, setSpent] = useState(false);
 
   /* Holds still for a beat, then sinks and dissolves. Touch scrolling skips this. */
-  const exit = native ? 0 : ramp(progress, 0.04, 0.84);
-  const spent = !native && progress >= 1;
+  useScrollDriver((progress) => {
+    const exit = native ? 0 : ramp(progress, 0.04, 0.84);
+    const nextSpent = !native && progress >= 1;
+    setSpent((prev) => (prev === nextSpent ? prev : nextSpent));
+
+    const wash = washRef.current;
+    if (wash) {
+      wash.style.transform = 'translate3d(0, ' + exit * 8 + 'vh, 0)';
+      wash.style.opacity = String(1 - exit * 0.6);
+    }
+    const copy = copyRef.current;
+    if (copy) {
+      copy.style.opacity = String(1 - exit);
+      copy.style.transform = native
+        ? ''
+        : 'translate3d(0, ' + exit * 20 + 'vh, 0) scale(' + (1 - exit * 0.07) + ')';
+      copy.style.visibility = nextSpent ? 'hidden' : '';
+      copy.style.willChange = native || nextSpent ? '' : 'transform, opacity';
+    }
+    const cue = cueRef.current;
+    if (cue) {
+      cue.style.opacity = String(1 - ramp(progress, 0, 0.16));
+      cue.style.visibility = nextSpent ? 'hidden' : '';
+    }
+    const section = sectionRef.current;
+    if (section) {
+      if (nextSpent) section.dataset.spent = 'true';
+      else delete section.dataset.spent;
+    }
+  });
 
   return (
-    <section className="hero-stage" aria-label="Wild AI" aria-hidden={spent}>
-      <div
-        className="hero-wash"
-        aria-hidden="true"
-        style={{
-          transform: 'translate3d(0, ' + exit * 8 + 'vh, 0)',
-          opacity: 1 - exit * 0.6,
-        }}
-      />
+    <div className="hero-pin">
+    <section ref={sectionRef} className="hero-stage" aria-label="Wild AI" aria-hidden={spent}>
+      <div ref={washRef} className="hero-wash" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
 
-      <div
-        className="container relative mx-auto px-4"
-        style={{
-          opacity: 1 - exit,
-          transform: native ? undefined : 'translate3d(0, ' + exit * 20 + 'vh, 0) scale(' + (1 - exit * 0.07) + ')',
-          visibility: spent ? 'hidden' : undefined,
-          willChange: native || spent ? undefined : 'transform, opacity',
-        }}
-      >
+      <div ref={copyRef} className="container relative mx-auto px-4">
         <div className="grid min-w-0 items-center gap-4 md:gap-8 lg:gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
           <div className="min-w-0">
             <div className="line-mask">
@@ -115,11 +132,8 @@ const Hero = () => {
       </div>
 
       <div
+        ref={cueRef}
         className="absolute inset-x-0 bottom-8 hidden justify-center md:flex"
-        style={{
-          opacity: 1 - ramp(progress, 0, 0.16),
-          visibility: spent ? 'hidden' : undefined,
-        }}
         aria-hidden="true"
       >
         <span
@@ -131,6 +145,7 @@ const Hero = () => {
         </span>
       </div>
     </section>
+    </div>
   );
 };
 

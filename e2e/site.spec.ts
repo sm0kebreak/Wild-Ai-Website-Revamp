@@ -352,13 +352,23 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     'href',
     'https://www.linkedin.com/in/justin14/',
   );
-  await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/justin-bosco.jpg',
+  );
+  await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/maanas-taneja.jpg',
+  );
   await expect(page.getByRole('link', { name: /Micah Peoples/ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/micahpeoples/',
   );
-  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/micah-peoples.jpg',
+  );
+  await expect(page.locator('ul.grid > li img')).toHaveCount(10);
   await expect(page.getByRole('link', { name: /Muhammad Shahid/ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/muhammad-shahid-moandco/',
@@ -394,6 +404,20 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   await expect(instagram).toHaveCount(1);
   await expect(instagram).toHaveAttribute('href', 'https://www.instagram.com/wildai.us/');
   await expect(page.locator('footer').getByRole('link', { name: 'Admin' })).toHaveCount(0);
+});
+
+test('homepage next meetup leads with the date', async ({ page }) => {
+  await openPath(page, '/');
+  const hero = page.locator('.hero-stage');
+  await expect(hero.getByText('Monday, October 19', { exact: true })).toBeVisible();
+  await expect(hero.getByText('Dangerous Man Brewing')).toBeVisible();
+  await expect(hero.getByText(/Doors 6:00 PM/)).toBeVisible();
+  await expect(hero.locator('.animate-ping')).toHaveCount(0);
+  const figures = hero.locator('.countdown-figures');
+  await expect(figures).toBeVisible();
+  const font = await figures.evaluate((element) => getComputedStyle(element).fontFamily);
+  expect(font.toLowerCase()).not.toContain('mono');
+  expect(font.toLowerCase()).toContain('inter');
 });
 
 test('anchors scroll to the named section', async ({ page }) => {
