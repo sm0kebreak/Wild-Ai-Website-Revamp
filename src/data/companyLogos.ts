@@ -4,11 +4,6 @@ export interface CompanyLogo {
   url?: string;
   /** 'dark-bg': light art on an opaque dark box. 'light-ink': light art on transparency. 'plain': a single-color mark. */
   tone?: 'dark-bg' | 'deep-bg' | 'light-ink' | 'plain';
-  /**
-   * One plain sentence, about 20 words, from the company's own site or LinkedIn.
-   * Empty when that could not be checked. Jake can edit these in `companyBios`.
-   */
-  bio?: string;
 }
 
 /** Logos already on the site before the speaker-company pass. */
@@ -226,89 +221,8 @@ export const speakerStageLogos: CompanyLogo[] = [
   { name: 'Wrapped', logo: '/logos/wrappt.png', url: 'https://wrappt.ai/', tone: 'dark-bg' },
 ];
 
-/**
- * One sentence each, taken from the company's site or LinkedIn.
- * Leave a value blank when the page did not say what the company does.
- */
-export const companyBios: Record<string, string> = {
-  '3M': '3M applies science to products people use in everyday life.',
-  'Adile Diagnostic': 'Adile Diagnostic develops and produces diagnostic medical devices.',
-  Agora: 'Agora provides voice, video, and chat tools for live conversations in apps.',
-  Amazon: 'Amazon sells millions of products online and bundles shopping and entertainment in Prime.',
-  Attentio: "Attentio puts an organization's rules into AI that the organization owns and runs.",
-  BData: 'BData runs a burn-care data platform built with the American Burn Association.',
-  BlueFolder: 'BlueFolder is field-service software for work orders, dispatch, scheduling, and billing.',
-  'Boardwalk Health': 'Boardwalk Health runs chronic and behavioral health programs for health systems.',
-  Brilliant: 'Brilliant is a visual tutor for math and coding, from grade school through college.',
-  'C.H. Robinson': 'C.H. Robinson moves freight and manages supply chains for shippers.',
-  Calabrio: 'Calabrio, now part of Verint, makes contact-center scheduling and workforce software.',
-  Caparra: 'Caparra makes developer tools, including a chatbot that reads code repositories.',
-  CareSupport: 'CareSupport turns family text messages into shared tasks, medications, and handoffs.',
-  ChatLPO: 'ChatLPO helps teachers in Chile create classroom materials from the national curriculum.',
-  Chickensoft: 'Chickensoft is a community of Godot and C# game developers with open-source tools.',
-  Chosn: 'Chosn listens to a short recording and shows how your emotions change over time.',
-  Cloudflare: 'Cloudflare provides internet services for millions of websites.',
-  'Crucible Energy': 'Crucible Energy designs superconducting power networks that include storage.',
-  'Custom AI Studio': 'Custom AI Studio designs and builds custom AI systems for businesses.',
-  'Deep Render': "Deep Render's website now points to InterDigital's research on video compression.",
-  EY: 'EY provides consulting, audit, tax, and transaction services.',
-  Elucid: 'Elucid makes FDA-cleared software that measures heart and neck artery plaque from CT scans.',
-  'Ever Just': 'Ever Just builds software products for small and mid-sized businesses.',
-  Famelia: "Famelia's dietitians adapt a recipe so one meal can fit a family's different diets.",
-  FlowDevs: 'FlowDevs builds custom apps, automations, and internal tools for businesses.',
-  'Fulcrum Neuro': 'Fulcrum Neuro estimates patient risk from a mathematical model of brain metabolism.',
-  'Gullview Tech': 'Gullview Tech helps companies find and build places to use AI.',
-  'Hacker Sidekick': 'Hacker Sidekick is desktop software that runs security tools on your computer.',
-  Invene: 'Invene does data engineering and AI work for health insurers and care providers.',
-  Kwikly: 'Kwikly matches dental professionals with offices that need temporary staff.',
-  'Life Time': 'Life Time runs athletic clubs, coworking spaces, and residences.',
-  LifeFx: 'LifeFx offers executive-function coaching and camps in Richfield, Minnesota.',
-  Luminal: 'Luminal compiles AI models so they run faster on GPUs and custom chips.',
-  'Mayo Clinic': 'Mayo Clinic is a hospital system founded in Rochester, Minnesota.',
-  Medtronic: 'Medtronic makes medical equipment and is headquartered in Minneapolis.',
-  'Monkey Island': 'Monkey Island Ventures is a Minnesota founder group that invests in and starts companies.',
-  NASA: 'NASA is the United States space agency for exploration, science, and aeronautics.',
-  Nerdery: 'Nerdery designs and builds custom digital platforms for companies.',
-  'Omega Point': 'Omega Point makes Kelly, an assistant that answers questions about an investment book.',
-  Optum: 'Optum offers health services and works on care experiences and costs.',
-  'Ovicounter AI': '',
-  Ovul: 'Ovul reads estrogen and fertile days from a drop of saliva in a home device.',
-  Parallax: 'Parallax is resource-planning software for professional services firms.',
-  'Quantified Mechanix': 'Quantified Mechanix builds data and analytics tools for manufacturing and health care.',
-  Quinoa: 'Quinoa tracks patient retention and safety in cancer clinical trials.',
-  Rainmaker: 'Rainmaker helps founders and salespeople build business relationships on LinkedIn.',
-  Remarketspace: 'Remarketspace sells used cars, trucks, and SUVs in Elk River, Minnesota.',
-  'Rosenblatt AI': 'Rosenblatt works with private-equity firms on AI for their portfolio companies.',
-  Satori: "Satori's product ctx packages the context an AI agent needs into one image.",
-  'Simple Lead AI': 'Simple Lead AI builds websites and follow-up tools for local service businesses.',
-  'Simplify AI': '',
-  Skail: 'Skail offers C# and TypeScript tools for adding AI agents to existing software.',
-  'St. Thomas': 'The University of St. Thomas is a private university in Minnesota.',
-  Submitta: 'Submitta automates human-factors documentation for medical device teams.',
-  'TSL Consulting': 'TSL Consulting provides marketing services, including search and lead generation, in Asia.',
-  Talknician: '',
-  Target: 'Target sells groceries, clothes, electronics, and other goods online and in stores.',
-  Tortus: 'Tortus records clinical consultations for health systems in the NHS.',
-  'U of Minnesota': 'The University of Minnesota has five campuses and degree programs.',
-  'UMN Morris': 'The University of Minnesota Morris offers a liberal arts education.',
-  'UST Nexus': '',
-  'UW-River Falls': 'The University of Wisconsin-River Falls offers academics, student life, and athletics.',
-  'Univ. Paris-Saclay': 'Université Paris-Saclay is a French university with schools of science, medicine, law, and engineering.',
-  VelociTx: 'VelociTx designs CAR-T cell therapy, including the transmembrane part of the cells.',
-  'Very Good Ventures': 'Very Good Ventures builds Flutter apps for mobile, web, and desktop.',
-  VirtualGo: 'VirtualGo makes mixed-reality games and tools, including games for Apple Vision Pro.',
-  'We Network Now': '',
-  Withum: 'Withum is an accounting and advisory firm for businesses and individuals.',
-  Wrapped: 'Wrappt turns a custom GPT into a branded product people can use and pay for.',
-  'Xcel Energy': 'Xcel Energy is a utility that provides energy in eight states, including Minnesota.',
-  'smallest.ai': 'Smallest AI offers speech-to-text, text-to-speech, and voice agents.',
-};
-
 /** Existing marks plus every speaker company that was not already in the carousel. */
-export const logos: CompanyLogo[] = [...existingLogos, ...speakerStageLogos].map((company) => ({
-  ...company,
-  bio: companyBios[company.name] ?? '',
-}));
+export const logos: CompanyLogo[] = [...existingLogos, ...speakerStageLogos];
 
 export type LogoFit = 'icon' | 'lockup' | 'word' | 'wide';
 

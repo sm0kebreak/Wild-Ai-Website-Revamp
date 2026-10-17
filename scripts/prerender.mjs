@@ -78,7 +78,7 @@ const required = [
   ['/about', about, 'What Wild AI is, who runs it, and how a meetup night works.'],
   ['/about', about, 'https://wildai.us/about'],
   ['/companies', companies, 'Companies | Wild AI'],
-  ['/companies', companies, 'Companies whose people have taken the stage at Wild AI, with a short note on what each one does.'],
+  ['/companies', companies, 'Companies whose people have taken the stage at Wild AI.'],
   ['/companies', companies, 'https://wildai.us/companies'],
 ];
 for (const [route, html, text] of required) {
