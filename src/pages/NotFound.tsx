@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { SitePhoto } from "@/components/RoutePhoto";
 import Seo from "@/components/Seo";
+import Navbar from "@/components/Navbar";
 
 const NotFound = () => {
   const location = useLocation();
@@ -22,6 +23,7 @@ const NotFound = () => {
         path="/404"
         noindex
       />
+      <Navbar />
       <SitePhoto stem="2026-10-afterparty-04" />
       <div className="container relative mx-auto px-4 text-center">
         <p className="eyebrow mb-5 justify-center">Error 404</p>
