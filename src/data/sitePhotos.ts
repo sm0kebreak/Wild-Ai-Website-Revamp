@@ -24,7 +24,6 @@ const square1600 = (stem: string): PhotoFrame => frame(stem, 1600, 1600, [480, 9
 export const PHOTO_FRAMES: Record<string, PhotoFrame> = {
   '2026-09-minneapolis-01': wide('2026-09-minneapolis-01'),
   '2026-08-minneapolis-05': wide('2026-08-minneapolis-05'),
-  '2026-08-minneapolis-07': wide('2026-08-minneapolis-07'),
   '2026-09-minneapolis-02': wide('2026-09-minneapolis-02'),
   '2026-08-minneapolis-08': wide('2026-08-minneapolis-08'),
   '2026-08-minneapolis-02': wide('2026-08-minneapolis-02'),
@@ -64,7 +63,8 @@ export const PHOTO_FRAMES: Record<string, PhotoFrame> = {
 
 /**
  * Homepage crossfade. Every frame is 4:3 so the slides share one box.
- * 2026-09-minneapolis-01 stays out: a child is visible in that crowd.
+ * 2026-08-minneapolis-07 is deleted: a child is in the frame.
+ * 2026-09-minneapolis-01 stays unused: a child was reported in that crowd.
  * 2026-04-gopher-04 is the room shot, but it is not 4:3, so it stays off this list.
  */
 export const HERO_FRAMES = [

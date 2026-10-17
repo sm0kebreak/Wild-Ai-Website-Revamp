@@ -216,21 +216,48 @@
     border-color: hsl(var(--accent) / 0.45);
   }
 
+  .logo-rail {
+    --logo-gap: 2.5rem;
+  }
   .logo-mark {
+    --logo-slot: 3rem;
     --logo-h: 2.5rem;
+    --logo-max: 9rem;
   }
   .logo-mark[data-fit='icon'] {
     --logo-h: 3rem;
+    --logo-max: 3rem;
   }
-  .logo-mark[data-fit='word'],
-  .logo-mark[data-fit='wide'] {
+  .logo-mark[data-fit='lockup'] {
+    --logo-h: 2.7rem;
+    --logo-max: 9.5rem;
+  }
+  .logo-mark[data-fit='word'] {
     --logo-h: 2.125rem;
+    --logo-max: 10.5rem;
+  }
+  .logo-mark[data-fit='wide'] {
+    --logo-h: 1.9rem;
+    --logo-max: 12.5rem;
+  }
+  .logo-mark-rail {
+    height: var(--logo-slot);
+    width: max-content;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+  }
+  .logo-set {
+    gap: var(--logo-gap);
+    /* The trailing pad is the seam. It matches the gap, and it sits inside the measured set. */
+    padding-inline-end: var(--logo-gap);
   }
   .logo-mark img {
+    display: block;
     width: auto;
     height: auto;
     max-height: var(--logo-h);
-    max-width: min(100%, 11rem);
+    max-width: var(--logo-max);
     object-fit: contain;
     opacity: 0.55;
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -280,15 +307,29 @@
     background: linear-gradient(to left, hsl(var(--card)), transparent);
   }
   @media (min-width: 768px) {
+    .logo-rail {
+      --logo-gap: 3.25rem;
+    }
     .logo-mark {
+      --logo-slot: 3.75rem;
       --logo-h: 3.25rem;
+      --logo-max: 11rem;
     }
     .logo-mark[data-fit='icon'] {
       --logo-h: 3.75rem;
+      --logo-max: 3.75rem;
     }
-    .logo-mark[data-fit='word'],
-    .logo-mark[data-fit='wide'] {
+    .logo-mark[data-fit='lockup'] {
+      --logo-h: 3.4rem;
+      --logo-max: 11rem;
+    }
+    .logo-mark[data-fit='word'] {
       --logo-h: 2.875rem;
+      --logo-max: 12rem;
+    }
+    .logo-mark[data-fit='wide'] {
+      --logo-h: 2.5rem;
+      --logo-max: 14rem;
     }
   }
   @media (pointer: coarse) {
@@ -1007,6 +1048,103 @@ html[data-native-scroll] .site-header.border-border {
   }
 }
 
+/* Horizontal night carousel. Snap stays on this scroller, never the page. */
+.photo-section .tesla-title {
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1;
+}
+.photo-carousel-frame {
+  position: relative;
+}
+.photo-carousel {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  height: min(70vw, 60vh);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.75rem;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  position: relative;
+}
+.photo-carousel::-webkit-scrollbar {
+  display: none;
+}
+.photo-carousel:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.photo-slide {
+  flex: 0 0 auto;
+  height: 100%;
+  margin: 0;
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+}
+.photo-slide img {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+}
+.photo-next-event {
+  min-width: min(16rem, 72vw);
+  padding: 0 1.5rem;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+.photo-arrow {
+  position: absolute;
+  top: calc(50% - 1.1rem);
+  z-index: 2;
+  display: inline-flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  background: rgba(7, 9, 8, 0.72);
+  color: #fff;
+}
+.photo-arrow-prev {
+  left: 0.75rem;
+}
+.photo-arrow-next {
+  right: 0.75rem;
+}
+.photo-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.photo-counter {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.88);
+}
+@media (max-width: 767px) {
+  .photo-section .tesla-title {
+    font-size: clamp(1.85rem, 7vw, 2.4rem);
+  }
+  .photo-arrow {
+    display: none;
+  }
+}
+
 /* ---------- Tesla homepage ---------- */
 .site-header {
   color: #fff;
@@ -1360,31 +1498,59 @@ html[data-native-scroll] .site-header.border-border {
 .logo-band .border-b {
   border-bottom-color: rgba(255, 255, 255, 0.14);
 }
+.logo-band .logo-rail {
+  --logo-gap: 2.5rem;
+}
 .logo-band .logo-mark {
-  height: auto;
-  min-height: calc(var(--logo-h) + 0.75rem);
+  height: var(--logo-slot);
+  min-height: var(--logo-slot);
+  --logo-slot: 4.15rem;
   --logo-h: 3.35rem;
+  --logo-max: 10rem;
 }
 .logo-band .logo-mark[data-fit='icon'] {
   --logo-h: 4.15rem;
+  --logo-max: 4.15rem;
 }
-.logo-band .logo-mark[data-fit='word'],
-.logo-band .logo-mark[data-fit='wide'] {
+.logo-band .logo-mark[data-fit='lockup'] {
+  --logo-h: 3.6rem;
+  --logo-max: 10.5rem;
+}
+.logo-band .logo-mark[data-fit='word'] {
   --logo-h: 2.9rem;
+  --logo-max: 11.5rem;
+}
+.logo-band .logo-mark[data-fit='wide'] {
+  --logo-h: 2.55rem;
+  --logo-max: 13.5rem;
 }
 @media (min-width: 768px) {
   .logo-band {
     padding: 2.25rem 0 0.75rem;
   }
+  .logo-band .logo-rail {
+    --logo-gap: 3.5rem;
+  }
   .logo-band .logo-mark {
+    --logo-slot: 5.5rem;
     --logo-h: 4.75rem;
+    --logo-max: 12rem;
   }
   .logo-band .logo-mark[data-fit='icon'] {
     --logo-h: 5.5rem;
+    --logo-max: 5.5rem;
   }
-  .logo-band .logo-mark[data-fit='word'],
-  .logo-band .logo-mark[data-fit='wide'] {
+  .logo-band .logo-mark[data-fit='lockup'] {
+    --logo-h: 4.9rem;
+    --logo-max: 12.5rem;
+  }
+  .logo-band .logo-mark[data-fit='word'] {
     --logo-h: 4rem;
+    --logo-max: 13.5rem;
+  }
+  .logo-band .logo-mark[data-fit='wide'] {
+    --logo-h: 3.5rem;
+    --logo-max: 16rem;
   }
 }
 

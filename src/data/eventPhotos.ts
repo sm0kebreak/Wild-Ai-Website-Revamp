@@ -352,17 +352,6 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
         credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/in/jacob-brindley-452a44264/recent-activity/images/' },
       },
       {
-        id: '2026-08-minneapolis-07',
-        src: '/event-photos/2026-08-minneapolis-07-960.webp',
-        srcSet: '/event-photos/2026-08-minneapolis-07-480.webp 480w, /event-photos/2026-08-minneapolis-07-960.webp 960w, /event-photos/2026-08-minneapolis-07-1280.webp 1280w',
-        fullSrc: '/event-photos/2026-08-minneapolis-07-1280.webp',
-        width: 1280,
-        height: 960,
-        alt: 'Hands-on laptop demo at a table at Wild AI Minneapolis on August 17, 2026 in Minneapolis',
-        caption: 'Hands-on laptop demo at a table',
-        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/in/jacob-brindley-452a44264/recent-activity/images/' },
-      },
-      {
         id: '2026-08-minneapolis-08',
         src: '/event-photos/2026-08-minneapolis-08-960.webp',
         srcSet: '/event-photos/2026-08-minneapolis-08-480.webp 480w, /event-photos/2026-08-minneapolis-08-960.webp 960w, /event-photos/2026-08-minneapolis-08-1280.webp 1280w',

@@ -499,9 +499,9 @@ test('photo gallery opens and past events expand', async ({ page }) => {
   await expect(tabs.first()).toBeVisible();
   await tabs.nth(1).click();
   await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
-  await page.getByRole('button', { name: 'Open photo 1' }).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
-  await page.keyboard.press('Escape');
+  const carousel = page.getByRole('region', { name: 'Photos from Wild AI afterparty' });
+  await expect(carousel).toBeVisible();
+  await expect(carousel.locator('img')).toHaveCount(4);
   await expect(page.getByRole('dialog')).toHaveCount(0);
 
   const past = page.locator('#past-events');
@@ -646,9 +646,9 @@ test('primary navigation reaches every section', async ({ page }, testInfo) => {
 
 test('October 2 afterparty photos keep their full frame', async ({ page }) => {
   await openPath(page, '/');
-  await page.getByRole('tab', { name: 'Oct 2 · Minneapolis' }).click();
-  const grid = page.getByRole('list', { name: 'Photos from Wild AI afterparty' });
-  await expect(grid.getByRole('button', { name: /Open photo/ })).toHaveCount(4);
+  await page.getByRole('tab', { name: 'Minneapolis Oct 2' }).click();
+  const grid = page.getByRole('region', { name: 'Photos from Wild AI afterparty' });
+  await expect(grid.locator('img')).toHaveCount(4);
   const frames = await grid.locator('img').evaluateAll((imgs) =>
     Promise.all(
       imgs.map(async (img) => {

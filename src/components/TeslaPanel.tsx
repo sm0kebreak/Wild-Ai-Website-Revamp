@@ -33,6 +33,9 @@ const PillLink = ({ action, kind }: { action: Pill; kind: 'primary' | 'secondary
 /** One full-bleed photograph with the words kept in a readable region. */
 const TeslaPanel = ({
   image,
+  srcSet,
+  width = 1280,
+  height = 960,
   focus = 'center 40%',
   imageAlt = '',
   title,
@@ -47,6 +50,9 @@ const TeslaPanel = ({
   titleAs: TitleTag = 'h2',
 }: {
   image?: string;
+  srcSet?: string;
+  width?: number;
+  height?: number;
   /** Portrait frame used on narrow screens, when one exists for this night. */
   portrait?: string;
   /** object-position so the subject survives a cover crop. */
@@ -75,11 +81,11 @@ const TeslaPanel = ({
         <img
           className="tesla-photo"
           src={image}
-          srcSet={responsiveSrc(image)}
+          srcSet={srcSet ?? responsiveSrc(image)}
           sizes="100vw"
           alt={imageAlt}
-          width={1280}
-          height={960}
+          width={width}
+          height={height}
           decoding="async"
           loading="lazy"
         />

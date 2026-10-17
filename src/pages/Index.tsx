@@ -9,7 +9,7 @@ import PastEventsStrip from '@/components/PastEventsStrip';
 import EventPhotoGallery from '@/components/EventPhotoGallery';
 import EmailCapture from '@/components/EmailCapture';
 import Footer from '@/components/Footer';
-import { photoSrc } from '@/data/sitePhotos';
+import { photoFrame, photoSrc, photoSrcSet } from '@/data/sitePhotos';
 import Seo, { HOME_DESCRIPTION, HOME_TITLE } from '@/components/Seo';
 const Index = () => {
   return (
@@ -65,7 +65,10 @@ const Index = () => {
         </TeslaPanel>
 
         <TeslaPanel
-          image={photoSrc('2026-08-minneapolis-07')}
+          image={photoSrc('2026-10-rochester-52')}
+          srcSet={photoSrcSet('2026-10-rochester-52')}
+          width={photoFrame('2026-10-rochester-52').width}
+          height={photoFrame('2026-10-rochester-52').height}
           title="Bring it to your city."
           subline="Start a chapter."
           primary={{ label: 'Start a chapter', href: '/start-a-chapter' }}

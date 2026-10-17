@@ -11,10 +11,10 @@ const logoRows = [logos.slice(0, rowSplit), logos.slice(rowSplit)] as const;
 const LogoMark = ({ company, grid = false }: { company: CompanyLogo; grid?: boolean }) => {
   const fit = logoFit[company.name] ?? 'lockup';
   const className =
-    'logo-mark group flex h-20 items-center justify-center md:h-24 ' +
+    'logo-mark group flex items-center justify-center ' +
     (grid
-      ? 'w-full min-w-0 px-2' + (fit === 'word' || fit === 'wide' ? ' col-span-2' : '')
-      : 'w-max shrink-0 px-4 md:px-6');
+      ? 'h-20 w-full min-w-0 px-2 md:h-24' + (fit === 'word' || fit === 'wide' ? ' col-span-2' : '')
+      : 'logo-mark-rail');
 
   const mark = company.logo ? (
     <img

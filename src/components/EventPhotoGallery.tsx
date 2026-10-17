@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { eventPhotoGroups, type EventPhotoGroup } from '@/data/eventPhotos';
 
 const chipLabel = (group: EventPhotoGroup) => {
+  if (group.id === '2026-04-09-gopher') return 'Gopher AI Demo Night';
   const date = new Date(`${group.date}T00:00:00`);
   const month = date.toLocaleDateString('en-US', { month: 'short' });
-  return `${month} ${date.getDate()} · ${group.city}`;
+  return `${group.city} ${month} ${date.getDate()}`;
 };
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const EventPhotoGallery = ({
   cinema = false,
@@ -19,32 +22,74 @@ const EventPhotoGallery = ({
 }) => {
   const groups = onlyGroup ? eventPhotoGroups.filter((item) => item.id === onlyGroup) : eventPhotoGroups;
   const [groupId, setGroupId] = useState(groups[0]?.id ?? '');
-  const group = eventPhotoGroups.find((item) => item.id === groupId) ?? eventPhotoGroups[0];
-  const [index, setIndex] = useState<number | null>(null);
-  const active = group && index !== null ? group.photos[index] : null;
+  const group = groups.find((item) => item.id === groupId) ?? groups[0];
+  const [active, setActive] = useState(0);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  const photoIndex = useCallback(() => {
+    const root = scrollerRef.current;
+    if (!root) return 0;
+    const slides = root.querySelectorAll<HTMLElement>('[data-photo]');
+    const mid = root.scrollLeft + root.clientWidth / 2;
+    let best = 0;
+    let bestDist = Number.POSITIVE_INFINITY;
+    slides.forEach((slide, index) => {
+      const center = slide.offsetLeft + slide.offsetWidth / 2;
+      const dist = Math.abs(center - mid);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = index;
+      }
+    });
+    return best;
+  }, []);
+
+  const scrollToPhoto = useCallback((index: number) => {
+    const root = scrollerRef.current;
+    const slide = root?.querySelectorAll<HTMLElement>('[data-photo]')[index];
+    if (!root || !slide) return;
+    const left = slide.offsetLeft - (root.clientWidth - slide.offsetWidth) / 2;
+    root.scrollTo({
+      left: Math.max(0, left),
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    });
+  }, []);
 
   useEffect(() => {
-    if (index === null || !group) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowRight') {
-        setIndex((current) => (current === null ? current : (current + 1) % group.photos.length));
-      }
-      if (event.key === 'ArrowLeft') {
-        setIndex((current) =>
-          current === null ? current : (current - 1 + group.photos.length) % group.photos.length,
-        );
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [group, index]);
+    const root = scrollerRef.current;
+    if (!root) return;
+    root.scrollTo({ left: 0 });
+    setActive(0);
+  }, [groupId]);
+
+  useEffect(() => {
+    const root = scrollerRef.current;
+    if (!root) return;
+    const onScroll = () => setActive(photoIndex());
+    root.addEventListener('scroll', onScroll, { passive: true });
+    return () => root.removeEventListener('scroll', onScroll);
+  }, [groupId, photoIndex]);
 
   if (!group) return null;
 
-  const open = (photoIndex: number) => setIndex(photoIndex);
+  const groupIndex = groups.findIndex((item) => item.id === group.id);
+  const nextGroup = !onlyGroup && groupIndex >= 0 ? groups[groupIndex + 1] : undefined;
+  const count = group.photos.length;
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    const dir = event.key === 'ArrowRight' ? 1 : -1;
+    scrollToPhoto(Math.min(count - 1, Math.max(0, photoIndex() + dir)));
+  };
+
+  const showNight = (id: string) => {
+    setGroupId(id);
+    setActive(0);
+  };
 
   return (
-    <section id={onlyGroup ? undefined : 'photos'} className={onlyGroup ? 'mb-10' : cinema ? '' : 'pb-8 pt-2 md:pb-10'}>
+    <section id={onlyGroup ? undefined : 'photos'} className={`photo-section${onlyGroup ? ' mb-10' : cinema ? '' : ' pb-8 pt-2 md:pb-10'}`}>
       <div className={onlyGroup || cinema ? '' : 'container mx-auto px-4'}>
         <div className={cinema ? 'text-center' : 'mb-3 flex items-end justify-between gap-4'}>
           <h2 className={cinema ? 'tesla-title' : 'font-display text-xl font-semibold tracking-tight md:text-2xl'}>
@@ -53,102 +98,77 @@ const EventPhotoGallery = ({
         </div>
 
         {onlyGroup ? null : (
-        <div className={`city-pills mb-3 ${cinema ? 'mt-8' : ''}`} role="tablist" aria-label="Choose a night">
-          {groups.map((item) => {
-            const selected = item.id === group.id;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                role="tab"
-                aria-selected={selected}
-                data-selected={selected}
-                className="city-pill"
-                onClick={() => {
-                  setGroupId(item.id);
-                  setIndex(null);
-                }}
-              >
-                {chipLabel(item)}
-              </button>
-            );
-          })}
-        </div>
+          <div className={`city-pills mb-3 ${cinema ? 'mt-4' : ''}`} role="tablist" aria-label="Choose a night">
+            {groups.map((item) => {
+              const selected = item.id === group.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  data-selected={selected}
+                  className="city-pill"
+                  onClick={() => showNight(item.id)}
+                >
+                  {chipLabel(item)}
+                </button>
+              );
+            })}
+          </div>
         )}
 
-        <ul className="photo-grid" aria-label={`Photos from ${group.event}`}>
-          {group.photos.map((photo, photoIndex) => (
-            <li key={photo.id}>
-              <button
-                type="button"
-                onClick={() => open(photoIndex)}
-                aria-label={`Open photo ${photoIndex + 1}`}
-              >
+        <div className="photo-carousel-frame">
+          <div
+            ref={scrollerRef}
+            className="photo-carousel"
+            tabIndex={0}
+            role="region"
+            aria-roledescription="carousel"
+            aria-label={`Photos from ${group.event}`}
+            onKeyDown={onKeyDown}
+          >
+            {group.photos.map((photo) => (
+              <figure key={photo.id} className="photo-slide" data-photo data-slide>
                 <img
                   src={photo.src}
                   srcSet={photo.srcSet}
-                  sizes="(max-width: 767px) 46vw, 30vw"
+                  sizes="(max-width: 767px) 90vw, 70vh"
                   alt={photo.alt}
                   width={photo.width}
                   height={photo.height}
                   loading="lazy"
                   decoding="async"
-                  style={{ objectPosition: photo.focus ?? 'center 40%' }}
                 />
+              </figure>
+            ))}
+            {nextGroup ? (
+              <button type="button" className="photo-slide photo-next-event" data-slide onClick={() => showNight(nextGroup.id)}>
+                Next event →
               </button>
-            </li>
-          ))}
-        </ul>
+            ) : null}
+          </div>
+          <button
+            type="button"
+            className="photo-arrow photo-arrow-prev"
+            aria-label="Previous photo"
+            onClick={() => scrollToPhoto(Math.max(0, active - 1))}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            className="photo-arrow photo-arrow-next"
+            aria-label="Next photo"
+            onClick={() => scrollToPhoto(Math.min(count - 1, active + 1))}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <p className="photo-counter" aria-live="polite">
+            {Math.min(active + 1, count)} / {count}
+          </p>
+        </div>
       </div>
-
-      <Dialog open={active !== null} onOpenChange={(next) => !next && setIndex(null)}>
-        <DialogContent className="max-w-3xl gap-3 border-border bg-card p-3 sm:p-4">
-          {active && (
-            <>
-              <DialogTitle className="sr-only">
-                Photo {index !== null ? index + 1 : 1} of {group.photos.length}
-              </DialogTitle>
-              <DialogDescription className="sr-only">Photograph from a Wild AI night.</DialogDescription>
-              <img
-                src={active.fullSrc}
-                alt=""
-                width={active.width}
-                height={active.height}
-                className="mx-auto block h-auto max-h-[70svh] w-auto max-w-full object-contain"
-              />
-              <div className="flex items-center justify-end gap-3">
-                <p className="sr-only">
-                  {index !== null ? index + 1 : 0} of {group.photos.length}
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                    aria-label="Previous photo"
-                    onClick={() =>
-                      setIndex((current) =>
-                        current === null ? current : (current - 1 + group.photos.length) % group.photos.length,
-                      )
-                    }
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                    aria-label="Next photo"
-                    onClick={() =>
-                      setIndex((current) => (current === null ? current : (current + 1) % group.photos.length))
-                    }
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </section>
   );
 };
