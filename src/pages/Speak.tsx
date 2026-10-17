@@ -5,6 +5,8 @@ import Footer from '@/components/Footer';
 import SpeakerForm from '@/components/SpeakerForm';
 import { Mic2 } from 'lucide-react';
 import PageHero from '@/components/PageHero';
+import { SitePhoto } from '@/components/RoutePhoto';
+import { MANIFESTO_STEM } from '@/data/sitePhotos';
 import { DEMO_SIGNUP, LUMA_CALENDAR_URL, MEETUP_TIME_LINE, MEETUP_VENUE } from '@/lib/meetupSchedule';
 
 const OCTOBER_LUMA = 'https://luma.com/50wo8gm8';
@@ -54,14 +56,7 @@ const Speak = () => (
       />
 
       <section className="speak-manifesto" aria-label="Show us">
-        <img
-          className="tesla-photo"
-          src="/event-photos/2026-08-minneapolis-03-1280.webp"
-          alt=""
-          width={1280}
-          height={960}
-        />
-        <div className="tesla-scrim" aria-hidden="true" />
+        <SitePhoto stem={MANIFESTO_STEM} />
         <div className="speak-manifesto-copy">
           <ul>
             <li>What&apos;s a new way to think about a problem?</li>

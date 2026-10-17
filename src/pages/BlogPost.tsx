@@ -7,6 +7,7 @@ import { useBlogPost } from '@/hooks/useBlogPosts';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
+import RoutePhoto from '@/components/RoutePhoto';
 import { format } from 'date-fns';
 
 const BlogPost = () => {
@@ -25,6 +26,7 @@ const BlogPost = () => {
         <Navbar />
         <main className="flex-1 pb-16">
           <header className="page-hero">
+            <RoutePhoto />
             <div className="container relative mx-auto px-4">
               <p className="page-hero__lede">Blog</p>
             </div>
@@ -54,6 +56,7 @@ const BlogPost = () => {
         <Navbar />
         <main className="flex-1 pb-16">
           <header className="page-hero">
+            <RoutePhoto />
             <div className="container relative mx-auto px-4 text-center">
               <h1 className="page-hero__title">Post not found</h1>
             </div>
@@ -90,6 +93,7 @@ const BlogPost = () => {
         <Navbar />
         <main className="flex-1 pb-16">
           <header className="page-hero">
+            <RoutePhoto />
             <div className="container relative mx-auto px-4">
               <Link
                 to="/blog"

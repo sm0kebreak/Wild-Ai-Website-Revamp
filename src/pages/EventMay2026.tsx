@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import RoutePhoto from '@/components/RoutePhoto';
 import EventSpeakers from '@/components/EventSpeakers';
 import { getEventHistoryByDate } from '@/data/eventHistory2026';
 
@@ -17,6 +18,7 @@ const EventMay2026 = () => {
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">
+          <RoutePhoto />
           <div className="container relative mx-auto px-4">
             <h1 className="page-hero__title">MAY 2026 MEETUP</h1>
           </div>

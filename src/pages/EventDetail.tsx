@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
+import RoutePhoto from '@/components/RoutePhoto';
 import Footer from '@/components/Footer';
 import NotFound from '@/pages/NotFound';
 import { Button } from '@/components/ui/button';
@@ -93,6 +94,7 @@ const EventDetail = () => {
       <main className="pb-20 flex-grow">
         {/* Event hero */}
         <section className="page-hero mb-12">
+          <RoutePhoto />
           <div className="page-hero__wash" aria-hidden="true" />
           <div className="hero-grain" aria-hidden="true" />
           <div className="container relative mx-auto px-4">

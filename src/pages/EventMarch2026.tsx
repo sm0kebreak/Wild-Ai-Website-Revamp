@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink, Laptop } from 'lucide-react';
 import ShowAndTellForm from '@/components/ShowAndTellForm';
 import { Helmet } from 'react-helmet-async';
+import RoutePhoto from '@/components/RoutePhoto';
 import { pastEventByDate } from '@/data/speakerArchive';
 import SpeakerRow from '@/components/SpeakerRow';
 
@@ -19,6 +20,7 @@ const EventMarch2026 = () => {
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">
+          <RoutePhoto />
           <div className="container relative mx-auto px-4">
             <h1 className="page-hero__title">MARCH 2026 MEETUP</h1>
             <p className="page-hero__lede">Anniversary Edition - Show & Tell</p>

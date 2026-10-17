@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import BlogPostCard from '@/components/BlogPostCard';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
 import { Skeleton } from '@/components/ui/skeleton';
+import RoutePhoto from '@/components/RoutePhoto';
 
 const Blog = () => {
   const { data, isLoading, error } = useBlogPosts();
@@ -23,6 +24,7 @@ const Blog = () => {
         <Navbar />
         <main className="flex-1 pb-16">
           <header className="page-hero">
+            <RoutePhoto />
             <div className="container relative mx-auto px-4 text-center">
               <h1 className="page-hero__title">Blog</h1>
               <p className="page-hero__lede mx-auto">

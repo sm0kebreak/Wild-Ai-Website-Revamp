@@ -9,6 +9,7 @@ import PastEventsStrip from '@/components/PastEventsStrip';
 import EventPhotoGallery from '@/components/EventPhotoGallery';
 import EmailCapture from '@/components/EmailCapture';
 import Footer from '@/components/Footer';
+import { photoSrc } from '@/data/sitePhotos';
 const Index = () => {
   return (
     <div className="tesla-home flex min-h-screen flex-col">
@@ -24,19 +25,19 @@ const Index = () => {
         <TeslaPanel
           sentence
           focus="center 42%"
-          image="/event-photos/2026-08-minneapolis-07-1280.webp"
+          image={photoSrc('2026-08-minneapolis-06')}
           title="The underground AI scene in Minneapolis."
           subline="Raw builds. Fringe ideas. No slides."
         />
 
-        <TeslaPanel flow focus="center 38%" image="/event-photos/2026-09-minneapolis-02-1280.webp" imageAlt="">
+        <TeslaPanel flow image={photoSrc('2026-08-minneapolis-03')} imageAlt="">
           <CityEventPicker />
         </TeslaPanel>
 
         <TeslaPanel
           id="demo-your-build"
           focus="62% 46%"
-          image="/event-photos/2026-08-minneapolis-05-1280.webp"
+          image={photoSrc('2026-08-minneapolis-02')}
           title="Show us something wild."
           subline="Any stage. The rawer, the better."
           primary={{ label: 'Demo it', href: '/speak' }}
@@ -46,25 +47,23 @@ const Index = () => {
         <TeslaPanel
           id="sponsor-a-night"
           focus="center 48%"
-          image="/event-photos/2026-08-minneapolis-08-1280.webp"
+          image={photoSrc('2026-09-minneapolis-04')}
           title="Sponsor a night"
           subline="$500 per event."
           primary={{ label: 'Sponsor', href: '/sponsor' }}
           secondary={{ label: 'Learn more', href: '/sponsor' }}
         />
 
-        <TeslaPanel flow wide focus="center 36%" image="/event-photos/2026-09-minneapolis-04-1280.webp">
+        <TeslaPanel flow wide>
           <EventPhotoGallery cinema />
         </TeslaPanel>
 
-        <TeslaPanel flow focus="center 40%" image="/event-photos/2026-08-minneapolis-04-1280.webp">
+        <TeslaPanel flow image={photoSrc('2026-08-minneapolis-04')}>
           <PastEventsStrip limit={4} stacks cinema />
         </TeslaPanel>
 
         <TeslaPanel
-          image="/event-photos/2026-08-sf-01-1280.webp"
-          portrait="/event-photos/2026-08-sf-03-800.webp"
-          focus="center 36%"
+          image={photoSrc('2026-08-sf-01')}
           title="Bring it to your city."
           subline="Start a chapter."
           primary={{ label: 'Start a chapter', href: '/start-a-chapter' }}
@@ -75,7 +74,7 @@ const Index = () => {
           id="email-signup"
           flow
           focus="center 40%"
-          image="/event-photos/2026-09-minneapolis-03-1280.webp"
+          image={photoSrc('2026-09-minneapolis-03')}
           title="Get the next invite"
           subline="One email per event. Invites and recaps."
         >

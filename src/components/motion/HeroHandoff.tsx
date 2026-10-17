@@ -25,7 +25,7 @@ const HeroHandoff = ({ children }: { children: React.ReactNode }) => {
         panel.style.opacity = '';
       } else {
         panel.style.transform =
-          'translate3d(0, ' + lag * 12 + 'vh, 0) scale(' + (1 - lag * 0.02) + ')';
+          'none';
         panel.style.opacity = String(0.3 + 0.7 * solid);
       }
     }

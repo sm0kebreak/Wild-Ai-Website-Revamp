@@ -644,17 +644,26 @@ test('primary navigation reaches every section', async ({ page }, testInfo) => {
   }
 });
 
-test('October 2 afterparty photos sit in the cover grid', async ({ page }) => {
+test('October 2 afterparty photos keep their full frame', async ({ page }) => {
   await openPath(page, '/');
   await page.getByRole('tab', { name: 'Oct 2 · Minneapolis' }).click();
   const grid = page.getByRole('list', { name: 'Photos from Wild AI afterparty' });
   await expect(grid.getByRole('button', { name: /Open photo/ })).toHaveCount(4);
   const frames = await grid.locator('img').evaluateAll((imgs) =>
-    imgs.map((img) => ({
-      src: img.getAttribute('src') ?? '',
-      alt: img.getAttribute('alt') ?? '',
-      fit: getComputedStyle(img).objectFit,
-    })),
+    Promise.all(
+      imgs.map(async (img) => {
+        const image = img as HTMLImageElement;
+        if (image.decode) await image.decode().catch(() => undefined);
+        const box = image.getBoundingClientRect();
+        return {
+          src: image.getAttribute('src') ?? '',
+          alt: image.getAttribute('alt') ?? '',
+          fit: getComputedStyle(image).objectFit,
+          rendered: box.width / box.height,
+          natural: image.naturalWidth / image.naturalHeight,
+        };
+      }),
+    ),
   );
   expect(frames.map((frame) => frame.src)).toEqual([
     '/event-photos/2026-10-afterparty-01-960.webp',
@@ -663,16 +672,10 @@ test('October 2 afterparty photos sit in the cover grid', async ({ page }) => {
     '/event-photos/2026-10-afterparty-04-960.webp',
   ]);
   for (const frame of frames) {
-    expect(frame.fit).toBe('cover');
+    expect(frame.fit).toBe('contain');
     expect(frame.alt.length).toBeGreaterThan(0);
+    expect(Math.abs(frame.rendered - frame.natural)).toBeLessThan(0.08);
   }
-  const cells = await grid.locator('button').evaluateAll((buttons) =>
-    buttons.map((button) => {
-      const box = button.getBoundingClientRect();
-      return box.width / box.height;
-    }),
-  );
-  for (const ratio of cells) expect(Math.abs(ratio - 1)).toBeLessThan(0.04);
   await expect(page.locator('#photos figcaption')).toHaveCount(0);
 });
 

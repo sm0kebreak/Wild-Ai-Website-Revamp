@@ -511,21 +511,17 @@
 
   /* ---------- Hero stage ---------- */
   .hero-stage {
-    height: 100svh;
-    min-height: 640px;
-    @apply sticky top-0 flex items-center overflow-hidden;
-    background: hsl(var(--surface-deep));
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    background: #070908;
   }
-  /* The hero only sticks through the opening handoff. After that it leaves
-     with the pin, instead of staying composited under the rest of the page. */
-  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .hero-pin {
-      height: calc(100svh + 125svh);
-      min-height: calc(640px + 125svh);
-    }
-    .hero-handoff {
-      margin-top: -125svh;
-    }
+  .hero-pin,
+  .hero-handoff {
+    height: auto;
+    min-height: 0;
+    margin-top: 0;
   }
   /* Static wash. A blurred, infinitely animated layer under a sticky hero
      repaints the whole scroll, worst when photos pass the footer. */
@@ -842,19 +838,16 @@
 /* ---------- Scroll reveal ---------- */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: none;
+  transition: opacity 0.45s ease;
   transition-delay: var(--reveal-delay, 0ms);
 }
 [data-reveal='shown'] {
   opacity: 1;
-  transform: none;
 }
 @media (pointer: coarse) {
   [data-reveal] {
     opacity: 1;
-    transform: none;
   }
 }
 
@@ -973,11 +966,11 @@ html[data-native-scroll] .site-header.border-border {
   border-radius: 999px;
 }
 
-/* Uniform cover grid. Cells are square; each frame is cropped, not squashed. */
+/* Full photos, stacked. Nothing in the gallery is cropped. */
 .photo-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -986,26 +979,31 @@ html[data-native-scroll] .site-header.border-border {
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 1;
+  height: auto;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
   border: 0;
   border-radius: 0;
-  background: #111;
+  background: transparent;
   cursor: pointer;
 }
 .photo-grid img {
-  position: absolute;
-  inset: 0;
+  position: static;
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
 @media (min-width: 768px) {
   .photo-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.65rem;
+    display: block;
+    columns: 2;
+    column-gap: 0.75rem;
+  }
+  .photo-grid li {
+    break-inside: avoid;
+    margin-bottom: 0.75rem;
   }
 }
 
@@ -1019,72 +1017,85 @@ html[data-native-scroll] .site-header.border-border {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  height: 100svh;
-  min-height: 100svh;
-  padding: calc(4.5rem + env(safe-area-inset-top)) 1.25rem calc(2.5rem + env(safe-area-inset-bottom));
-  overflow: hidden;
+  align-items: stretch;
+  justify-content: flex-start;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
   color: #fff;
-  background: #000;
+  background: #070908;
 }
 .tesla-panel-flow {
   height: auto;
   min-height: 0;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: visible;
 }
 .tesla-home .hero-stage {
   position: relative;
   top: auto;
-  height: 100svh;
-  min-height: 100svh;
-  padding: calc(4.5rem + env(safe-area-inset-top)) 1.25rem calc(2.5rem + env(safe-area-inset-bottom));
-  background: #000;
+  height: auto;
+  min-height: 0;
+  padding: calc(3.5rem + env(safe-area-inset-top)) 0 0;
+  background: #070908;
 }
-.tesla-media {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.tesla-media picture {
-  position: absolute;
-  inset: 0;
-  display: block;
+.tesla-media,
+.page-hero__media {
+  position: relative;
   width: 100%;
-  height: 100%;
+  background: #070908;
+}
+.tesla-media::after,
+.page-hero__media::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5.5rem;
+  background: linear-gradient(to bottom, rgba(7, 9, 8, 0), #070908 86%);
+  pointer-events: none;
+  z-index: 1;
 }
 .tesla-photo,
-.tesla-scrim {
+.page-hero__photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center center;
+  animation: none;
+  transform: none;
+}
+.hero-fade {
+  width: min(100%, calc(52vh * 4 / 3));
+  aspect-ratio: 4 / 3;
+  max-height: 52vh;
+  margin-inline: auto;
+}
+.hero-fade .tesla-photo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
 }
-.tesla-photo {
-  object-fit: cover;
-  object-position: var(--photo-focus, center 40%);
-}
-/* Overall dim, a dark floor under the words, and a cap so the nav stays readable. */
-.tesla-scrim {
-  background-color: rgba(0, 0, 0, 0.32);
-  background-image:
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.18) 12%, transparent 24%),
-    linear-gradient(to top, rgba(0, 0, 0, 0.84) 0%, rgba(0, 0, 0, 0.78) 46%, rgba(0, 0, 0, 0.4) 68%, transparent 90%);
-}
-.tesla-panel-flow .tesla-scrim {
-  background-color: rgba(0, 0, 0, 0.74);
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, transparent 18%);
+.hero-fade .tesla-photo[data-active='true'] {
+  opacity: 1;
 }
 .tesla-copy {
   position: relative;
   z-index: 1;
   width: min(68rem, 100%);
   margin-inline: auto;
+  padding: 0.25rem 1.25rem 2.25rem;
+  background: #070908;
   text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  text-shadow: none;
 }
 .tesla-copy-wide {
   width: min(76rem, 100%);
@@ -1099,6 +1110,9 @@ html[data-native-scroll] .site-header.border-border {
   letter-spacing: -0.045em;
   line-height: 0.92;
   font-size: clamp(3.4rem, 8.6vw, 7.4rem);
+}
+.hero-stage .tesla-title {
+  font-size: clamp(2.35rem, 4.6vw, 4rem);
 }
 .tesla-title-sentence {
   max-width: 16ch;
@@ -1179,32 +1193,19 @@ html[data-native-scroll] .site-header.border-border {
   .tesla-panel,
   .tesla-home .hero-stage {
     height: auto;
-    min-height: 100svh;
+    min-height: 0;
     align-items: stretch;
     justify-content: flex-start;
     padding: 0;
     overflow: visible;
   }
-  .tesla-panel-flow {
-    min-height: 0;
+  .tesla-home .hero-stage {
+    padding-top: calc(3.5rem + env(safe-area-inset-top));
   }
-  .tesla-media {
-    position: relative;
-    inset: auto;
-    flex: none;
+  .hero-fade {
     width: 100%;
-    aspect-ratio: 3 / 4;
-    max-height: 58svh;
-  }
-  /* The words sit on the solid band, so the photograph itself stays bright. */
-  .tesla-panel .tesla-scrim,
-  .tesla-panel-flow .tesla-scrim {
-    background-color: transparent;
-    background-image: none;
-  }
-  .hero-stage .tesla-scrim {
-    background-color: transparent;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.28) 12%, transparent 26%);
+    max-height: none;
+    aspect-ratio: 4 / 3;
   }
   .tesla-copy {
     display: flex;
@@ -1231,7 +1232,7 @@ html[data-native-scroll] .site-header.border-border {
   .tesla-panel-flow .tesla-copy {
     justify-content: flex-start;
     padding-top: 1.6rem;
-    background: #080a09;
+    background: #070908;
   }
   .tesla-title {
     font-size: clamp(2.35rem, 10vw, 3.6rem);
@@ -1243,44 +1244,25 @@ html[data-native-scroll] .site-header.border-border {
 @media (max-height: 700px) {
   .tesla-panel {
     height: auto;
-    min-height: 100svh;
+    min-height: 0;
     overflow: visible;
   }
-  .tesla-panel-flow {
-    min-height: 0;
-  }
   .tesla-title {
-    font-size: clamp(2.35rem, 9vw, 3.6rem);
+    font-size: clamp(2.15rem, 8vw, 3.2rem);
   }
 }
 .speak-manifesto {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   color: #fff;
   background: #070908;
-}
-.speak-manifesto .tesla-photo,
-.speak-manifesto .tesla-scrim {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.speak-manifesto .tesla-photo {
-  object-fit: cover;
-  object-position: center 40%;
-}
-.speak-manifesto .tesla-scrim {
-  background-color: rgba(0, 0, 0, 0.74);
-  background-image: none;
 }
 .speak-manifesto-copy {
   position: relative;
   z-index: 1;
   width: min(40rem, 100%);
   margin-inline: auto;
-  padding: 4.25rem 1.25rem 3.75rem;
+  padding: 1.5rem 1.25rem 3.75rem;
 }
 .speak-manifesto-copy ul {
   margin: 0;
@@ -1321,8 +1303,8 @@ html[data-native-scroll] .site-header.border-border {
 }
 
 @media (max-width: 767px) and (max-height: 720px) {
-  .tesla-media {
-    max-height: 46svh;
+  .hero-stage .tesla-title {
+    font-size: clamp(2rem, 8vw, 2.6rem);
   }
   .tesla-title {
     font-size: clamp(2.05rem, 9vw, 2.75rem);
@@ -1381,28 +1363,18 @@ html[data-native-scroll] .site-header.border-border {
 .page-hero {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
-  align-items: flex-end;
-  min-height: 46svh;
-  padding: calc(6.25rem + env(safe-area-inset-top)) 0 2.75rem;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+  padding: calc(3.5rem + env(safe-area-inset-top)) 0 2.75rem;
   border: 0;
   background: #070908;
   color: #fff;
 }
 .page-hero-fill {
-  align-items: center;
   min-height: 100svh;
-}
-.page-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(to top, rgba(7, 9, 8, 0.92) 0%, rgba(0, 0, 0, 0.62) 42%, rgba(0, 0, 0, 0.34) 100%),
-    url('/event-photos/2026-09-minneapolis-01-1280.webp') center 42% / cover no-repeat;
 }
 .page-hero__wash,
 .page-hero .hero-grain {
@@ -1449,8 +1421,8 @@ html[data-native-scroll] .site-header.border-border {
 }
 @media (max-width: 767px) {
   .page-hero {
-    min-height: 42svh;
-    padding: calc(5.25rem + env(safe-area-inset-top)) 0 2rem;
+    min-height: 0;
+    padding: calc(3.5rem + env(safe-area-inset-top)) 0 2rem;
   }
   .page-hero-fill {
     min-height: 100svh;

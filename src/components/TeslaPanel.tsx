@@ -33,7 +33,6 @@ const PillLink = ({ action, kind }: { action: Pill; kind: 'primary' | 'secondary
 /** One full-bleed photograph with the words kept in a readable region. */
 const TeslaPanel = ({
   image,
-  portrait,
   focus = 'center 40%',
   imageAlt = '',
   title,
@@ -47,7 +46,7 @@ const TeslaPanel = ({
   children,
   titleAs: TitleTag = 'h2',
 }: {
-  image: string;
+  image?: string;
   /** Portrait frame used on narrow screens, when one exists for this night. */
   portrait?: string;
   /** object-position so the subject survives a cover crop. */
@@ -71,9 +70,8 @@ const TeslaPanel = ({
     className={`tesla-panel${flow ? ' tesla-panel-flow' : ''}`}
     style={{ ['--photo-focus' as string]: focus }}
   >
-    <div className="tesla-media">
-      <picture>
-        {portrait ? <source media="(max-width: 767px)" srcSet={portrait} /> : null}
+    {image ? (
+      <div className="tesla-media">
         <img
           className="tesla-photo"
           src={image}
@@ -85,9 +83,8 @@ const TeslaPanel = ({
           decoding="async"
           loading="lazy"
         />
-      </picture>
-      <div className="tesla-scrim" aria-hidden="true" />
-    </div>
+      </div>
+    ) : null}
     <div className={`tesla-copy${wide ? ' tesla-copy-wide' : ''}`}>
       {title && <TitleTag className={sentence ? 'tesla-title tesla-title-sentence' : 'tesla-title'}>{title}</TitleTag>}
       {subline && <p className="tesla-sub">{subline}</p>}

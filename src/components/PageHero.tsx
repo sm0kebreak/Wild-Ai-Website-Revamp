@@ -1,5 +1,6 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
+import RoutePhoto from '@/components/RoutePhoto';
 
 interface PageHeroProps {
   eyebrow?: string;
@@ -13,9 +14,7 @@ interface PageHeroProps {
 /** Shared opening band for every page other than the homepage. */
 const PageHero = ({ eyebrow, icon: Icon, title, lede, aside, children }: PageHeroProps) => (
   <section className="page-hero">
-    <div className="page-hero__wash" aria-hidden="true" />
-    <div className="hero-grain" aria-hidden="true" />
-
+    <RoutePhoto />
     <div className="container relative mx-auto px-4">
       <div className="grid gap-10 lg:grid-cols-[1.5fr_auto] lg:items-end">
         <div className="max-w-3xl">

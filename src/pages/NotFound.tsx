@@ -1,6 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { SitePhoto } from "@/components/RoutePhoto";
 
 const NotFound = () => {
   const location = useLocation();
@@ -14,8 +15,7 @@ const NotFound = () => {
 
   return (
     <div className="page-hero page-hero-fill">
-      <div className="page-hero__wash" aria-hidden="true" />
-      <div className="hero-grain" aria-hidden="true" />
+      <SitePhoto stem="2026-10-afterparty-04" />
       <div className="container relative mx-auto px-4 text-center">
         <p className="eyebrow mb-5 justify-center">Error 404</p>
         <h1 className="page-hero__title mb-4">

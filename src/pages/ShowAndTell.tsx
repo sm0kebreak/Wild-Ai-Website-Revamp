@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Helmet } from 'react-helmet-async';
 import { ExternalLink } from 'lucide-react';
+import RoutePhoto from '@/components/RoutePhoto';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Submission {
@@ -41,6 +42,7 @@ const ShowAndTell = () => {
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">
+          <RoutePhoto />
           <div className="container relative mx-auto px-4">
             <h1 className="page-hero__title">SHOW & TELL</h1>
             <p className="page-hero__lede">Projects from the Wild AI community</p>

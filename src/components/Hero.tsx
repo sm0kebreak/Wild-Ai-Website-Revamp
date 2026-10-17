@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import HeroCountdown from '@/components/HeroCountdown';
+import { HERO_FRAMES, photoFrame, photoSrc, photoSrcSet } from '@/data/sitePhotos';
 import { MEETUP_TIME_LINE, MEETUP_VENUE, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 const headlineFor = (dateIso: string) =>
@@ -14,22 +15,38 @@ const headlineFor = (dateIso: string) =>
 const Hero = () => {
   const date = nextMeetupDate();
   const rsvpUrl = rsvpUrlFor(date);
+  const [frame, setFrame] = useState(0);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (media.matches) return;
+    const id = window.setInterval(() => {
+      setFrame((current) => (current + 1) % HERO_FRAMES.length);
+    }, 6000);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
-    <section className="hero-stage tesla-panel" aria-label="Wild AI" style={{ ['--photo-focus' as string]: 'center 42%' }}>
-      <div className="tesla-media">
-        <img
-          className="tesla-photo"
-          src="/event-photos/2026-09-minneapolis-01-1280.webp"
-          srcSet="/event-photos/2026-09-minneapolis-01-480.webp 480w, /event-photos/2026-09-minneapolis-01-960.webp 960w, /event-photos/2026-09-minneapolis-01-1280.webp 1280w"
-          sizes="100vw"
-          alt=""
-          width={1280}
-          height={960}
-          fetchPriority="high"
-          decoding="async"
-        />
-        <div className="tesla-scrim" aria-hidden="true" />
+    <section className="hero-stage tesla-panel" aria-label="Wild AI">
+      <div className="tesla-media hero-fade">
+        {HERO_FRAMES.map((stem, index) => {
+          const photo = photoFrame(stem);
+          return (
+            <img
+              key={stem}
+              className="tesla-photo"
+              src={photoSrc(stem)}
+              srcSet={photoSrcSet(stem)}
+              sizes="100vw"
+              alt=""
+              width={photo.width}
+              height={photo.height}
+              data-active={index === frame ? 'true' : 'false'}
+              fetchPriority={index === 0 ? 'high' : 'low'}
+              decoding="async"
+            />
+          );
+        })}
       </div>
       <div className="tesla-copy">
         <h1 className="tesla-title">

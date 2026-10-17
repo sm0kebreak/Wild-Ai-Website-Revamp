@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { pastMeetups, type PastMeetup } from '@/data/pastMeetups';
 import SpeakerRow, { SpeakerFace } from '@/components/SpeakerRow';
+import RoutePhoto from '@/components/RoutePhoto';
 import type { LineupSpeaker } from '@/data/speakerArchive';
 
 const AvatarStack = ({ speakers }: { speakers: LineupSpeaker[] }) => {
@@ -161,6 +162,7 @@ const PastEventsStrip = ({
     <>
     {page ? (
       <header className="page-hero">
+        <RoutePhoto />
         <div className="container relative mx-auto px-4">
           <h1 className="page-hero__title">Past events</h1>
         </div>

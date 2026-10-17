@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink, Car, Ticket, Presentation, FlaskConical, Rocket } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import RoutePhoto from '@/components/RoutePhoto';
 
 const GopherAIConference = () => {
   return (
@@ -14,6 +15,7 @@ const GopherAIConference = () => {
       <Navbar />
       <main className="pb-20 flex-grow">
         <header className="page-hero">
+          <RoutePhoto />
           <div className="container relative mx-auto px-4 text-center">
             <h1 className="page-hero__title">
               GOPHER AI<br />DEMO NIGHT
