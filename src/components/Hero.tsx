@@ -19,25 +19,57 @@ const Hero = () => {
   const slidesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const root = slidesRef.current;
+    if (!root) return;
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (motion.matches) return;
+    const images = () => Array.from(root.querySelectorAll('img'));
+    const decodeAt = (index: number) => {
+      const img = images()[index];
+      if (img && typeof img.decode === 'function') img.decode().catch(() => undefined);
+    };
+    let timer = 0;
+    let visible = false;
+    let ready = false;
     let cancelled = false;
-    let id = 0;
-    const images = Array.from(slidesRef.current?.querySelectorAll('img') ?? []);
-    const decoded = Promise.all(
-      images.map((img) => (typeof img.decode === 'function' ? img.decode() : Promise.resolve()).catch(() => undefined)),
-    );
-    decoded.then(() => {
-      if (cancelled) return;
-      id = window.setInterval(() => {
+    const start = () => {
+      if (timer || !visible || !ready) return;
+      timer = window.setInterval(() => {
         setFrame((current) => (current + 1) % HERO_FRAMES.length);
       }, 6000);
+    };
+    const stop = () => {
+      window.clearInterval(timer);
+      timer = 0;
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) start();
+      else stop();
+    });
+    observer.observe(root);
+    // Decode the frame on screen and the next one. The rest stay hidden until the fade reaches them.
+    decodeAt(0);
+    const next = images()[1];
+    const pending = next && typeof next.decode === 'function' ? next.decode().catch(() => undefined) : Promise.resolve();
+    pending.then(() => {
+      if (cancelled) return;
+      ready = true;
+      start();
     });
     return () => {
       cancelled = true;
-      window.clearInterval(id);
+      ready = false;
+      stop();
+      observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    const root = slidesRef.current;
+    const next = root?.querySelectorAll('img')[(frame + 1) % HERO_FRAMES.length];
+    if (next && typeof next.decode === 'function') next.decode().catch(() => undefined);
+  }, [frame]);
 
   return (
     <section className="hero-stage tesla-panel" aria-label="Wild AI">

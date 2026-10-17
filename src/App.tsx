@@ -30,6 +30,7 @@ import Join from "./pages/Join";
 import Companies from "./pages/Companies";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import PrimeImages from "./components/PrimeImages";
 
 // Create a new client outside of the component to avoid recreation on each render
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const App = ({ helmetContext, queryClient: client = queryClient, location }: App
   const routes = (
     <>
       <ScrollToTop />
+      <PrimeImages />
       <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/events/february-2026" element={<EventFebruary2026 />} />

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import LogoRail from '@/components/motion/LogoRail';
 import Reveal from '@/components/motion/Reveal';
 import { logoFit, logos, type CompanyLogo } from '@/data/companyLogos';
+import { logoBox } from '@/data/logoDimensions';
 import { speakerCompanyCount } from '@/data/speakerArchive';
 
 const rowSplit = Math.ceil(logos.length / 2);
@@ -19,6 +20,7 @@ const LogoMark = ({ company }: { company: CompanyLogo }) => {
       loading="eager"
       decoding="async"
       draggable={false}
+      {...logoBox(company.logo)}
       className={company.tone === 'plain' ? 'brightness-0 invert' : undefined}
       style={
         company.tone === 'plain'

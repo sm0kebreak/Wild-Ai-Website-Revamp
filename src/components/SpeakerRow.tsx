@@ -24,6 +24,8 @@ export const SpeakerFace = ({
       <img
         src={speaker.photo}
         alt=""
+        width={96}
+        height={96}
         loading="lazy"
         decoding="async"
         className={cn('avatar-photo h-7 w-7 shrink-0', className)}

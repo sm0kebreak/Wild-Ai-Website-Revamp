@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import { LogoFilters } from '@/components/LogoCarousel';
 import { logos, type CompanyLogo } from '@/data/companyLogos';
+import { logoBox } from '@/data/logoDimensions';
 import { demosForCompany, type CompanyDemo } from '@/data/companyDemos';
 import { speakerCompanyCount } from '@/data/speakerArchive';
 
@@ -43,6 +44,7 @@ const CompanyMark = ({ company }: { company: CompanyLogo }) => {
       alt=""
       loading="lazy"
       decoding="async"
+      {...logoBox(company.logo)}
       className={company.tone === 'plain' ? 'brightness-0 invert' : undefined}
       style={
         company.tone === 'plain'
