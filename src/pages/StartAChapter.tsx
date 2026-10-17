@@ -59,15 +59,15 @@ const StartAChapter = () => {
         <PageHero
           eyebrow="Bring Wild AI home"
           icon={Rocket}
-          title={<>Start a <span>chapter</span>.</>}
-          lede="You bring the local energy. We bring the playbook, the brand, the organizer network, and four years of lessons about what makes AI meetups actually good."
+          title={<>Start a <span>chapter</span></>}
+          lede="Run the same night in your city. 15-minute demos, no slides."
         />
         <div className="container mx-auto px-4 pt-14">
 
           {/* The pitch + expectations */}
           <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 mb-16">
             <div className="surface p-6 md:p-8">
-              <h2 className="text-xl font-display font-semibold text-wildai-mint mb-4">WHAT YOU GET</h2>
+              <h2 className="text-xl font-semibold mb-4">What you get</h2>
               <ul className="space-y-4 text-muted-foreground">
                 <li className="flex items-start"><Users className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />A proven format: 15-minute demos, no slides, then networking</li>
                 <li className="flex items-start"><Map className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />Brand, event templates, and a page on this site for your city</li>
@@ -75,7 +75,7 @@ const StartAChapter = () => {
               </ul>
             </div>
             <div className="surface p-6 md:p-8">
-              <h2 className="text-xl bold font-display font-semibold text-wildai-mint mb-4">WHAT WE EXPECT</h2>
+              <h2 className="text-xl font-semibold mb-4">What we expect</h2>
               <ul className="space-y-4 text-muted-foreground">
                 <li className="flex items-start"><Rocket className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />You live in (or near) the city you want to launch</li>
                 <li className="flex items-start"><Rocket className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />A co-organizer or two - this is a team sport</li>
@@ -86,7 +86,7 @@ const StartAChapter = () => {
 
           {/* Current + launching chapters */}
           <div className="max-w-4xl mx-auto mb-16">
-            <h2 className="section-title text-center">WHERE WE ARE NOW</h2>
+            <h2 className="section-title text-center">Where we are</h2>
             <div className="grid sm:grid-cols-3 gap-4">
               {(chapters ?? []).map((c) => (
                 <Link
@@ -116,9 +116,9 @@ const StartAChapter = () => {
 
           {/* Application form */}
           <div className="max-w-xl mx-auto mb-16">
-            <h2 className="section-title text-center">APPLY TO ORGANIZE</h2>
+            <h2 className="section-title text-center">Apply</h2>
             <p className="text-center text-muted-foreground mb-8">
-              Tell us about your city and why you want to build its AI community.
+              Tell us your city and why you want to host.
             </p>
             {submitted ? (
               <div className="surface p-6 md:p-8 text-center">
@@ -200,7 +200,7 @@ const StartAChapter = () => {
 
           {/* What happens next */}
           <div className="max-w-2xl mx-auto">
-            <h2 className="section-title text-center">WHAT HAPPENS NEXT</h2>
+            <h2 className="section-title text-center">What happens next</h2>
             <div className="space-y-4">
               {[
                 { step: '01', text: 'We review applications weekly and reply within two weeks.' },

@@ -45,7 +45,7 @@ const EmailCapture = ({
         payload: { source, chapterId: chapterId ?? null, cityRequested: cityRequested ?? null },
       });
       setDone(true);
-      toast.success("You're on the list!");
+      toast.success("You're on the list");
     } catch (err) {
       console.error(err);
       toast.error(err instanceof Error ? err.message : 'Signup failed - please try again');
@@ -58,7 +58,7 @@ const EmailCapture = ({
     return (
       <div className={`surface ${compact ? 'p-6' : 'p-10'} text-center`}>
         <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
-        <p className="font-mono font-bold text-wildai-mint">YOU'RE ON THE LIST</p>
+        <p className="font-semibold">You&apos;re on the list</p>
         <p className="text-sm text-muted-foreground mt-2">Jake has this address for event invites.</p>
       </div>
     );

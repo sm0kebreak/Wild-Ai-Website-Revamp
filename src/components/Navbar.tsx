@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Search } from 'lucide-react';
@@ -27,8 +27,8 @@ const navLinks = [
 const Navbar = () => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const barRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
   const palette = useCommandPalette();
   const rsvpUrl = rsvpUrlFor(nextMeetupDate());
@@ -42,8 +42,10 @@ const Navbar = () => {
       if (frame) return;
       frame = requestAnimationFrame(() => {
         frame = 0;
+        const bar = barRef.current;
+        if (!bar) return;
         const max = document.documentElement.scrollHeight - window.innerHeight;
-        setProgress(max > 0 ? window.scrollY / max : 0);
+        bar.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
       });
     };
     onScroll();
@@ -58,7 +60,7 @@ const Navbar = () => {
     <>
       <header
         className={`site-header fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-300 ${
-          scrolled ? 'border-border bg-background/85 backdrop-blur-xl' : 'border-transparent bg-transparent'
+          scrolled ? 'border-border bg-background' : 'border-transparent bg-transparent'
         }`}
       >
         <div className="container mx-auto flex h-16 min-w-0 items-center justify-between gap-3 px-4">
@@ -137,8 +139,8 @@ const Navbar = () => {
         </div>
 
         <div
-          className="absolute bottom-0 left-0 h-[2px] bg-accent/70 transition-[width] duration-150 ease-out"
-          style={{ width: `${progress * 100}%` }}
+          ref={barRef}
+          className="absolute bottom-0 left-0 h-[2px] w-0 bg-accent/70"
           aria-hidden="true"
         />
       </header>

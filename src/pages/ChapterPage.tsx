@@ -105,8 +105,8 @@ const ChapterPage = () => {
             </a>
           )}
           <Link to="/chapters">
-            <Button variant="outline" size="lg">
-              ALL CHAPTERS
+            <Button variant="link" size="lg">
+              All chapters
             </Button>
           </Link>
         </PageHero>

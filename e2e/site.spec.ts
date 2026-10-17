@@ -7,12 +7,12 @@ const DEMO_LINE =
 const LUMA_URLS = new Set([LUMA_EVENT, LUMA_CALENDAR]);
 
 const routes: { path: string; heading: RegExp; redirect?: string }[] = [
-  { path: '/', heading: /The room where/ },
-  { path: '/events', heading: /Wild AI\s+events/ },
+  { path: '/', heading: /Monday, October 19/ },
+  { path: '/events', heading: /^Events$/ },
   { path: '/chapters', heading: /Find your/ },
-  { path: '/speak', heading: /Demo at/ },
-  { path: '/sponsor', heading: /Reach AI/ },
-  { path: '/about', heading: /crowded room/ },
+  { path: '/speak', heading: /^Demo$/ },
+  { path: '/sponsor', heading: /Sponsor a night/ },
+  { path: '/about', heading: /A room for builders/ },
   { path: '/join', heading: /Join/ },
   { path: '/start-a-chapter', heading: /chapter/i },
   { path: '/past-events', heading: /Past events/ },
@@ -26,10 +26,10 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/events/may-2026', heading: /MAY 2026/ },
   { path: '/events/gopher-ai-demo-night', heading: /DEMO NIGHT/ },
   { path: '/events/gopher-ai-conference', heading: /DEMO NIGHT/ },
-  { path: '/admin', heading: /The room where/, redirect: '/' },
-  { path: '/admin/login', heading: /The room where/, redirect: '/' },
-  { path: '/admin/show-and-tell', heading: /The room where/, redirect: '/' },
-  { path: '/admin/emails', heading: /The room where/, redirect: '/' },
+  { path: '/admin', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/login', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/show-and-tell', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/emails', heading: /Monday, October 19/, redirect: '/' },
   { path: '/minneapolis', heading: /Next up/ },
   { path: '/san-francisco', heading: /coming soon/ },
   { path: '/toronto', heading: /coming soon/ },
@@ -38,8 +38,8 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/events/msp-october-2026', heading: /October/ },
   { path: '/events/archive-2026-09-21', heading: /September Meetup/ },
   { path: '/events/archive-2025-06-19', heading: /June Meetup/ },
-  { path: '/afterparty', heading: /The room where/, redirect: '/' },
-  { path: '/press', heading: /The room where/, redirect: '/' },
+  { path: '/afterparty', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/press', heading: /Monday, October 19/, redirect: '/' },
 ];
 
 const seedPages = [
@@ -101,7 +101,7 @@ test.describe('routes', () => {
     await openPath(page, '/this-page-does-not-exist');
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/not found/i);
     await page.getByRole('link', { name: 'Return to Home' }).click();
-    await assertPage(page, /The room where/);
+    await assertPage(page, /Monday, October 19/);
   });
 });
 
@@ -168,7 +168,10 @@ test('registration, demo, sponsor, and LinkedIn hrefs are valid', async ({ page 
   }
 
   await openPath(page, '/');
-  await expect(page.getByRole('link', { name: 'Register now' })).toHaveAttribute('href', LUMA_EVENT);
+  await expect(page.locator('.hero-stage').getByRole('link', { name: 'Register', exact: true })).toHaveAttribute(
+    'href',
+    LUMA_EVENT,
+  );
   await expect(page.locator('header').getByRole('link', { name: 'Register' })).toHaveAttribute('href', LUMA_EVENT);
   await expect(page.locator('#next-event').getByRole('link', { name: 'Register' })).toHaveAttribute('href', LUMA_EVENT);
   await expect(page.getByRole('link', { name: 'Sign up to demo' })).toHaveAttribute('href', '/speak');
@@ -352,13 +355,23 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     'href',
     'https://www.linkedin.com/in/justin14/',
   );
-  await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/justin-bosco.jpg',
+  );
+  await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/maanas-taneja.jpg',
+  );
   await expect(page.getByRole('link', { name: /Micah Peoples/ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/micahpeoples/',
   );
-  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/micah-peoples.jpg',
+  );
+  await expect(page.locator('ul.grid > li img')).toHaveCount(10);
   await expect(page.getByRole('link', { name: /Muhammad Shahid/ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/muhammad-shahid-moandco/',
@@ -394,6 +407,20 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   await expect(instagram).toHaveCount(1);
   await expect(instagram).toHaveAttribute('href', 'https://www.instagram.com/wildai.us/');
   await expect(page.locator('footer').getByRole('link', { name: 'Admin' })).toHaveCount(0);
+});
+
+test('homepage next meetup leads with the date', async ({ page }) => {
+  await openPath(page, '/');
+  const hero = page.locator('.hero-stage');
+  await expect(hero.getByText('Monday, October 19', { exact: true })).toBeVisible();
+  await expect(hero.getByText('Dangerous Man Brewing')).toBeVisible();
+  await expect(hero.getByText(/Doors 6:00 PM/)).toBeVisible();
+  await expect(hero.locator('.animate-ping')).toHaveCount(0);
+  const figures = hero.locator('.countdown-figures');
+  await expect(figures).toBeVisible();
+  const font = await figures.evaluate((element) => getComputedStyle(element).fontFamily);
+  expect(font.toLowerCase()).not.toContain('mono');
+  expect(font.toLowerCase()).toContain('inter');
 });
 
 test('anchors scroll to the named section', async ({ page }) => {
@@ -599,9 +626,9 @@ test('primary navigation reaches every section', async ({ page }, testInfo) => {
     for (const item of [
       { label: 'Chapters', heading: /Find your/ },
       { label: 'Events', heading: /events/i },
-      { label: 'Speak', heading: /Demo at/ },
-      { label: 'Sponsor', heading: /Reach AI/ },
-      { label: 'About', heading: /crowded room/ },
+      { label: 'Speak', heading: /^Demo$/ },
+      { label: 'Sponsor', heading: /Sponsor a night/ },
+      { label: 'About', heading: /A room for builders/ },
     ]) {
       await page.locator('nav[aria-label="Primary navigation"]').getByRole('link', { name: item.label }).click();
       await assertPage(page, item.heading);

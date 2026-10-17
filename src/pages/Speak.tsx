@@ -50,7 +50,7 @@ const Speak = () => (
       <PageHero
         eyebrow="Demos"
         icon={Mic2}
-        title={<>Demo at <span>Wild AI</span>.</>}
+        title="Demo"
         lede={DEMO_SIGNUP}
       />
       <div className="container mx-auto px-4 pt-14">
@@ -58,7 +58,7 @@ const Speak = () => (
         {/* What we're looking for + what to expect */}
         <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 mb-16">
           <div className="surface p-6 md:p-8">
-            <h2 className="text-xl font-display font-semibold text-wildai-mint mb-4">WHAT WE'RE LOOKING FOR</h2>
+            <h2 className="text-xl font-semibold mb-4">What to send</h2>
             <ul className="space-y-4 text-muted-foreground">
               <li className="flex items-start">
                 <Sparkles className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
@@ -75,7 +75,7 @@ const Speak = () => (
             </ul>
           </div>
           <div className="surface p-6 md:p-8">
-            <h2 className="text-xl font-display font-semibold text-wildai-mint mb-4">WHAT TO EXPECT</h2>
+            <h2 className="text-xl font-semibold mb-4">What to expect</h2>
             <ul className="space-y-4 text-muted-foreground">
               <li className="flex items-start">
                 <Clock className="w-4 h-4 text-wildai-mint mr-3 mt-1 flex-shrink-0" />
@@ -95,9 +95,9 @@ const Speak = () => (
 
         {/* Form */}
         <div className="max-w-2xl mx-auto mb-16">
-          <h2 className="section-title text-center">SUBMIT YOUR TALK</h2>
+          <h2 className="section-title text-center">Apply to demo</h2>
           <p className="text-center text-muted-foreground mb-8">
-            Tell us what you're building and we'll match you with a city and a date.
+            Tell us what you built. We will match you with a city and a date.
           </p>
           <SpeakerForm />
         </div>

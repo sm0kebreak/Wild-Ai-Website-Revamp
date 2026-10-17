@@ -19,7 +19,7 @@ const NotFound = () => {
       <div className="container relative mx-auto px-4 text-center">
         <p className="eyebrow mb-5 justify-center">Error 404</p>
         <h1 className="page-hero__title mb-4">
-          Oops! Page <span>not found</span>
+          Page <span>not found</span>
         </h1>
         <Link to="/" className="btn-primary mt-6">
           Return to Home

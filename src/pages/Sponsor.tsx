@@ -56,35 +56,35 @@ const Sponsor = () => {
         <PageHero
           eyebrow="Partner with us"
           icon={Handshake}
-          title={<>Reach AI <span>builders</span>.</>}
-          lede="Wild AI rooms are full of people who ship: engineers, founders, and researchers actively building with AI. Sponsors get their attention in person, not in a feed."
+          title="Sponsor a night"
+          lede="Sponsorship is $500 per event. You meet builders in the room."
         />
         <div className="container mx-auto px-4 pt-14">
 
           {/* Why sponsor */}
           <div className="max-w-4xl mx-auto surface p-6 md:p-8 mb-16">
-            <h2 className="section-title">WHY SPONSORS KEEP COMING BACK</h2>
+            <h2 className="section-title">Why sponsor</h2>
             <ul className="space-y-3 text-muted-foreground">
-              <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Recruitment: meet your next AI hire in person, not in a pile of résumés</li>
-              <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Product feedback: demo to builders who will actually use (and break) your tool</li>
-              <li className="flex items-start"><span className="text-wildai-mint mr-2">→</span> Brand trust: align with the community voice of local AI scenes, not a generic conference</li>
+              <li>Meet people you might hire.</li>
+              <li>Show your product to people who build with it.</li>
+              <li>Your name is in the room.</li>
             </ul>
           </div>
 
           <div className="max-w-xl mx-auto mb-16 text-center">
-            <h2 className="section-title">SPONSORSHIP</h2>
+            <h2 className="section-title">Sponsorship</h2>
             <p className="font-display text-4xl font-semibold text-wildai-mint">$500 per event</p>
           </div>
 
           {/* Sponsors + photos */}
           <div className="max-w-4xl mx-auto mb-16">
-            <h2 className="section-title text-center">TRUSTED BY</h2>
+            <h2 className="section-title text-center">In the room</h2>
             <LogoCarousel />
           </div>
 
           {/* Lead form */}
           <div className="max-w-xl mx-auto">
-            <h2 className="section-title text-center">SPONSOR AN EVENT</h2>
+            <h2 className="section-title text-center">Get in touch</h2>
             <p className="text-center text-muted-foreground mb-8">
               Sponsorship is $500 per event. Tell us about your company and we will follow up.
             </p>

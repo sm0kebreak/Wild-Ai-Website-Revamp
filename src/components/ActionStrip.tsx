@@ -1,73 +1,50 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Mic2, Handshake } from 'lucide-react';
-import { DEMO_SIGNUP } from '@/lib/meetupSchedule';
+import { Button } from '@/components/ui/button';
+import EmailCapture from '@/components/EmailCapture';
 
-const actions = [
+const paths = [
   {
-    key: 'demo',
-    kicker: 'Demo',
-    title: 'Sign up to demo',
-    pitch: DEMO_SIGNUP,
-    href: '/speak',
+    line: '15 minutes on the mic. No slides.',
     cta: 'Sign up to demo',
-    icon: Mic2,
-    featured: true,
+    href: '/speak',
   },
   {
-    key: 'sponsor',
-    kicker: 'Sponsor',
-    title: 'Sponsor an event',
-    pitch: 'Put your company in the room with the builders.',
-    href: '/sponsor',
+    line: 'Sponsorship is $500 per event.',
     cta: 'Become a sponsor',
-    icon: Handshake,
-    featured: false,
+    href: '/sponsor',
+  },
+  {
+    line: 'Host the same night in your city.',
+    cta: 'Start a chapter',
+    href: '/start-a-chapter',
   },
 ] as const;
 
-/** Two separate calls to action, each with its own pitch. */
+/** Four ways in. Each is one sentence and one action. */
 const ActionStrip = () => (
-  <section className="pb-2 pt-6 md:pt-8" aria-label="Demo or sponsor">
+  <section className="pb-2 pt-6 md:pt-8" aria-label="Ways to take part">
     <div className="container mx-auto min-w-0 px-4">
       <div className="grid min-w-0 gap-3 md:grid-cols-2">
-        {actions.map((action) => {
-          const Icon = action.icon;
-          return (
-            <Link
-              key={action.key}
-              to={action.href}
-              className={`flex min-w-0 flex-col justify-between gap-5 rounded-2xl border p-5 transition-colors md:p-6 ${
-                action.featured
-                  ? 'border-cta/40 bg-card hover:border-cta'
-                  : 'border-accent/40 bg-card hover:border-accent'
-              }`}
-            >
-              <div className="min-w-0">
-                <p className={`kicker inline-flex items-center gap-2 ${action.featured ? '' : 'text-accent'}`}>
-                  <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-                  {action.kicker}
-                </p>
-                <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight md:text-3xl">
-                  {action.title}
-                </h2>
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground md:text-base">
-                  {action.pitch}
-                </p>
-              </div>
-              <span
-                className={`inline-flex h-12 w-full items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold sm:w-fit ${
-                  action.featured
-                    ? 'bg-cta text-cta-foreground'
-                    : 'border border-accent/70 text-accent'
-                }`}
-              >
-                {action.cta}
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </span>
-            </Link>
-          );
-        })}
+        {paths.map((path) => (
+          <div
+            key={path.href}
+            className="flex min-w-0 flex-col justify-between gap-4 rounded-lg border border-border bg-card p-5 md:p-6"
+          >
+            <p className="text-sm leading-relaxed text-muted-foreground md:text-base">{path.line}</p>
+            <Button asChild className="w-full sm:w-fit">
+              <Link to={path.href}>{path.cta}</Link>
+            </Button>
+          </div>
+        ))}
+        <div className="min-w-0">
+          <EmailCapture
+            source="home"
+            title="Email"
+            description="One email per event."
+            compact
+          />
+        </div>
       </div>
     </div>
   </section>

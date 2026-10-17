@@ -42,6 +42,7 @@ const team: TeamMember[] = [
   {
     name: 'Justin Bosco',
     linkedin: 'https://www.linkedin.com/in/justin14/',
+    photo: '/team/justin-bosco.jpg',
   },
   {
     name: 'Kate Kuehl',
@@ -51,6 +52,7 @@ const team: TeamMember[] = [
   {
     name: 'Maanas Taneja',
     linkedin: 'https://www.linkedin.com/in/maanas-taneja',
+    photo: '/team/maanas-taneja.jpg',
   },
   {
     name: 'Matthew Osborn',
@@ -60,6 +62,7 @@ const team: TeamMember[] = [
   {
     name: 'Micah Peoples',
     linkedin: 'https://www.linkedin.com/in/micahpeoples/',
+    photo: '/team/micah-peoples.jpg',
   },
   {
     name: 'Muhammad Shahid',
@@ -97,18 +100,14 @@ const About = () => {
         <PageHero
           eyebrow="About Wild AI"
           icon={Flame}
-          title={
-            <>
-              The best AI conversations happen <span>in a crowded room</span>.
-            </>
-          }
-          lede="Wild AI is a community-run meetup network for people who build with AI. 15-minute demos, no slides. All ages. Free."
+          title="A room for builders"
+          lede="15-minute demos, no slides. All ages. Free."
         />
         <div className="container mx-auto px-4 pt-14">
 
           {/* Origin story */}
           <div className="max-w-3xl mx-auto surface p-6 md:p-8 mb-16">
-            <h2 className="section-title">THE ORIGIN STORY</h2>
+            <h2 className="section-title">How it started</h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 The first Wild AI meetup was a handful of engineers, founders, and students at
@@ -124,7 +123,7 @@ const About = () => {
 
           {/* Values */}
           <div className="max-w-4xl mx-auto mb-16">
-            <h2 className="section-title text-center">WHAT WE STAND FOR</h2>
+            <h2 className="section-title text-center">What we stand for</h2>
             <div className="surface p-6 md:p-8">
               <p className="text-muted-foreground leading-relaxed">
                 Show, don&apos;t tell. Slides are banned. Every speaker gets 15 minutes of mic
@@ -136,7 +135,7 @@ const About = () => {
 
           {/* Team */}
           <div className="max-w-4xl mx-auto mb-16">
-            <h2 className="section-title text-center">THE TEAM</h2>
+            <h2 className="section-title text-center">Team</h2>
             <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {team.map((person) => {
                 const body = (
@@ -185,7 +184,7 @@ const About = () => {
 
           {/* Network */}
           <div className="max-w-4xl mx-auto mb-16">
-            <h2 className="section-title text-center">THE NETWORK</h2>
+            <h2 className="section-title text-center">Cities</h2>
             <div className="grid sm:grid-cols-3 gap-4">
               {(chapters ?? []).map((c) => (
                 <Link
@@ -215,7 +214,7 @@ const About = () => {
 
           {/* Code of conduct */}
           <div id="conduct" className="max-w-3xl mx-auto surface p-6 md:p-8 mb-16 scroll-mt-28">
-            <h2 className="section-title">CODE OF CONDUCT</h2>
+            <h2 className="section-title">Code of conduct</h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 Wild AI exists so builders can share real work in a room they trust. That trust
@@ -234,13 +233,13 @@ const About = () => {
 
           {/* CTA */}
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-display font-semibold mb-4">COME TO A MEETUP</h2>
+            <h2 className="text-xl font-semibold mb-4">Come to a meetup</h2>
             <p className="text-muted-foreground mb-6">
-              The fastest way to understand Wild AI is to stand in one of our rooms.
+              The fastest way to see Wild AI is to come to one.
             </p>
             <Link to="/chapters">
-              <Button >
-                FIND YOUR CITY <ArrowRight className="w-4 h-4 ml-1" />
+              <Button>
+                Find your city <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
           </div>
