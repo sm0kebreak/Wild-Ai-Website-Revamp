@@ -7,7 +7,7 @@ const DEMO_LINE =
 const LUMA_URLS = new Set([LUMA_EVENT, LUMA_CALENDAR]);
 
 const routes: { path: string; heading: RegExp; redirect?: string }[] = [
-  { path: '/', heading: /The room where/ },
+  { path: '/', heading: /Monday, October 19/ },
   { path: '/events', heading: /Wild AI\s+events/ },
   { path: '/chapters', heading: /Find your/ },
   { path: '/speak', heading: /Demo at/ },
@@ -26,10 +26,10 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/events/may-2026', heading: /MAY 2026/ },
   { path: '/events/gopher-ai-demo-night', heading: /DEMO NIGHT/ },
   { path: '/events/gopher-ai-conference', heading: /DEMO NIGHT/ },
-  { path: '/admin', heading: /The room where/, redirect: '/' },
-  { path: '/admin/login', heading: /The room where/, redirect: '/' },
-  { path: '/admin/show-and-tell', heading: /The room where/, redirect: '/' },
-  { path: '/admin/emails', heading: /The room where/, redirect: '/' },
+  { path: '/admin', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/login', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/show-and-tell', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/emails', heading: /Monday, October 19/, redirect: '/' },
   { path: '/minneapolis', heading: /Next up/ },
   { path: '/san-francisco', heading: /coming soon/ },
   { path: '/toronto', heading: /coming soon/ },
@@ -38,8 +38,8 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/events/msp-october-2026', heading: /October/ },
   { path: '/events/archive-2026-09-21', heading: /September Meetup/ },
   { path: '/events/archive-2025-06-19', heading: /June Meetup/ },
-  { path: '/afterparty', heading: /The room where/, redirect: '/' },
-  { path: '/press', heading: /The room where/, redirect: '/' },
+  { path: '/afterparty', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/press', heading: /Monday, October 19/, redirect: '/' },
 ];
 
 const seedPages = [
@@ -101,7 +101,7 @@ test.describe('routes', () => {
     await openPath(page, '/this-page-does-not-exist');
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/not found/i);
     await page.getByRole('link', { name: 'Return to Home' }).click();
-    await assertPage(page, /The room where/);
+    await assertPage(page, /Monday, October 19/);
   });
 });
 
@@ -168,11 +168,13 @@ test('registration, demo, sponsor, and LinkedIn hrefs are valid', async ({ page 
   }
 
   await openPath(page, '/');
-  await expect(page.getByRole('link', { name: 'Register now' })).toHaveAttribute('href', LUMA_EVENT);
-  await expect(page.locator('header').getByRole('link', { name: 'Register' })).toHaveAttribute('href', LUMA_EVENT);
-  await expect(page.locator('#next-event').getByRole('link', { name: 'Register' })).toHaveAttribute('href', LUMA_EVENT);
-  await expect(page.getByRole('link', { name: 'Sign up to demo' })).toHaveAttribute('href', '/speak');
-  await expect(page.getByRole('link', { name: 'Become a sponsor' })).toHaveAttribute('href', '/sponsor');
+  await expect(page.locator('.hero-stage').getByRole('link', { name: 'Register', exact: true })).toHaveAttribute('href', LUMA_EVENT);
+  await expect(page.locator('header').getByRole('link', { name: 'Register', exact: true })).toHaveAttribute('href', LUMA_EVENT);
+  await expect(page.locator('#next-event').getByRole('link', { name: 'Register', exact: true })).toHaveAttribute('href', LUMA_EVENT);
+  await expect(page.getByRole('link', { name: 'Sign up to demo', exact: true })).toHaveAttribute('href', '/speak');
+  await expect(page.getByRole('link', { name: 'How it works', exact: true })).toHaveAttribute('href', '/speak');
+  await expect(page.locator('#sponsor-a-night').getByRole('link', { name: 'Sponsor', exact: true })).toHaveAttribute('href', '/sponsor');
+  await expect(page.locator('#sponsor-a-night').getByRole('link', { name: 'Learn more', exact: true })).toHaveAttribute('href', '/sponsor');
 
   await openPath(page, '/events');
   await expect(page.getByRole('link', { name: /RSVP/ }).first()).toHaveAttribute('href', LUMA_EVENT);

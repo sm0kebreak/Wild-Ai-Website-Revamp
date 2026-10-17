@@ -9,7 +9,7 @@ const chipLabel = (group: EventPhotoGroup) => {
   return `${month} ${date.getDate()} · ${group.city}`;
 };
 
-const EventPhotoGallery = () => {
+const EventPhotoGallery = ({ cinema = false }: { cinema?: boolean }) => {
   const [groupId, setGroupId] = useState(eventPhotoGroups[0]?.id ?? '');
   const group = eventPhotoGroups.find((item) => item.id === groupId) ?? eventPhotoGroups[0];
   const [index, setIndex] = useState<number | null>(null);
@@ -36,15 +36,15 @@ const EventPhotoGallery = () => {
   const open = (photoIndex: number) => setIndex(photoIndex);
 
   return (
-    <section id="photos" className="pb-8 pt-2 md:pb-10">
-      <div className="container mx-auto px-4">
-        <div className="mb-3 flex items-end justify-between gap-4">
-          <div>
-            <h2 className="font-display text-xl font-semibold tracking-tight md:text-2xl">Photos</h2>
-          </div>
+    <section id="photos" className={cinema ? '' : 'pb-8 pt-2 md:pb-10'}>
+      <div className={cinema ? '' : 'container mx-auto px-4'}>
+        <div className={cinema ? 'text-center' : 'mb-3 flex items-end justify-between gap-4'}>
+          <h2 className={cinema ? 'tesla-title' : 'font-display text-xl font-semibold tracking-tight md:text-2xl'}>
+            Photos
+          </h2>
         </div>
 
-        <div className="city-pills mb-3" role="tablist" aria-label="Choose a night">
+        <div className={`city-pills mb-3 ${cinema ? 'mt-8' : ''}`} role="tablist" aria-label="Choose a night">
           {eventPhotoGroups.map((item) => {
             const selected = item.id === group.id;
             return (

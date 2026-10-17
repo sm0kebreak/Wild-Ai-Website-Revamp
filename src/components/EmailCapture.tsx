@@ -13,6 +13,8 @@ interface EmailCaptureProps {
   title?: string;
   description?: string;
   compact?: boolean;
+  /** Homepage photograph: the form only, no card. */
+  bare?: boolean;
 }
 
 /**
@@ -25,6 +27,7 @@ const EmailCapture = ({
   title = 'JOIN THE COMMUNITY',
   description = 'Event invites, speaker lineups, and recaps. No spam, unsubscribe anytime.',
   compact = false,
+  bare = false,
 }: EmailCaptureProps) => {
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -56,7 +59,7 @@ const EmailCapture = ({
 
   if (done) {
     return (
-      <div className={`surface ${compact ? 'p-6' : 'p-10'} text-center`}>
+      <div className={bare ? 'text-center' : `surface ${compact ? 'p-6' : 'p-10'} text-center`}>
         <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
         <p className="font-mono font-bold text-wildai-mint">YOU'RE ON THE LIST</p>
         <p className="text-sm text-muted-foreground mt-2">Jake has this address for event invites.</p>
@@ -65,19 +68,25 @@ const EmailCapture = ({
   }
 
   return (
-    <div className={`surface ${compact ? 'p-6' : 'p-8'}`}>
-      <div className="flex items-center gap-2 mb-3">
-        <Mail className="w-5 h-5 text-wildai-mint" />
-        <h3 className="text-lg font-display font-semibold text-wildai-mint">{title}</h3>
-      </div>
-      <p className="text-sm text-muted-foreground mb-4">{description}</p>
+    <div className={bare ? '' : `surface ${compact ? 'p-6' : 'p-8'}`}>
+      {!bare && (
+        <div className="flex items-center gap-2 mb-3">
+          <Mail className="w-5 h-5 text-wildai-mint" />
+          <h3 className="text-lg font-display font-semibold text-wildai-mint">{title}</h3>
+        </div>
+      )}
+      {!bare && description ? <p className="text-sm text-muted-foreground mb-4">{description}</p> : null}
       <form onSubmit={submit} className="flex flex-col sm:flex-row gap-3">
         <Input
           type="email"
           placeholder="you@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-grow"
+          className={
+            bare
+              ? 'h-12 flex-grow rounded-full border-white/25 bg-white/10 text-white placeholder:text-white/60'
+              : 'flex-grow'
+          }
           maxLength={255}
           required
         />
@@ -89,7 +98,7 @@ const EmailCapture = ({
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'SUBSCRIBE'}
         </Button>
       </form>
-      <p className="text-xs text-muted-foreground mt-3">
+      <p className={`mt-3 text-xs ${bare ? 'text-white/70' : 'text-muted-foreground'}`}>
         By subscribing you agree to receive chapter emails. Unsubscribe anytime.
       </p>
     </div>

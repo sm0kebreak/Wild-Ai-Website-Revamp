@@ -145,34 +145,38 @@ const PastEventsStrip = ({
   limit,
   detailed = false,
   stacks = false,
+  cinema = false,
 }: {
   limit?: number;
   detailed?: boolean;
   stacks?: boolean;
+  cinema?: boolean;
 }) => {
   const events = typeof limit === 'number' ? pastMeetups.slice(0, limit) : pastMeetups;
+  const Heading = stacks || cinema ? 'h2' : 'h1';
 
   return (
-    <section id="past-events" className={stacks ? 'py-6 md:py-8' : 'py-12 md:py-16'}>
-      <div className="container mx-auto px-4">
-        <div className="mb-3 flex items-end justify-between gap-4">
+    <section id="past-events" className={cinema ? '' : stacks ? 'py-6 md:py-8' : 'py-12 md:py-16'}>
+      <div className={cinema ? 'mx-auto max-w-3xl' : 'container mx-auto px-4'}>
+        <div className={cinema ? 'text-center' : 'mb-3 flex items-end justify-between gap-4'}>
           <div>
-            <p className="eyebrow mb-2">Archive</p>
-            {stacks ? (
-              <h2 className="font-display text-xl font-semibold tracking-tight md:text-2xl">Past events</h2>
-            ) : (
-              <h1 className="font-display text-xl font-semibold tracking-tight md:text-2xl">Past events</h1>
-            )}
+            {!cinema && <p className="eyebrow mb-2">Archive</p>}
+            <Heading className={cinema ? 'tesla-title' : 'font-display text-xl font-semibold tracking-tight md:text-2xl'}>
+              Past events
+            </Heading>
           </div>
           {typeof limit === 'number' && pastMeetups.length > limit && (
-            <Link to="/past-events" className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+            <Link
+              to="/past-events"
+              className={`inline-flex items-center gap-1.5 text-sm font-medium text-accent ${cinema ? 'mt-5 justify-center' : ''}`}
+            >
               All events
               <ArrowRight className="h-4 w-4" />
             </Link>
           )}
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-border bg-card">
+        <div className={cinema ? 'mt-8 text-left' : 'overflow-hidden rounded-xl border border-border bg-card'}>
           {!stacks && (
             <div className="hidden grid-cols-[11rem_8.5rem_1fr] gap-4 border-b border-border px-4 py-2.5 text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground md:grid">
               <span>Date</span>

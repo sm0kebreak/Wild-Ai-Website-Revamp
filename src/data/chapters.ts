@@ -17,7 +17,7 @@ export const publicChapters: PublicChapter[] = [
     label: 'Minneapolis',
     region: 'Minnesota',
     status: 'active',
-    tagline: 'Third Monday of the month. Doors 6:00 PM CT, demos at 6:40 PM.',
+    tagline: 'Doors 6:00 PM CT, demos at 6:40 PM.',
     about:
       'The original Wild AI room. 15-minute demos, no slides: about 10 minutes to show what you built, then about 5 minutes of questions and feedback. Doors at 6:00 PM CT, demos at 6:40, networking until 9 at Dangerous Man Brewing. All ages. Free.',
   },

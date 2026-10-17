@@ -11,7 +11,7 @@ export const MEETUP_VENUE = {
 export const MEETUP_START_TIME = '18:00';
 /** Networking runs until 9:00 PM. Doors stay at 18:00. */
 export const MEETUP_END_TIME = '21:00';
-export const MEETUP_CADENCE = 'Third Monday of every month. Doors 6:00 PM CT, demos at 6:40 PM.';
+export const MEETUP_CADENCE = 'Doors 6:00 PM CT, demos at 6:40 PM.';
 
 /** One line for heroes and cards, so a doors time never hides the demo start. */
 export const MEETUP_TIME_LINE = 'Doors 6:00 PM · Demos 6:40 PM · Until 9 PM CT';
