@@ -9,8 +9,16 @@ const chipLabel = (group: EventPhotoGroup) => {
   return `${month} ${date.getDate()} · ${group.city}`;
 };
 
-const EventPhotoGallery = ({ cinema = false }: { cinema?: boolean }) => {
-  const [groupId, setGroupId] = useState(eventPhotoGroups[0]?.id ?? '');
+const EventPhotoGallery = ({
+  cinema = false,
+  groupId: onlyGroup,
+}: {
+  cinema?: boolean;
+  /** Show one night and hide the night switcher. */
+  groupId?: string;
+}) => {
+  const groups = onlyGroup ? eventPhotoGroups.filter((item) => item.id === onlyGroup) : eventPhotoGroups;
+  const [groupId, setGroupId] = useState(groups[0]?.id ?? '');
   const group = eventPhotoGroups.find((item) => item.id === groupId) ?? eventPhotoGroups[0];
   const [index, setIndex] = useState<number | null>(null);
   const active = group && index !== null ? group.photos[index] : null;
@@ -36,16 +44,17 @@ const EventPhotoGallery = ({ cinema = false }: { cinema?: boolean }) => {
   const open = (photoIndex: number) => setIndex(photoIndex);
 
   return (
-    <section id="photos" className={cinema ? '' : 'pb-8 pt-2 md:pb-10'}>
-      <div className={cinema ? '' : 'container mx-auto px-4'}>
+    <section id={onlyGroup ? undefined : 'photos'} className={onlyGroup ? 'mb-10' : cinema ? '' : 'pb-8 pt-2 md:pb-10'}>
+      <div className={onlyGroup || cinema ? '' : 'container mx-auto px-4'}>
         <div className={cinema ? 'text-center' : 'mb-3 flex items-end justify-between gap-4'}>
           <h2 className={cinema ? 'tesla-title' : 'font-display text-xl font-semibold tracking-tight md:text-2xl'}>
             Photos
           </h2>
         </div>
 
+        {onlyGroup ? null : (
         <div className={`city-pills mb-3 ${cinema ? 'mt-8' : ''}`} role="tablist" aria-label="Choose a night">
-          {eventPhotoGroups.map((item) => {
+          {groups.map((item) => {
             const selected = item.id === group.id;
             return (
               <button
@@ -65,6 +74,7 @@ const EventPhotoGallery = ({ cinema = false }: { cinema?: boolean }) => {
             );
           })}
         </div>
+        )}
 
         <ul className="photo-grid" aria-label={`Photos from ${group.event}`}>
           {group.photos.map((photo, photoIndex) => (

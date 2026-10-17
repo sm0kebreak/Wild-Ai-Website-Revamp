@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import { MapPin, Clock, Calendar, Users, ExternalLink, Car, Ticket, Presentation, FlaskConical, Rocket } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import RoutePhoto from '@/components/RoutePhoto';
+import EventPhotoGallery from '@/components/EventPhotoGallery';
 
 const GopherAIConference = () => {
   return (
@@ -142,6 +143,7 @@ const GopherAIConference = () => {
             </div>
           </div>
 
+          <EventPhotoGallery groupId="2026-04-09-gopher" />
 
           {/* CTA */}
           <div className="bg-primary/25 p-6 md:p-8 surface text-center">

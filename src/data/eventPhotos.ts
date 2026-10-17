@@ -440,6 +440,68 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
     ],
   },
   {
+    id: '2026-04-09-gopher',
+    event: 'Gopher AI Demo Night',
+    city: 'Minneapolis',
+    date: '2026-04-09',
+    displayDate: 'April 9, 2026',
+    photos: [
+      {
+        id: '2026-04-gopher-01',
+        src: '/event-photos/2026-04-gopher-01-960.webp',
+        srcSet:
+          '/event-photos/2026-04-gopher-01-480.webp 480w, /event-photos/2026-04-gopher-01-800.webp 800w, /event-photos/2026-04-gopher-01-960.webp 960w, /event-photos/2026-04-gopher-01-1280.webp 1280w',
+        fullSrc: '/event-photos/2026-04-gopher-01-1280.webp',
+        width: 1280,
+        height: 960,
+        alt: 'Five demoers posing at Gopher AI Demo Night on April 9, 2026 at Coffman Memorial Union',
+        caption: '',
+        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/feed/update/urn:li:ugcPost:7448435964504432640/' },
+      },
+      {
+        id: '2026-04-gopher-02',
+        src: '/event-photos/2026-04-gopher-02-960.webp',
+        srcSet:
+          '/event-photos/2026-04-gopher-02-480.webp 480w, /event-photos/2026-04-gopher-02-800.webp 800w, /event-photos/2026-04-gopher-02-960.webp 960w, /event-photos/2026-04-gopher-02-1280.webp 1280w',
+        fullSrc: '/event-photos/2026-04-gopher-02-1280.webp',
+        width: 1280,
+        height: 960,
+        alt: 'Three people posing at Gopher AI Demo Night on April 9, 2026 at Coffman Memorial Union',
+        caption: '',
+        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/feed/update/urn:li:ugcPost:7448435964504432640/' },
+      },
+      {
+        id: '2026-04-gopher-03',
+        src: '/event-photos/2026-04-gopher-03-800.webp',
+        srcSet: '/event-photos/2026-04-gopher-03-480.webp 480w, /event-photos/2026-04-gopher-03-800.webp 800w',
+        fullSrc: '/event-photos/2026-04-gopher-03-800.webp',
+        width: 800,
+        height: 622,
+        alt: 'Two people posing at Gopher AI Demo Night on April 9, 2026 at Coffman Memorial Union',
+        caption: '',
+        credit: {
+          name: 'Dylan Salber',
+          url: 'https://www.linkedin.com/posts/dylan-salber_represented-the-university-of-minnesota-at-activity-7450709038679592960-zPPV',
+        },
+      },
+      {
+        id: '2026-04-gopher-04',
+        src: '/event-photos/2026-04-gopher-04-960.webp',
+        srcSet:
+          '/event-photos/2026-04-gopher-04-480.webp 480w, /event-photos/2026-04-gopher-04-800.webp 800w, /event-photos/2026-04-gopher-04-960.webp 960w, /event-photos/2026-04-gopher-04-1206.webp 1206w',
+        fullSrc: '/event-photos/2026-04-gopher-04-1206.webp',
+        width: 1206,
+        height: 795,
+        alt: 'The audience at Gopher AI Demo Night on April 9, 2026 at Coffman Memorial Union',
+        caption: '',
+        credit: {
+          name: 'Dylan Salber',
+          url: 'https://www.linkedin.com/posts/dylan-salber_represented-the-university-of-minnesota-at-activity-7450709038679592960-zPPV',
+        },
+      },
+    ],
+  },
+  {
     id: '2025-06-19-minneapolis',
     event: 'Wild AI Networking Mixer',
     city: 'Minneapolis',

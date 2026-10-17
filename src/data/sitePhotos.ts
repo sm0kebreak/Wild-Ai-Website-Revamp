@@ -54,6 +54,10 @@ export const PHOTO_FRAMES: Record<string, PhotoFrame> = {
   '2026-10-rochester-51': wide1600('2026-10-rochester-51'),
   '2026-10-rochester-52': tall1600('2026-10-rochester-52'),
   '2026-10-rochester-53': square1600('2026-10-rochester-53'),
+  '2026-04-gopher-01': wide('2026-04-gopher-01'),
+  '2026-04-gopher-02': wide('2026-04-gopher-02'),
+  '2026-04-gopher-03': frame('2026-04-gopher-03', 800, 622, [480, 800]),
+  '2026-04-gopher-04': frame('2026-04-gopher-04', 1206, 795, [480, 800, 960, 1206]),
   '2025-06-minneapolis-01': wide800('2025-06-minneapolis-01'),
   '2025-06-minneapolis-02': wide800('2025-06-minneapolis-02'),
 };
@@ -61,16 +65,16 @@ export const PHOTO_FRAMES: Record<string, PhotoFrame> = {
 /**
  * Homepage crossfade. Every frame is 4:3 so the slides share one box.
  * 2026-09-minneapolis-01 stays out: a child is visible in that crowd.
- * These stems are not reused on other sections.
+ * 2026-04-gopher-04 is the room shot, but it is not 4:3, so it stays off this list.
  */
 export const HERO_FRAMES = [
   '2026-08-minneapolis-05',
   '2026-10-rochester-03',
+  '2026-04-gopher-01',
   '2026-08-minneapolis-08',
   '2026-10-rochester-50',
   '2026-08-sf-01',
   '2026-10-rochester-06',
-  '2026-09-minneapolis-02',
   '2026-10-rochester-51',
 ] as const;
 
@@ -93,8 +97,8 @@ const PAGE_PHOTO: Record<string, string> = {
   '/events/march-2026': '2026-10-rochester-04',
   '/events/april-2026': '2026-10-rochester-05',
   '/events/may-2026': '2026-10-rochester-07',
-  '/events/gopher-ai-demo-night': '2025-06-minneapolis-01',
-  '/events/gopher-ai-conference': '2025-06-minneapolis-01',
+  '/events/gopher-ai-demo-night': '2026-04-gopher-04',
+  '/events/gopher-ai-conference': '2026-04-gopher-04',
   '/minneapolis': '2025-06-minneapolis-02',
   '/events/msp-october-2026': '2026-10-rochester-52',
   '/austin': '2026-08-minneapolis-06',
