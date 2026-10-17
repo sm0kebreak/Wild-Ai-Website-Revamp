@@ -824,7 +824,7 @@ const decodePng = (buf: Buffer) => {
 test('hero text, countdown, and buttons meet WCAG AA', async ({ page }) => {
   await openPath(page, '/');
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.locator('.hero-stage .tesla-photo').evaluate((img: HTMLImageElement) => img.decode());
+  await page.locator('.hero-stage .tesla-photo[data-active="true"]').evaluate((img: HTMLImageElement) => img.decode());
   const inView = await page.locator('.hero-stage .tesla-pill-primary').evaluate((el) => {
     const rect = el.getBoundingClientRect();
     return rect.top >= 0 && rect.bottom <= window.innerHeight - 2;
