@@ -64,8 +64,8 @@ const Events = () => {
         <PageHero
           eyebrow="On the calendar"
           icon={CalendarDays}
-          title={<>Wild AI <span>events</span>.</>}
-          lede="Every gathering, every city. 15-minute demos, no slides. All ages. Free. Register on Luma."
+          title="Events"
+          lede="15-minute demos, no slides. All ages. Free."
         />
         <div className="container mx-auto px-4 pt-12">
           {/* Filter bar */}
@@ -136,13 +136,7 @@ const Events = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex-grow">
                     {i === 0 && !showPastFallback && timeFilter === 'upcoming' && (
-                      <p className="eyebrow mb-3">
-                        <span className="relative flex h-2 w-2">
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-                          <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-                        </span>
-                        Next up
-                      </p>
+                      <p className="eyebrow mb-3">Next up</p>
                     )}
                     <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono mb-1 flex-wrap">
                       <span className="text-wildai-mint">{e.chapter?.city.toUpperCase()}</span>

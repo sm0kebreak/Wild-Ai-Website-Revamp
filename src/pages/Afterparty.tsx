@@ -21,7 +21,7 @@ const Afterparty = () => {
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Join us after <a href="https://events.humanitix.com/minnedemo41?c=wildai" target="_blank" rel="noopener noreferrer" className="text-wildai-mint underline hover:underline">Minnedemo</a> to keep the conversation going!
+              Join us after <a href="https://events.humanitix.com/minnedemo41?c=wildai" target="_blank" rel="noopener noreferrer" className="text-wildai-mint underline hover:underline">Minnedemo</a> to keep the conversation going.
             </p>
 
             <div className="inline-block px-6 py-3 bg-secondary/60 rounded-lg mb-8">

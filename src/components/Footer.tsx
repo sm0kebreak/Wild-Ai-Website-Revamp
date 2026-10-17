@@ -54,7 +54,7 @@ const Footer = () => {
             <div className="mb-5 max-w-sm">
               <EmailCapture
                 source="footer"
-                title="STAY IN THE LOOP"
+                title="Event email"
                 description="Event invites and recaps, one email per event."
                 compact
               />

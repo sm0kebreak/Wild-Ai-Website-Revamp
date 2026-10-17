@@ -54,7 +54,7 @@ const Blog = () => {
 
               {data && data.posts.length === 0 && (
                 <div className="text-center py-16">
-                  <p className="text-muted-foreground text-lg">No blog posts yet. Check back soon!</p>
+                  <p className="text-muted-foreground text-lg">No blog posts yet. Check back soon.</p>
                 </div>
               )}
 

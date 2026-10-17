@@ -71,7 +71,7 @@ const EventMay2026 = () => {
                 View on Google Maps <ExternalLink className="w-3 h-3" />
               </a>
               <p className="text-sm text-muted-foreground/80 mt-3 italic">
-                Hosted by Emily McCarthy and the Improving team - thank you!
+                Hosted by Emily McCarthy and the Improving team. Thank you.
               </p>
             </div>
           </div>

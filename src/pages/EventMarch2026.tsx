@@ -14,7 +14,7 @@ const EventMarch2026 = () => {
     <div className="flex flex-col min-h-screen">
       <Helmet>
         <title>Wild AI Meetup - March 16, 2026 | Anniversary Show & Tell</title>
-        <meta name="description" content="Celebrate Wild AI's anniversary on March 16, 2026! Bring your AI projects for show & tell and hear from amazing speakers." />
+        <meta name="description" content="Wild AI's anniversary on March 16, 2026. Bring a project for show and tell." />
       </Helmet>
       <Navbar />
       <main className="pt-24 pb-20 flex-grow">
@@ -27,9 +27,9 @@ const EventMarch2026 = () => {
 
           {/* Anniversary Banner */}
           <div className="bg-gradient-to-r from-wildai-mint/10 via-accent/10 to-wildai-mint/10 border border-wildai-mint/30 p-5 rounded-lg mb-10 text-center">
-            <p className="font-mono text-wildai-mint text-sm mb-1">🎉 ANNIVERSARY CELEBRATION 🎉</p>
+            <p className="text-sm mb-1">Anniversary</p>
             <p className="text-foreground">
-              Builders - bring your projects! We're hosting a <span className="font-bold text-wildai-mint">Show & Tell</span> before and after the speaker sessions.
+              Bring a project. There is a Show &amp; Tell before and after the demos.
             </p>
           </div>
 
@@ -68,7 +68,7 @@ const EventMarch2026 = () => {
               SHOW & TELL
             </h2>
             <p className="text-muted-foreground mb-3">
-              In celebration of our anniversary, we're inviting builders to showcase their AI projects! Whether it's a side project, a startup MVP, or a creative experiment - bring it and share it with the community.
+              For the anniversary, bring a project and share it with the room. A side project is enough.
             </p>
             <ul className="space-y-2 text-sm">
               <li className="flex items-start gap-2">

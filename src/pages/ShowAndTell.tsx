@@ -51,7 +51,7 @@ const ShowAndTell = () => {
             <div className="text-center py-20 text-muted-foreground">Loading projects...</div>
           ) : projects.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-muted-foreground text-lg mb-4">No approved projects yet - be the first!</p>
+              <p className="text-muted-foreground text-lg mb-4">No approved projects yet.</p>
               <a
                 href="/events/march-2026"
                 className="btn-primary"

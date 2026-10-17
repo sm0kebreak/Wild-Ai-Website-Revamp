@@ -47,10 +47,10 @@ const Chapters = () => {
           eyebrow="Chapters"
           title={
             <>
-              Find your <span>city</span>.
+              Find your <span>city</span>
             </>
           }
-          lede="Five chapters. One format. Minneapolis is on the calendar. The others will post a date here when it is set."
+          lede="Minneapolis is on the calendar. Other cities will post a date when it is set."
           aside={
             <>
               <span>North America</span>

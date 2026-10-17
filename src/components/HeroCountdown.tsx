@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import { useCountdown } from '@/hooks/useCountdown';
+import { Button } from '@/components/ui/button';
 import {
+  MEETUP_CADENCE,
   MEETUP_START_TIME,
   MEETUP_TIME_LINE,
   MEETUP_VENUE,
   meetupSlug,
   nextMeetupDate,
+  rsvpUrlFor,
 } from '@/lib/meetupSchedule';
 
 const headlineFor = (dateIso: string) =>
@@ -20,7 +22,6 @@ const headlineFor = (dateIso: string) =>
 const HeroCountdown = ({ spent }: { spent?: boolean }) => {
   const date = nextMeetupDate();
   const diff = useCountdown(new Date(`${date}T${MEETUP_START_TIME}:00`));
-
   const cells = diff && [
     { label: 'Days', value: diff.days },
     { label: 'Hrs', value: diff.hrs },
@@ -29,22 +30,37 @@ const HeroCountdown = ({ spent }: { spent?: boolean }) => {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-md text-center lg:mx-0 lg:text-left">
-      <p className="kicker">Next meetup</p>
-      <p className="mt-3 font-display text-3xl font-semibold tracking-tight text-foreground md:text-5xl">
-        {headlineFor(date)}
+    <div className="mx-auto w-full max-w-xl text-left">
+      <p className="kicker">Minneapolis</p>
+      <h1 className="display-title mt-2">{headlineFor(date)}</h1>
+      <p className="mt-3 text-base text-foreground">{MEETUP_TIME_LINE}</p>
+      <p className="mt-1 text-base font-medium text-foreground">{MEETUP_VENUE.name}</p>
+      <p className="mt-2 text-sm text-muted-foreground">{MEETUP_CADENCE.split('.')[0]}.</p>
+
+      <Button asChild size="lg" className="mt-6">
+        <a
+          href={rsvpUrlFor(date)}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex={spent ? -1 : undefined}
+        >
+          Register
+        </a>
+      </Button>
+
+      <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground">
+        Doors at 6:00. Live demos at 6:40 PM, 15 minutes each, no slides, then questions, then hang out.
       </p>
-      <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{MEETUP_TIME_LINE}</p>
-      <p className="mt-1 text-sm font-medium text-foreground md:text-base">{MEETUP_VENUE.name}</p>
+      <p className="mt-2 max-w-lg text-sm leading-relaxed text-muted-foreground">
+        For builders at any technical level. Raw projects welcome.
+      </p>
 
       {cells ? (
-        <div className="countdown-figures mt-5 flex flex-wrap justify-center gap-x-4 gap-y-1 text-muted-foreground lg:justify-start">
+        <div className="countdown-figures mt-5 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
           {cells.map((cell) => (
             <span key={cell.label} className="inline-flex items-baseline gap-1.5">
-              <span className="text-lg font-medium text-foreground md:text-xl">
-                {String(cell.value).padStart(2, '0')}
-              </span>
-              <span className="text-[0.6875rem] uppercase tracking-wide">{cell.label}</span>
+              <span className="font-medium text-foreground">{String(cell.value).padStart(2, '0')}</span>
+              <span>{cell.label}</span>
             </span>
           ))}
         </div>
@@ -55,10 +71,9 @@ const HeroCountdown = ({ spent }: { spent?: boolean }) => {
       <Link
         to={`/events/${meetupSlug(date)}`}
         tabIndex={spent ? -1 : undefined}
-        className="group mt-3 inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-accent"
+        className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-accent"
       >
         Event details
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
       </Link>
     </div>
   );
