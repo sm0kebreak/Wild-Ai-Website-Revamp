@@ -55,7 +55,7 @@ const Footer = () => {
               <EmailCapture
                 source="footer"
                 title="STAY IN THE LOOP"
-                description="Event invites and recaps, one email per event."
+                description="Join the email list"
                 compact
               />
             </div>

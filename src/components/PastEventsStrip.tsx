@@ -148,14 +148,18 @@ const PastEventsStrip = ({
   stacks = false,
   cinema = false,
   page = false,
+  city,
 }: {
   limit?: number;
   detailed?: boolean;
   stacks?: boolean;
   cinema?: boolean;
   page?: boolean;
+  /** Limit the archive to one chapter city. */
+  city?: string;
 }) => {
-  const events = typeof limit === 'number' ? pastMeetups.slice(0, limit) : pastMeetups;
+  const source = city ? pastMeetups.filter((event) => event.city === city) : pastMeetups;
+  const events = typeof limit === 'number' ? source.slice(0, limit) : source;
   const Heading = stacks || cinema ? 'h2' : 'h1';
 
   return (
@@ -178,7 +182,7 @@ const PastEventsStrip = ({
               Past events
             </Heading>
           </div>
-          {typeof limit === 'number' && pastMeetups.length > limit && (
+          {typeof limit === 'number' && source.length > limit && (
             <Link
               to="/past-events"
               className={`inline-flex items-center gap-1.5 text-sm font-medium text-accent ${cinema ? 'mt-5 justify-center' : ''}`}

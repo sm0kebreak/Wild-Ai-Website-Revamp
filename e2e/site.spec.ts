@@ -32,7 +32,7 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/admin/show-and-tell', heading: /Monday, October 19/, redirect: '/' },
   { path: '/admin/emails', heading: /Monday, October 19/, redirect: '/' },
   { path: '/minneapolis', heading: /Next up/ },
-  { path: '/san-francisco', heading: /coming soon/ },
+  { path: '/san-francisco', heading: /San Francisco/ },
   { path: '/toronto', heading: /coming soon/ },
   { path: '/chicago', heading: /coming soon/ },
   { path: '/austin', heading: /coming soon/ },
@@ -830,6 +830,75 @@ const decodePng = (buf: Buffer) => {
   }
   return { width, height, pixels };
 };
+
+test('mobile hero headline keeps its size when the viewport height changes', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openPath(page, '/');
+  await page.evaluate(() => document.fonts.ready);
+  const h1 = page.locator('.hero-stage h1');
+  const measure = () =>
+    h1.evaluate((el) => {
+      const box = el.getBoundingClientRect();
+      return {
+        fontSize: getComputedStyle(el).fontSize,
+        height: box.height,
+        transform: getComputedStyle(el).transform,
+      };
+    });
+  const before = await measure();
+  await page.evaluate(() => window.scrollTo(0, 700));
+  const scrolled = await measure();
+  await page.setViewportSize({ width: 390, height: 750 });
+  const mid = await measure();
+  await page.setViewportSize({ width: 390, height: 640 });
+  const short = await measure();
+  await page.setViewportSize({ width: 390, height: 844 });
+  const after = await measure();
+  for (const sample of [scrolled, mid, short, after]) {
+    expect(sample.fontSize).toBe(before.fontSize);
+    expect(Math.abs(sample.height - before.height)).toBeLessThan(1);
+    expect(sample.transform === 'none' || sample.transform === 'matrix(1, 0, 0, 1, 0, 0)').toBe(true);
+  }
+});
+
+test('san francisco is an active chapter with its first night', async ({ page }) => {
+  await openPath(page, '/san-francisco');
+  await expect(page).toHaveTitle('Wild AI San Francisco | Show us something wild');
+  const canonicals = await page.locator('link[rel="canonical"]').evaluateAll((nodes) =>
+    nodes.map((node) => node.getAttribute('href')),
+  );
+  expect(canonicals).toContain('https://wildai.us/san-francisco');
+  const descriptions = await page.locator('meta[name="description"]').evaluateAll((nodes) =>
+    nodes.map((node) => node.getAttribute('content') ?? ''),
+  );
+  expect(descriptions.some((content) => /builders demo raw AI projects/.test(content))).toBe(true);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Date coming soon');
+  await expect(page.getByRole('heading', { name: 'Next SF event: date coming soon' })).toBeVisible();
+  await expect(page.getByText('Join the email list').first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Want to demo in SF?' })).toHaveAttribute('href', '/speak');
+  await expect(page.getByText('Frontier Tower').first()).toBeVisible();
+  await expect(page.getByText('Arsalan Zafar').first()).toBeVisible();
+  await expect(page.getByText('Joe Fioti').first()).toBeVisible();
+  await expect(page.getByText('Lukas Valine').first()).toBeVisible();
+  await expect(page.getByText(/Maanas Taneja/).first()).toBeVisible();
+  await expect(page.getByText('Purab Shingvi').first()).toBeVisible();
+  await expect(page.locator('.photo-carousel img')).toHaveCount(5);
+  const linkedData = await page.locator('script[type="application/ld+json"]').allTextContents();
+  expect(linkedData.some((block) => block.includes('Wild AI SF #1') && block.includes('Frontier Tower'))).toBe(true);
+  await expect(page.locator('footer').getByRole('link', { name: 'San Francisco', exact: true })).toHaveAttribute(
+    'href',
+    '/san-francisco',
+  );
+
+  await openPath(page, '/chapters');
+  const card = page.locator('main').getByRole('link', { name: /San Francisco/ });
+  await expect(card).toContainText('Active');
+  await expect(card).toContainText('Next event coming soon');
+
+  await openPath(page, '/');
+  await expect(page.getByText(/one email per event/i)).toHaveCount(0);
+  await expect(page.getByText('Join the email list').first()).toBeVisible();
+});
 
 test('hero text, countdown, and buttons meet WCAG AA', async ({ page }) => {
   await openPath(page, '/');

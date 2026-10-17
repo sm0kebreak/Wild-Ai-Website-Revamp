@@ -25,7 +25,7 @@ const mentions = [
 const facts = [
   ['Founded', '2021, Minneapolis'],
   ['Format', '15-minute demos, no slides, monthly on third Mondays. All ages. Free.'],
-  ['Chapters', 'Minneapolis (active), San Francisco & Toronto (launching 2026)'],
+  ['Chapters', 'Minneapolis (active), San Francisco (active), Toronto (launching 2026)'],
   ['Community', '790+ members across chapters'],
   ['Typical attendance', '80–120 builders per event'],
 ];

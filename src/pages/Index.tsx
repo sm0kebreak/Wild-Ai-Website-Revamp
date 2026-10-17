@@ -81,7 +81,7 @@ const Index = () => {
           focus="center 40%"
           image={photoSrc('2026-09-minneapolis-03')}
           title="Get the next invite"
-          subline="One email per event. Invites and recaps."
+          subline="Join the email list"
         >
           <div className="mx-auto mt-8 max-w-md text-left">
             <EmailCapture source="home" bare title="Get the next invite" description="" />

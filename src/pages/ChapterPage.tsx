@@ -31,6 +31,7 @@ import { publicChapters } from '@/data/chapters';
 import { DEMO_SIGNUP, meetupAgenda, rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
 import { upcomingLineups } from '@/data/speakerArchive';
 import SpeakerRow from '@/components/SpeakerRow';
+import SanFranciscoChapter from '@/pages/SanFranciscoChapter';
 
 const ChapterPage = () => {
   const { city } = useParams<{ city: string }>();
@@ -39,6 +40,7 @@ const ChapterPage = () => {
   const { data: events } = useChapterEvents(chapter);
 
   if (!chapter && !publicChapters.some((item) => item.slug === city)) return <NotFound />;
+  if (city === 'san-francisco') return <SanFranciscoChapter />;
 
   const sorted = (events ?? []).slice().sort((a, b) => b.event_date.localeCompare(a.event_date));
   const next = sorted.filter((e) => isUpcoming(e.event_date)).pop();

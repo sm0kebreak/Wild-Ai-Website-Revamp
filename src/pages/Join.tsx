@@ -54,7 +54,7 @@ const Join = () => {
         <PageHero
           eyebrow="Get on the list"
           title={<>Join <span>Wild AI</span>.</>}
-          lede="One email per event. Demo lineups and recaps from the builders around you. All ages. Free."
+          lede="Join the email list. Demo lineups and recaps from the builders around you. All ages. Free."
         />
         <div className="container mx-auto px-4 pt-14">
 

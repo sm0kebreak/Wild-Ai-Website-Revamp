@@ -9,7 +9,7 @@ export type PublicChapter = {
   about: string;
 };
 
-/** The public chapter list. Only Minneapolis has a scheduled event. */
+/** The public chapter list. Minneapolis is the only chapter with a scheduled date. */
 export const publicChapters: PublicChapter[] = [
   {
     slug: 'minneapolis',
@@ -26,9 +26,10 @@ export const publicChapters: PublicChapter[] = [
     city: 'San Francisco',
     label: 'San Francisco',
     region: 'California',
-    status: 'launching',
+    status: 'active',
     tagline: 'Next event coming soon.',
-    about: 'A San Francisco chapter is on the way. Leave your email and we will send the first date.',
+    about:
+      'Wild AI San Francisco launched August 5, 2026 at Frontier Tower. The next date is not set yet.',
   },
   {
     slug: 'toronto',

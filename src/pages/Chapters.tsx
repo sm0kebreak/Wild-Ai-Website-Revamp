@@ -15,6 +15,7 @@ import {
 } from '@/hooks/useChapters';
 import PageHero from '@/components/PageHero';
 import { CHAPTER_SEO_CITIES } from '@/data/chapters';
+import { nextChapterNight } from '@/data/chapterNights';
 
 const Chapters = () => {
   const { data: chapters, isLoading } = useChapters();
@@ -58,6 +59,7 @@ const Chapters = () => {
               ))}
             {(chapters ?? []).map((chapter) => {
               const next = nextEventFor(chapter.id);
+              const night = next ? null : nextChapterNight(chapter.slug);
               const members = formatMemberCount(chapter.member_count);
               return (
                 <Link
@@ -82,13 +84,18 @@ const Chapters = () => {
                         Next: {formatDate(next.event_date)}
                         {next.venue_name ? ` · ${next.venue_name}` : ''}
                       </span>
+                    ) : night ? (
+                      <span>
+                        Next: {formatDate(night.date)}
+                        {night.venueName ? ` · ${night.venueName}` : ''}
+                      </span>
                     ) : (
                       <span>Next event coming soon</span>
                     )}
                   </p>
                   {members && <p className="mt-3 text-xs text-muted-foreground">{members}</p>}
                   <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
-                    {next ? 'View event' : 'Get notified'}
+                    {next || night ? 'View event' : 'Get notified'}
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </Link>

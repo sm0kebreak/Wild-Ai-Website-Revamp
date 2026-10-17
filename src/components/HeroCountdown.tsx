@@ -3,9 +3,10 @@ import { useCountdown } from '@/hooks/useCountdown';
 import { MEETUP_START_TIME, nextMeetupDate } from '@/lib/meetupSchedule';
 
 /** Small tabular countdown. The date itself lives in the hero headline. */
-const HeroCountdown = () => {
-  const date = nextMeetupDate();
-  const diff = useCountdown(new Date(`${date}T${MEETUP_START_TIME}:00`));
+const HeroCountdown = ({ date, time }: { date?: string; time?: string }) => {
+  const resolved = date ?? nextMeetupDate();
+  const clock = time ?? MEETUP_START_TIME;
+  const diff = useCountdown(new Date(`${resolved}T${clock}:00`));
 
   if (!diff) return null;
 

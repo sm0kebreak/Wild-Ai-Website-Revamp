@@ -380,7 +380,7 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
         height: 960,
         alt: 'Wild AI SF #1 speakers lined up on stage at Wild AI SF #1 on August 5, 2026 in San Francisco',
         caption: 'Wild AI SF #1 speakers lined up on stage',
-        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/in/jacob-brindley-452a44264/recent-activity/images/' },
+        credit: { name: 'Maanas Taneja', url: 'https://www.linkedin.com/in/maanas-taneja' },
       },
       {
         id: '2026-08-sf-02',
@@ -391,7 +391,7 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
         height: 1067,
         alt: 'Venue set up before the talks at Wild AI SF #1 on August 5, 2026 in San Francisco',
         caption: 'Venue set up before the talks',
-        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/in/jacob-brindley-452a44264/recent-activity/images/' },
+        credit: { name: 'Maanas Taneja', url: 'https://www.linkedin.com/in/maanas-taneja' },
       },
       {
         id: '2026-08-sf-03',
@@ -402,7 +402,7 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
         height: 1067,
         alt: 'Audience watching a talk at Wild AI SF #1 on August 5, 2026 in San Francisco',
         caption: 'Audience watching a talk',
-        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/in/jacob-brindley-452a44264/recent-activity/images/' },
+        credit: { name: 'Maanas Taneja', url: 'https://www.linkedin.com/in/maanas-taneja' },
       },
       {
         id: '2026-08-sf-04',
@@ -413,7 +413,7 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
         height: 1067,
         alt: 'Presenter at the podium at Wild AI SF #1 on August 5, 2026 in San Francisco',
         caption: 'Presenter at the podium',
-        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/in/jacob-brindley-452a44264/recent-activity/images/' },
+        credit: { name: 'Maanas Taneja', url: 'https://www.linkedin.com/in/maanas-taneja' },
       },
       {
         id: '2026-08-sf-05',
@@ -424,7 +424,7 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
         height: 1067,
         alt: 'Speaker presenting on the big screen at Wild AI SF #1 on August 5, 2026 in San Francisco',
         caption: 'Speaker presenting on the big screen',
-        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/in/jacob-brindley-452a44264/recent-activity/images/' },
+        credit: { name: 'Maanas Taneja', url: 'https://www.linkedin.com/in/maanas-taneja' },
       },
     ],
   },
