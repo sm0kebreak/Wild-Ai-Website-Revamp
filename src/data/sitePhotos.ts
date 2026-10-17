@@ -58,43 +58,50 @@ export const PHOTO_FRAMES: Record<string, PhotoFrame> = {
   '2025-06-minneapolis-02': wide800('2025-06-minneapolis-02'),
 };
 
-/** Crowd and demo frames for the homepage crossfade. Not reused elsewhere. */
+/**
+ * Homepage crossfade. Every frame is 4:3 so the slides share one box.
+ * 2026-09-minneapolis-01 stays out: a child is visible in that crowd.
+ * These stems are not reused on other sections.
+ */
 export const HERO_FRAMES = [
-  '2026-09-minneapolis-01',
   '2026-08-minneapolis-05',
-  '2026-08-minneapolis-07',
-  '2026-09-minneapolis-02',
+  '2026-10-rochester-03',
   '2026-08-minneapolis-08',
+  '2026-10-rochester-50',
+  '2026-08-sf-01',
+  '2026-10-rochester-06',
+  '2026-09-minneapolis-02',
+  '2026-10-rochester-51',
 ] as const;
 
 export const MANIFESTO_STEM = '2026-08-sf-02';
 
 const PAGE_PHOTO: Record<string, string> = {
-  '/events': '2026-10-rochester-03',
-  '/chapters': '2026-10-rochester-06',
+  '/events': '2026-08-minneapolis-01',
+  '/chapters': '2026-10-rochester-01',
   '/speak': '2026-10-afterparty-01',
   '/sponsor': '2026-10-afterparty-02',
   '/about': '2026-10-afterparty-03',
   '/join': '2026-08-sf-04',
   '/start-a-chapter': '2026-08-sf-05',
-  '/past-events': '2025-06-minneapolis-02',
-  '/blog': '2025-06-minneapolis-01',
-  '/show-and-tell': '2026-10-rochester-01',
+  '/past-events': '2026-09-minneapolis-04',
+  '/blog': '2026-08-minneapolis-02',
+  '/show-and-tell': '2026-08-minneapolis-03',
   '/location': '2026-08-sf-03',
   '/locations': '2026-08-sf-03',
   '/events/february-2026': '2026-10-rochester-02',
   '/events/march-2026': '2026-10-rochester-04',
   '/events/april-2026': '2026-10-rochester-05',
   '/events/may-2026': '2026-10-rochester-07',
-  '/events/gopher-ai-demo-night': '2026-10-rochester-50',
-  '/events/gopher-ai-conference': '2026-10-rochester-50',
-  '/minneapolis': '2026-10-rochester-51',
+  '/events/gopher-ai-demo-night': '2025-06-minneapolis-01',
+  '/events/gopher-ai-conference': '2025-06-minneapolis-01',
+  '/minneapolis': '2025-06-minneapolis-02',
   '/events/msp-october-2026': '2026-10-rochester-52',
-  '/austin': '2026-08-minneapolis-01',
+  '/austin': '2026-08-minneapolis-06',
   '/404': '2026-10-afterparty-04',
 };
 
-const FALLBACK = ['2026-10-rochester-53', '2026-09-minneapolis-04', '2026-08-minneapolis-04', '2026-08-sf-01'];
+const FALLBACK = ['2026-10-rochester-53', '2026-09-minneapolis-03', '2026-08-minneapolis-04', '2026-10-afterparty-04'];
 
 export const photoFrame = (stem: string) => PHOTO_FRAMES[stem] ?? PHOTO_FRAMES['2026-08-minneapolis-06'];
 

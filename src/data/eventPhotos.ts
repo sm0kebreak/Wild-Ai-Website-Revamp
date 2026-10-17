@@ -244,17 +244,6 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
     displayDate: 'September 21, 2026',
     photos: [
       {
-        id: '2026-09-minneapolis-01',
-        src: '/event-photos/2026-09-minneapolis-01-960.webp',
-        srcSet: '/event-photos/2026-09-minneapolis-01-480.webp 480w, /event-photos/2026-09-minneapolis-01-960.webp 960w, /event-photos/2026-09-minneapolis-01-1280.webp 1280w',
-        fullSrc: '/event-photos/2026-09-minneapolis-01-1280.webp',
-        width: 1280,
-        height: 960,
-        alt: '66 attendees filling the brewery hall at Wild AI Minneapolis on September 21, 2026 in Minneapolis',
-        caption: '66 attendees filling the brewery hall',
-        credit: { name: 'Jacob Brindley', url: 'https://www.linkedin.com/feed/update/urn:li:activity:7508238715874365440/' },
-      },
-      {
         id: '2026-09-minneapolis-02',
         src: '/event-photos/2026-09-minneapolis-02-960.webp',
         srcSet: '/event-photos/2026-09-minneapolis-02-480.webp 480w, /event-photos/2026-09-minneapolis-02-960.webp 960w, /event-photos/2026-09-minneapolis-02-1280.webp 1280w',

@@ -63,7 +63,7 @@ const Index = () => {
         </TeslaPanel>
 
         <TeslaPanel
-          image={photoSrc('2026-08-sf-01')}
+          image={photoSrc('2026-08-minneapolis-07')}
           title="Bring it to your city."
           subline="Start a chapter."
           primary={{ label: 'Start a chapter', href: '/start-a-chapter' }}
