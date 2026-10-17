@@ -1,5 +1,6 @@
 import type { Chapter, ChapterEvent } from '@/hooks/useChapters';
 import { confirmedMeetupSpeakers } from '@/data/speakerArchive';
+import { chicagoYmd, currentDate } from '@/lib/now';
 
 export const MEETUP_VENUE = {
   name: 'Dangerous Man Brewing',
@@ -51,12 +52,9 @@ export const standingMeetupTime = (dateIso: string) =>
   isConfirmedMeetup(dateIso) ? MEETUP_TIME_LINE : null;
 
 /** Confirmed dates that have not passed, soonest first. */
-export const confirmedMeetupDates = (from = new Date()): string[] => {
-  const today = new Date(from);
-  today.setHours(0, 0, 0, 0);
-  return CONFIRMED_MEETUPS.map((meetup) => meetup.date).filter(
-    (date) => new Date(`${date}T00:00:00`) >= today,
-  );
+export const confirmedMeetupDates = (from = currentDate()): string[] => {
+  const today = chicagoYmd(from);
+  return CONFIRMED_MEETUPS.map((meetup) => meetup.date).filter((date) => date >= today);
 };
 
 export const meetupAgenda = [
@@ -88,18 +86,18 @@ export const meetupSlug = (dateIso: string) =>
   `msp-${monthName(dateIso).toLowerCase()}-${dateIso.slice(0, 4)}`;
 
 /** Next `count` third-Mondays, starting with today's month if it hasn't passed. */
-export const upcomingMeetupDates = (count = 4, from = new Date()): string[] => {
-  const today = new Date(from);
-  today.setHours(0, 0, 0, 0);
+export const upcomingMeetupDates = (count = 4, from = currentDate()): string[] => {
+  const today = chicagoYmd(from);
+  const [year, month] = today.split('-').map(Number);
   const dates: string[] = [];
   for (let i = 0; dates.length < count; i++) {
-    const d = thirdMonday(today.getFullYear(), today.getMonth() + i);
-    if (d >= today) dates.push(toYmd(d));
+    const ymd = toYmd(thirdMonday(year, month - 1 + i));
+    if (ymd >= today) dates.push(ymd);
   }
   return dates;
 };
 
-export const nextMeetupDate = (from = new Date()) =>
+export const nextMeetupDate = (from = currentDate()) =>
   confirmedMeetupDates(from)[0] ?? upcomingMeetupDates(1, from)[0];
 
 /** Confirmed Minneapolis meetups, alongside anything already stored for the chapter. */

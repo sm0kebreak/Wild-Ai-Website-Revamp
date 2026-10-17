@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { StaticRouter } from "react-router";
 import { HelmetProvider } from "react-helmet-async";
 import SiteJsonLd from "./components/SiteJsonLd";
 import Index from "./pages/Index";
@@ -32,18 +33,26 @@ import ScrollToTop from "./components/ScrollToTop";
 // Create a new client outside of the component to avoid recreation on each render
 const queryClient = new QueryClient();
 
-const App = () => {
-  return (
-    <React.StrictMode>
-      <HelmetProvider>
-        <SiteJsonLd />
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <ScrollToTop />
-              <Routes>
+const clock = globalThis as typeof globalThis & { __WILD_NOW__?: number };
+
+type AppProps = {
+  helmetContext?: object;
+  queryClient?: QueryClient;
+  location?: string;
+};
+
+const App = ({ helmetContext, queryClient: client = queryClient, location }: AppProps) => {
+  const [, setLive] = useState(false);
+  useEffect(() => {
+    if (typeof clock.__WILD_NOW__ !== "number") return;
+    delete clock.__WILD_NOW__;
+    setLive(true);
+  }, []);
+
+  const routes = (
+    <>
+      <ScrollToTop />
+      <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/events/february-2026" element={<EventFebruary2026 />} />
                 <Route path="/events/march-2026" element={<EventMarch2026 />} />
@@ -74,8 +83,23 @@ const App = () => {
                 <Route path="/:city" element={<ChapterPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
+      </Routes>
+    </>
+  );
+
+  return (
+    <React.StrictMode>
+      <HelmetProvider context={helmetContext}>
+        <SiteJsonLd />
+        <QueryClientProvider client={client}>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            {location !== undefined ? (
+              <StaticRouter location={location}>{routes}</StaticRouter>
+            ) : (
+              <BrowserRouter>{routes}</BrowserRouter>
+            )}
           </TooltipProvider>
         </QueryClientProvider>
       </HelmetProvider>

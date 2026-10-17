@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LOGO_SRC } from '@/components/Logo';
+import { prerenderPath } from '@/lib/now';
 
 /**
  * Module scope on purpose: survives client-side navigation so the curtain
@@ -8,7 +9,7 @@ import { LOGO_SRC } from '@/components/Logo';
 let hasPlayed = false;
 
 /** The route this page load started on - the curtain is for direct landings only. */
-const ENTRY_PATH = typeof window === 'undefined' ? '/' : window.location.pathname;
+const entryPath = () => (typeof window === 'undefined' ? prerenderPath() ?? '/' : window.location.pathname);
 
 /** How long the mark sits centred before it takes off. */
 const HOLD_MS = 2000;
@@ -16,7 +17,7 @@ const HOLD_MS = 2000;
 const FLIGHT_MS = 1500;
 
 const Intro = () => {
-  const [active] = useState(() => !hasPlayed && ENTRY_PATH === '/');
+  const [active] = useState(() => !hasPlayed && entryPath() === '/');
   const [leaving, setLeaving] = useState(false);
   const [done, setDone] = useState(false);
   const logoRef = useRef<HTMLImageElement>(null);

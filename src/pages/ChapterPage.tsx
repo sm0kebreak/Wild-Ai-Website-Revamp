@@ -27,6 +27,7 @@ import {
   formatDate,
   formatTime,
 } from '@/hooks/useChapters';
+import { publicChapters } from '@/data/chapters';
 import { DEMO_SIGNUP, meetupAgenda, rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
 import { upcomingLineups } from '@/data/speakerArchive';
 import SpeakerRow from '@/components/SpeakerRow';
@@ -37,7 +38,7 @@ const ChapterPage = () => {
   const { data: organizers } = useChapterOrganizers(chapter?.id);
   const { data: events } = useChapterEvents(chapter);
 
-  if (!isLoading && !chapter) return <NotFound />;
+  if (!chapter && !publicChapters.some((item) => item.slug === city)) return <NotFound />;
 
   const sorted = (events ?? []).slice().sort((a, b) => b.event_date.localeCompare(a.event_date));
   const next = sorted.filter((e) => isUpcoming(e.event_date)).pop();

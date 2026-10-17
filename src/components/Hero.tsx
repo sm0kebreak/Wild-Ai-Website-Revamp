@@ -56,7 +56,7 @@ const Hero = () => {
                 width={photo.width}
                 height={photo.height}
                 data-active={index === frame ? 'true' : 'false'}
-                fetchPriority={index === 0 ? 'high' : 'low'}
+                {...{ fetchpriority: index === 0 ? 'high' : 'low' }}
                 decoding="async"
               />
             );
