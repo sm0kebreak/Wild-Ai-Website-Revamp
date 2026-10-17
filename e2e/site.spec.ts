@@ -649,22 +649,32 @@ test('October 2 afterparty photos keep their full frame', async ({ page }) => {
   await page.getByRole('tab', { name: 'Minneapolis Oct 2' }).click();
   const grid = page.getByRole('region', { name: 'Photos from Wild AI afterparty' });
   await expect(grid.locator('img')).toHaveCount(4);
-  const frames = await grid.locator('img').evaluateAll((imgs) =>
-    Promise.all(
-      imgs.map(async (img) => {
-        const image = img as HTMLImageElement;
-        if (image.decode) await image.decode().catch(() => undefined);
-        const box = image.getBoundingClientRect();
-        return {
-          src: image.getAttribute('src') ?? '',
-          alt: image.getAttribute('alt') ?? '',
-          fit: getComputedStyle(image).objectFit,
-          rendered: box.width / box.height,
-          natural: image.naturalWidth / image.naturalHeight,
-        };
-      }),
-    ),
-  );
+  const frames = await grid.locator('img').evaluateAll(async (imgs) => {
+    const frames: {
+      src: string;
+      alt: string;
+      fit: string;
+      rendered: number;
+      natural: number;
+    }[] = [];
+    for (const img of imgs) {
+      const image = img as HTMLImageElement;
+      image.scrollIntoView({ inline: 'center', block: 'nearest' });
+      await Promise.race([
+        image.decode ? image.decode().catch(() => undefined) : Promise.resolve(),
+        new Promise((resolve) => setTimeout(resolve, 4000)),
+      ]);
+      const box = image.getBoundingClientRect();
+      frames.push({
+        src: image.getAttribute('src') ?? '',
+        alt: image.getAttribute('alt') ?? '',
+        fit: getComputedStyle(image).objectFit,
+        rendered: box.width / box.height,
+        natural: image.naturalWidth / image.naturalHeight,
+      });
+    }
+    return frames;
+  });
   expect(frames.map((frame) => frame.src)).toEqual([
     '/event-photos/2026-10-afterparty-01-960.webp',
     '/event-photos/2026-10-afterparty-02-960.webp',
