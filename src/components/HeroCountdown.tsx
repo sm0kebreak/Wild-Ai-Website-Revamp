@@ -17,11 +17,11 @@ const HeroCountdown = () => {
   ];
 
   return (
-    <div className="countdown-figures mt-5 flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm text-white/75">
+    <div className="countdown-figures mt-4 flex flex-wrap justify-center gap-x-6 gap-y-1 text-base text-white">
       {cells.map((cell) => (
         <span key={cell.label} className="inline-flex items-baseline gap-1.5">
-          <span className="text-base font-medium text-white">{String(cell.value).padStart(2, '0')}</span>
-          <span className="text-[0.6875rem] uppercase tracking-wide">{cell.label}</span>
+          <span className="text-xl font-semibold text-white md:text-2xl">{String(cell.value).padStart(2, '0')}</span>
+          <span className="text-xs font-medium uppercase tracking-wide text-white">{cell.label}</span>
         </span>
       ))}
     </div>

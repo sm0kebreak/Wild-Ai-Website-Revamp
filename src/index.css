@@ -227,9 +227,10 @@
     --logo-h: 2.125rem;
   }
   .logo-mark img {
-    height: var(--logo-h);
     width: auto;
-    max-width: 100%;
+    height: auto;
+    max-height: var(--logo-h);
+    max-width: min(100%, 11rem);
     object-fit: contain;
     opacity: 0.55;
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -519,11 +520,11 @@
      with the pin, instead of staying composited under the rest of the page. */
   @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .hero-pin {
-      height: calc(100svh + 125vh);
-      min-height: calc(640px + 125vh);
+      height: calc(100svh + 125svh);
+      min-height: calc(640px + 125svh);
     }
     .hero-handoff {
-      margin-top: -125vh;
+      margin-top: -125svh;
     }
   }
   /* Static wash. A blurred, infinitely animated layer under a sticky hero
@@ -871,7 +872,6 @@
   .hero-stage {
     min-height: 0;
     height: 100svh;
-    height: 100dvh;
     padding-top: calc(4rem + env(safe-area-inset-top));
     padding-bottom: max(1.75rem, env(safe-area-inset-bottom));
     position: relative;
@@ -964,6 +964,54 @@ html[data-native-scroll] .site-header.border-border {
   }
 }
 
+/* Page shells use the small viewport so the iOS toolbar does not jump the fold. */
+.min-h-screen {
+  min-height: 100svh;
+}
+
+/* Headshots stay square. Cover crops the photo; it does not stretch it. */
+.avatar-photo {
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+/* Uniform cover grid. Cells are square; each frame is cropped, not squashed. */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.photo-grid button {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #111;
+  cursor: pointer;
+}
+.photo-grid img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (min-width: 768px) {
+  .photo-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+}
+
 /* ---------- Tesla homepage ---------- */
 html:has(.tesla-home) {
   scroll-snap-type: y proximity;
@@ -980,11 +1028,12 @@ html:has(.tesla-home) {
 .tesla-panel {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   height: 100svh;
   min-height: 100svh;
-  padding: calc(4.25rem + env(safe-area-inset-top)) 1.25rem calc(2.25rem + env(safe-area-inset-bottom));
+  padding: calc(4.5rem + env(safe-area-inset-top)) 1.25rem calc(2.5rem + env(safe-area-inset-bottom));
   overflow: hidden;
   color: #fff;
   scroll-snap-align: start;
@@ -993,6 +1042,7 @@ html:has(.tesla-home) {
 }
 .tesla-panel-flow {
   height: auto;
+  justify-content: center;
   overflow: visible;
 }
 .tesla-home .hero-stage {
@@ -1000,7 +1050,21 @@ html:has(.tesla-home) {
   top: auto;
   height: 100svh;
   min-height: 100svh;
+  padding: calc(4.5rem + env(safe-area-inset-top)) 1.25rem calc(2.5rem + env(safe-area-inset-bottom));
   background: #000;
+}
+.tesla-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.tesla-media picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .tesla-photo,
 .tesla-scrim {
@@ -1012,11 +1076,18 @@ html:has(.tesla-home) {
 }
 .tesla-photo {
   object-fit: cover;
-  object-position: center;
+  object-position: var(--photo-focus, center 40%);
 }
+/* Overall dim, a dark floor under the words, and a cap so the nav stays readable. */
 .tesla-scrim {
-  background:
-    linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.38) 46%, rgba(0, 0, 0, 0.28) 100%);
+  background-color: rgba(0, 0, 0, 0.32);
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.18) 12%, transparent 24%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.84) 0%, rgba(0, 0, 0, 0.78) 46%, rgba(0, 0, 0, 0.4) 68%, transparent 90%);
+}
+.tesla-panel-flow .tesla-scrim {
+  background-color: rgba(0, 0, 0, 0.74);
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, transparent 18%);
 }
 .tesla-copy {
   position: relative;
@@ -1024,9 +1095,13 @@ html:has(.tesla-home) {
   width: min(68rem, 100%);
   margin-inline: auto;
   text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
 }
 .tesla-copy-wide {
   width: min(76rem, 100%);
+}
+.tesla-panel .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.88);
 }
 .tesla-title {
   display: block;
@@ -1036,12 +1111,19 @@ html:has(.tesla-home) {
   line-height: 0.92;
   font-size: clamp(3.4rem, 8.6vw, 7.4rem);
 }
+.tesla-title-sentence {
+  max-width: 16ch;
+  margin-inline: auto;
+  font-size: clamp(2.2rem, 5.6vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.038em;
+}
 .tesla-sub {
   margin-top: 1.15rem;
-  font-size: clamp(1rem, 1.7vw, 1.3rem);
-  font-weight: 500;
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 600;
   letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.88);
+  color: #fff;
 }
 .tesla-actions {
   display: flex;
@@ -1065,34 +1147,33 @@ html:has(.tesla-home) {
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
+  text-shadow: none;
 }
 .tesla-pill-primary {
   background: #fff;
   color: #111;
 }
 .tesla-pill-primary:hover {
-  background: rgba(255, 255, 255, 0.88);
+  background: #f2f2f2;
 }
 .tesla-pill-secondary {
-  background: rgba(255, 255, 255, 0.16);
+  background: #111;
   color: #fff;
+  box-shadow: inset 0 0 0 1.5px #fff;
 }
 .tesla-pill-secondary:hover {
-  background: rgba(255, 255, 255, 0.28);
-}
-.tesla-home #photos li button {
-  border: 0;
-  background: transparent;
-  border-radius: 0;
+  background: #1c1c1c;
 }
 .tesla-home .city-pill {
   border: 0;
-  background: rgba(255, 255, 255, 0.16);
+  background: #111;
   color: #fff;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.9);
 }
 .tesla-home .city-pill[data-selected='true'] {
   background: #fff;
   color: #111;
+  box-shadow: none;
 }
 .tesla-home #past-events li {
   border-color: rgba(255, 255, 255, 0.16);
@@ -1106,12 +1187,55 @@ html:has(.tesla-home) {
   border-bottom-color: transparent;
 }
 @media (max-width: 767px) {
-  .tesla-title {
-    font-size: clamp(2.7rem, 12vw, 4.4rem);
-  }
+  .tesla-panel,
   .tesla-home .hero-stage {
+    height: auto;
     min-height: 100svh;
-    height: 100svh;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0;
+    overflow: visible;
+  }
+  .tesla-media {
+    position: relative;
+    inset: auto;
+    flex: none;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    max-height: 58svh;
+  }
+  .tesla-copy {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: none;
+    padding: 1rem 1.15rem calc(1rem + env(safe-area-inset-bottom));
+    background: #070908;
+    text-shadow: none;
+  }
+  .tesla-sub {
+    margin-top: 0.6rem;
+    font-size: 1.0625rem;
+    line-height: 1.25;
+  }
+  .tesla-actions {
+    margin-top: 0.85rem;
+  }
+  .countdown-figures {
+    margin-top: 0.55rem;
+  }
+  .tesla-panel-flow .tesla-copy {
+    justify-content: flex-start;
+    padding-top: 1.6rem;
+    background: #080a09;
+  }
+  .tesla-title {
+    font-size: clamp(2.35rem, 10vw, 3.6rem);
+  }
+  .tesla-title-sentence {
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
   }
 }
 @media (max-height: 700px) {
@@ -1122,5 +1246,84 @@ html:has(.tesla-home) {
   }
   .tesla-title {
     font-size: clamp(2.35rem, 9vw, 3.6rem);
+  }
+}
+.speak-manifesto {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background: #070908;
+}
+.speak-manifesto .tesla-photo,
+.speak-manifesto .tesla-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.speak-manifesto .tesla-photo {
+  object-fit: cover;
+  object-position: center 40%;
+}
+.speak-manifesto .tesla-scrim {
+  background-color: rgba(0, 0, 0, 0.74);
+  background-image: none;
+}
+.speak-manifesto-copy {
+  position: relative;
+  z-index: 1;
+  width: min(40rem, 100%);
+  margin-inline: auto;
+  padding: 4.25rem 1.25rem 3.75rem;
+}
+.speak-manifesto-copy ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.speak-manifesto-copy li,
+.speak-manifesto-copy p {
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+}
+.speak-manifesto-copy li + li {
+  margin-top: 0.7rem;
+}
+.speak-manifesto-copy p {
+  margin-top: 1.5rem;
+}
+.speak-manifesto-copy .speak-manifesto-format {
+  font-family: Inter, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: #fff;
+}
+@media (max-width: 767px) {
+  .speak-manifesto-copy {
+    padding: 2.75rem 1.15rem 2.5rem;
+  }
+  .speak-manifesto-copy li,
+  .speak-manifesto-copy p {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 720px) {
+  .tesla-media {
+    max-height: 46svh;
+  }
+  .tesla-title {
+    font-size: clamp(2.05rem, 9vw, 2.75rem);
+  }
+  .tesla-copy {
+    padding-top: 0.75rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
   }
 }

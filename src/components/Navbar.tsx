@@ -46,7 +46,7 @@ const Navbar = () => {
       <header className="site-header fixed top-0 left-0 right-0 z-50" data-scrolled={scrolled ? 'true' : 'false'}>
         <div className="relative mx-auto flex h-12 min-w-0 items-center px-4 md:h-14 md:px-6">
           <Link to="/" className="relative z-10 flex min-w-0 items-center">
-            <Logo className="h-6 max-w-[8.5rem] md:h-7 md:max-w-none" data-nav-logo="" />
+            <Logo className="h-auto max-h-6 w-auto max-w-[8.5rem] md:max-h-7" data-nav-logo="" />
           </Link>
 
           <nav

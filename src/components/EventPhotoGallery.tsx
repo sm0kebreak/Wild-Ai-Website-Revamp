@@ -66,38 +66,28 @@ const EventPhotoGallery = ({ cinema = false }: { cinema?: boolean }) => {
           })}
         </div>
 
-        <ul
-          className="flex snap-x gap-2 overflow-x-auto pb-1 md:grid md:auto-rows-[7.25rem] md:grid-flow-dense md:grid-cols-6 md:gap-2 md:overflow-visible"
-          aria-label={`Photos from ${group.event}`}
-        >
-          {group.photos.map((photo, photoIndex) => {
-            const feature = photoIndex === 0;
-            return (
-              <li
-                key={photo.id}
-                className={`snap-start md:min-h-0 ${feature ? 'md:col-span-2 md:row-span-2' : ''}`}
+        <ul className="photo-grid" aria-label={`Photos from ${group.event}`}>
+          {group.photos.map((photo, photoIndex) => (
+            <li key={photo.id}>
+              <button
+                type="button"
+                onClick={() => open(photoIndex)}
+                aria-label={`Open photo ${photoIndex + 1}`}
               >
-                <button
-                  type="button"
-                  onClick={() => open(photoIndex)}
-                  className="block h-full w-max max-w-[16rem] overflow-hidden rounded-xl border border-border bg-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:w-full md:max-w-none md:min-h-0"
-                  aria-label={`Open photo ${photoIndex + 1}`}
-                >
-                  <img
-                    src={photo.src}
-                    srcSet={photo.srcSet}
-                    sizes={feature ? '(max-width: 768px) 70vw, 360px' : '(max-width: 768px) 46vw, 200px'}
-                    alt=""
-                    width={photo.width}
-                    height={photo.height}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-32 w-auto max-w-none object-cover md:h-full md:min-h-0 md:w-full"
-                  />
-                </button>
-              </li>
-            );
-          })}
+                <img
+                  src={photo.src}
+                  srcSet={photo.srcSet}
+                  sizes="(max-width: 767px) 46vw, 30vw"
+                  alt={photo.alt}
+                  width={photo.width}
+                  height={photo.height}
+                  loading="lazy"
+                  decoding="async"
+                  style={{ objectPosition: photo.focus ?? 'center 40%' }}
+                />
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -114,7 +104,7 @@ const EventPhotoGallery = ({ cinema = false }: { cinema?: boolean }) => {
                 alt=""
                 width={active.width}
                 height={active.height}
-                className="max-h-[70vh] w-full rounded-lg object-contain"
+                className="mx-auto block h-auto max-h-[70svh] w-auto max-w-full object-contain"
               />
               <div className="flex items-center justify-end gap-3">
                 <p className="sr-only">

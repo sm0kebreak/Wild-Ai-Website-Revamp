@@ -26,7 +26,7 @@ export const SpeakerFace = ({
         alt=""
         loading="lazy"
         decoding="async"
-        className={cn('h-7 w-7 shrink-0 rounded-full object-cover', className)}
+        className={cn('avatar-photo h-7 w-7 shrink-0', className)}
       />
     );
   }

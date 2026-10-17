@@ -14,6 +14,8 @@ export type EventPhoto = {
   height: number;
   alt: string;
   caption: string;
+  /** Cover-crop anchor, so faces stay in frame on a square cell. */
+  focus?: string;
   credit?: PhotoCredit;
 };
 
@@ -28,7 +30,7 @@ export type EventPhotoGroup = {
 
 /**
  * Real frames only. Nights without a photo in the sheet are omitted.
- * Derivatives are webp at 480, 960, and up to 1600 wide. Sources are not upscaled.
+ * Derivatives are webp at 480, 800, 960, and up to 1600 wide. Sources are not upscaled.
  */
 export const eventPhotoGroups: EventPhotoGroup[] = [
   {
@@ -158,6 +160,79 @@ export const eventPhotoGroups: EventPhotoGroup[] = [
         alt: 'The four speakers at Wild AI x BiotechMN on October 14, 2026 in Rochester',
         caption: 'The four speakers',
         credit: { name: 'Judd Larson' },
+      },
+    ],
+  },
+  {
+    id: '2026-10-02-afterparty',
+    event: 'Wild AI afterparty',
+    city: 'Minneapolis',
+    date: '2026-10-02',
+    displayDate: 'October 2, 2026',
+    photos: [
+      {
+        id: '2026-10-afterparty-01',
+        src: '/event-photos/2026-10-afterparty-01-960.webp',
+        srcSet:
+          '/event-photos/2026-10-afterparty-01-480.webp 480w, /event-photos/2026-10-afterparty-01-800.webp 800w, /event-photos/2026-10-afterparty-01-960.webp 960w, /event-photos/2026-10-afterparty-01-1280.webp 1280w',
+        fullSrc: '/event-photos/2026-10-afterparty-01-1280.webp',
+        width: 1280,
+        height: 960,
+        alt: 'Four men posing together at the Wild AI afterparty at Loon Cafe on October 2, 2026 in Minneapolis',
+        caption: '',
+        focus: 'center 42%',
+        credit: {
+          name: 'Jacob Brindley',
+          url: 'https://www.linkedin.com/feed/update/urn:li:activity:7511816064725372928/',
+        },
+      },
+      {
+        id: '2026-10-afterparty-02',
+        src: '/event-photos/2026-10-afterparty-02-960.webp',
+        srcSet:
+          '/event-photos/2026-10-afterparty-02-480.webp 480w, /event-photos/2026-10-afterparty-02-800.webp 800w, /event-photos/2026-10-afterparty-02-960.webp 960w, /event-photos/2026-10-afterparty-02-1280.webp 1280w',
+        fullSrc: '/event-photos/2026-10-afterparty-02-1280.webp',
+        width: 1280,
+        height: 960,
+        alt: 'Two men smiling at the Wild AI afterparty at Loon Cafe on October 2, 2026 in Minneapolis',
+        caption: '',
+        focus: 'center 40%',
+        credit: {
+          name: 'Jacob Brindley',
+          url: 'https://www.linkedin.com/feed/update/urn:li:activity:7511816064725372928/',
+        },
+      },
+      {
+        id: '2026-10-afterparty-03',
+        src: '/event-photos/2026-10-afterparty-03-960.webp',
+        srcSet:
+          '/event-photos/2026-10-afterparty-03-480.webp 480w, /event-photos/2026-10-afterparty-03-800.webp 800w, /event-photos/2026-10-afterparty-03-960.webp 960w, /event-photos/2026-10-afterparty-03-1280.webp 1280w',
+        fullSrc: '/event-photos/2026-10-afterparty-03-1280.webp',
+        width: 1280,
+        height: 960,
+        alt: 'Five people posing with drinks at the Wild AI afterparty at Loon Cafe on October 2, 2026 in Minneapolis',
+        caption: '',
+        focus: 'center 45%',
+        credit: {
+          name: 'Jacob Brindley',
+          url: 'https://www.linkedin.com/feed/update/urn:li:activity:7511816064725372928/',
+        },
+      },
+      {
+        id: '2026-10-afterparty-04',
+        src: '/event-photos/2026-10-afterparty-04-960.webp',
+        srcSet:
+          '/event-photos/2026-10-afterparty-04-480.webp 480w, /event-photos/2026-10-afterparty-04-800.webp 800w, /event-photos/2026-10-afterparty-04-960.webp 960w, /event-photos/2026-10-afterparty-04-1280.webp 1280w',
+        fullSrc: '/event-photos/2026-10-afterparty-04-1280.webp',
+        width: 1280,
+        height: 1707,
+        alt: 'Two men posing at the Wild AI afterparty at Loon Cafe on October 2, 2026 in Minneapolis',
+        caption: '',
+        focus: 'center 24%',
+        credit: {
+          name: 'Jacob Brindley',
+          url: 'https://www.linkedin.com/feed/update/urn:li:activity:7511816064725372928/',
+        },
       },
     ],
   },

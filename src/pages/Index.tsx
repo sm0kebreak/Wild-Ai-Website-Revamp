@@ -21,24 +21,30 @@ const Index = () => {
         <Hero />
 
         <TeslaPanel
-          flow
-          image="/event-photos/2026-09-minneapolis-02-1280.webp"
-          imageAlt=""
-        >
+          sentence
+          focus="center 42%"
+          image="/event-photos/2026-08-minneapolis-07-1280.webp"
+          title="The underground AI scene in Minneapolis."
+          subline="Raw builds. Fringe ideas. No slides."
+        />
+
+        <TeslaPanel flow focus="center 38%" image="/event-photos/2026-09-minneapolis-02-1280.webp" imageAlt="">
           <CityEventPicker />
         </TeslaPanel>
 
         <TeslaPanel
           id="demo-your-build"
+          focus="62% 46%"
           image="/event-photos/2026-08-minneapolis-05-1280.webp"
-          title="Demo your build"
-          subline="15 minutes. No slides."
-          primary={{ label: 'Sign up to demo', href: '/speak' }}
+          title="Show us something wild."
+          subline="Any stage. The rawer, the better."
+          primary={{ label: 'Demo it', href: '/speak' }}
           secondary={{ label: 'How it works', href: '/speak' }}
         />
 
         <TeslaPanel
           id="sponsor-a-night"
+          focus="center 48%"
           image="/event-photos/2026-08-minneapolis-08-1280.webp"
           title="Sponsor a night"
           subline="$500 per event."
@@ -46,11 +52,11 @@ const Index = () => {
           secondary={{ label: 'Learn more', href: '/sponsor' }}
         />
 
-        <TeslaPanel flow wide image="/event-photos/2026-09-minneapolis-04-1280.webp">
+        <TeslaPanel flow wide focus="center 36%" image="/event-photos/2026-09-minneapolis-04-1280.webp">
           <EventPhotoGallery cinema />
         </TeslaPanel>
 
-        <TeslaPanel flow image="/event-photos/2026-08-minneapolis-06-1280.webp" title="Team" subline="Organizers.">
+        <TeslaPanel flow focus="center 32%" image="/event-photos/2026-08-minneapolis-06-1280.webp" title="Team" subline="Organizers.">
           <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-5">
             {team.map((person) => {
               const body = (
@@ -59,13 +65,15 @@ const Index = () => {
                     <img
                       src={person.photo}
                       alt=""
-                      className="mx-auto h-24 w-24 rounded-full object-cover md:h-28 md:w-28"
+                      className="avatar-photo mx-auto h-24 w-24 md:h-28 md:w-28"
+                      width={100}
+                      height={100}
                       loading="lazy"
                       decoding="async"
                     />
                   ) : null}
                   <p className="mt-3 font-display text-sm font-semibold leading-tight md:text-base">{person.name}</p>
-                  <p className="mt-1 text-xs text-white/70">Organizer</p>
+                  <p className="mt-1 text-xs text-white/85">Organizer</p>
                 </>
               );
               return (
@@ -97,11 +105,11 @@ const Index = () => {
           </div>
         </TeslaPanel>
 
-        <TeslaPanel flow image="/event-photos/2026-08-minneapolis-04-1280.webp">
+        <TeslaPanel flow focus="center 40%" image="/event-photos/2026-08-minneapolis-04-1280.webp">
           <PastEventsStrip limit={4} stacks cinema />
         </TeslaPanel>
 
-        <TeslaPanel flow wide image="/event-photos/2026-08-minneapolis-02-1280.webp">
+        <TeslaPanel flow wide focus="center 46%" image="/event-photos/2026-08-minneapolis-02-1280.webp">
           <div className="tesla-companies">
             <LogoCarousel />
           </div>
@@ -109,8 +117,10 @@ const Index = () => {
 
         <TeslaPanel
           image="/event-photos/2026-08-sf-01-1280.webp"
-          title="Start a chapter"
-          subline="Bring Wild AI to your city."
+          portrait="/event-photos/2026-08-sf-03-800.webp"
+          focus="center 36%"
+          title="Bring it to your city."
+          subline="Start a chapter."
           primary={{ label: 'Start a chapter', href: '/start-a-chapter' }}
           secondary={{ label: 'See chapters', href: '/chapters' }}
         />
@@ -118,12 +128,13 @@ const Index = () => {
         <TeslaPanel
           id="email-signup"
           flow
+          focus="center 40%"
           image="/event-photos/2026-09-minneapolis-03-1280.webp"
-          title="Stay in the loop"
-          subline="Event invites and recaps, one email per event."
+          title="Get the next invite"
+          subline="One email per event. Invites and recaps."
         >
           <div className="mx-auto mt-8 max-w-md text-left">
-            <EmailCapture source="home" bare title="Stay in the loop" description="" />
+            <EmailCapture source="home" bare title="Get the next invite" description="" />
           </div>
         </TeslaPanel>
       </main>

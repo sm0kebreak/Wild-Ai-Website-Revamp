@@ -16,17 +16,21 @@ const Hero = () => {
   const rsvpUrl = rsvpUrlFor(date);
 
   return (
-    <section className="hero-stage tesla-panel" aria-label="Wild AI">
-      <img
-        className="tesla-photo"
-        src="/event-photos/2026-09-minneapolis-01-1280.webp"
-        srcSet="/event-photos/2026-09-minneapolis-01-480.webp 480w, /event-photos/2026-09-minneapolis-01-960.webp 960w, /event-photos/2026-09-minneapolis-01-1280.webp 1280w"
-        sizes="100vw"
-        alt=""
-        fetchPriority="high"
-        decoding="async"
-      />
-      <div className="tesla-scrim" aria-hidden="true" />
+    <section className="hero-stage tesla-panel" aria-label="Wild AI" style={{ ['--photo-focus' as string]: 'center 42%' }}>
+      <div className="tesla-media">
+        <img
+          className="tesla-photo"
+          src="/event-photos/2026-09-minneapolis-01-1280.webp"
+          srcSet="/event-photos/2026-09-minneapolis-01-480.webp 480w, /event-photos/2026-09-minneapolis-01-960.webp 960w, /event-photos/2026-09-minneapolis-01-1280.webp 1280w"
+          sizes="100vw"
+          alt=""
+          width={1280}
+          height={960}
+          fetchPriority="high"
+          decoding="async"
+        />
+        <div className="tesla-scrim" aria-hidden="true" />
+      </div>
       <div className="tesla-copy">
         <h1 className="tesla-title">
           <span className="block">Minneapolis</span>

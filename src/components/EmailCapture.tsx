@@ -84,7 +84,7 @@ const EmailCapture = ({
           onChange={(e) => setEmail(e.target.value)}
           className={
             bare
-              ? 'h-12 flex-grow rounded-full border-white/25 bg-white/10 text-white placeholder:text-white/60'
+              ? 'h-12 flex-grow rounded-full border-white/40 bg-black/60 text-white placeholder:text-white/80'
               : 'flex-grow'
           }
           maxLength={255}
@@ -98,7 +98,7 @@ const EmailCapture = ({
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'SUBSCRIBE'}
         </Button>
       </form>
-      <p className={`mt-3 text-xs ${bare ? 'text-white/70' : 'text-muted-foreground'}`}>
+      <p className={`mt-3 text-xs ${bare ? 'text-white/85' : 'text-muted-foreground'}`}>
         By subscribing you agree to receive chapter emails. Unsubscribe anytime.
       </p>
     </div>

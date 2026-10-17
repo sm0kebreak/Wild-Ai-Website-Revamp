@@ -23,9 +23,11 @@ const PillLink = ({ action, kind }: { action: Pill; kind: 'primary' | 'secondary
   );
 };
 
-/** One full-viewport photograph with a short centered message. */
+/** One full-bleed photograph with the words kept in a readable region. */
 const TeslaPanel = ({
   image,
+  portrait,
+  focus = 'center 40%',
   imageAlt = '',
   title,
   subline,
@@ -34,10 +36,15 @@ const TeslaPanel = ({
   id,
   flow = false,
   wide = false,
+  sentence = false,
   children,
   titleAs: TitleTag = 'h2',
 }: {
   image: string;
+  /** Portrait frame used on narrow screens, when one exists for this night. */
+  portrait?: string;
+  /** object-position so the subject survives a cover crop. */
+  focus?: string;
   imageAlt?: string;
   title?: React.ReactNode;
   subline?: string;
@@ -47,14 +54,33 @@ const TeslaPanel = ({
   /** Grows past the viewport when the panel has a list, gallery, or form. */
   flow?: boolean;
   wide?: boolean;
+  /** Sentence-length headline, smaller than the one-line display type. */
+  sentence?: boolean;
   children?: React.ReactNode;
   titleAs?: 'h1' | 'h2';
 }) => (
-  <section id={id} className={`tesla-panel${flow ? ' tesla-panel-flow' : ''}`}>
-    <img className="tesla-photo" src={image} alt={imageAlt} decoding="async" loading="lazy" />
-    <div className="tesla-scrim" aria-hidden="true" />
+  <section
+    id={id}
+    className={`tesla-panel${flow ? ' tesla-panel-flow' : ''}`}
+    style={{ ['--photo-focus' as string]: focus }}
+  >
+    <div className="tesla-media">
+      <picture>
+        {portrait ? <source media="(max-width: 767px)" srcSet={portrait} /> : null}
+        <img
+          className="tesla-photo"
+          src={image}
+          alt={imageAlt}
+          width={1280}
+          height={960}
+          decoding="async"
+          loading="lazy"
+        />
+      </picture>
+      <div className="tesla-scrim" aria-hidden="true" />
+    </div>
     <div className={`tesla-copy${wide ? ' tesla-copy-wide' : ''}`}>
-      {title && <TitleTag className="tesla-title">{title}</TitleTag>}
+      {title && <TitleTag className={sentence ? 'tesla-title tesla-title-sentence' : 'tesla-title'}>{title}</TitleTag>}
       {subline && <p className="tesla-sub">{subline}</p>}
       {(primary || secondary) && (
         <div className="tesla-actions">

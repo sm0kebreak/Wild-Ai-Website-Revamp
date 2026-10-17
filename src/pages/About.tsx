@@ -86,7 +86,9 @@ const About = () => {
                       <img
                         src={person.photo}
                         alt=""
-                        className="mx-auto h-20 w-20 rounded-full object-cover"
+                        className="avatar-photo mx-auto h-20 w-20"
+                        width={256}
+                        height={256}
                       />
                     ) : (
                       <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-secondary font-display text-lg font-semibold text-foreground">

@@ -20,7 +20,7 @@ const CityEventPicker = () => {
 
   return (
     <div id="next-event" className="mx-auto w-full max-w-3xl text-left">
-      <p className="text-sm font-medium uppercase tracking-[0.16em] text-white/70">Next event · Minneapolis</p>
+      <p className="text-sm font-medium uppercase tracking-[0.16em] text-white/85">Next event · Minneapolis</p>
       <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">{meetupTitle(dateIso)}</h2>
       <p className="mt-3 text-base text-white/85 md:text-lg">
         {formatDate(dateIso)} · {MEETUP_TIME_LINE}
@@ -32,8 +32,8 @@ const CityEventPicker = () => {
       )}
       <p className="mt-6 text-sm">
         <span className="block font-medium">{MEETUP_VENUE.name}</span>
-        <span className="block text-white/70">{MEETUP_VENUE.street}</span>
-        <span className="block text-white/70">{MEETUP_VENUE.cityState}</span>
+        <span className="block text-white/85">{MEETUP_VENUE.street}</span>
+        <span className="block text-white/85">{MEETUP_VENUE.cityState}</span>
       </p>
       <div className="tesla-actions tesla-actions-start">
         {rsvpUrl && (
