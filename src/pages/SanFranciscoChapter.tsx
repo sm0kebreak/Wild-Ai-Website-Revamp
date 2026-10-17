@@ -110,7 +110,7 @@ const SanFranciscoChapter = () => {
       <Navbar />
       <main className="min-w-0">
         <section className="hero-stage tesla-panel" aria-label="Wild AI San Francisco">
-          <div className="hero-fade-frame">
+          <div className="hero-fade-frame" data-fit="contain">
             <div className="hero-fade">
               <img
                 className="tesla-photo"
@@ -131,11 +131,9 @@ const SanFranciscoChapter = () => {
             <h1 className="tesla-title">
               <span className="sr-only">Wild AI</span>
               <span className="block">San Francisco</span>
-              <span className="block">{night ? headlineFor(night.date) : 'Date coming soon'}</span>
+              {night ? <span className="block">{headlineFor(night.date)}</span> : null}
             </h1>
-            <p className="tesla-sub">
-              {night ? `${night.venueName}` : 'Next SF event: date coming soon'}
-            </p>
+            <p className="tesla-sub">{night ? night.venueName : 'Next event: date coming soon'}</p>
             {night ? <HeroCountdown date={night.date} time={night.startTime} /> : null}
             <div className="tesla-actions">
               {night ? (
@@ -154,13 +152,7 @@ const SanFranciscoChapter = () => {
           </div>
         </section>
 
-        <TeslaPanel
-          id="chapter-signup"
-          flow
-          sentence
-          title={night ? `Next SF event: ${headlineFor(night.date)}` : 'Next SF event: date coming soon'}
-          subline="Join the email list"
-        >
+        <TeslaPanel id="chapter-signup" flow sentence title="Join the email list">
           {night ? (
             <p className="mx-auto mt-4 max-w-xl text-sm text-white/85">
               {night.venueName}

@@ -27,6 +27,7 @@ import Sponsor from "./pages/Sponsor";
 import StartAChapter from "./pages/StartAChapter";
 import About from "./pages/About";
 import Join from "./pages/Join";
+import Companies from "./pages/Companies";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -80,6 +81,7 @@ const App = ({ helmetContext, queryClient: client = queryClient, location }: App
                 <Route path="/about" element={<About />} />
                 <Route path="/press" element={<Navigate to="/" replace />} />
                 <Route path="/join" element={<Join />} />
+                <Route path="/companies" element={<Companies />} />
                 <Route path="/:city" element={<ChapterPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

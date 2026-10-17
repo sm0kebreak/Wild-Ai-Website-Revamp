@@ -86,6 +86,7 @@ const PAGE_PHOTO: Record<string, string> = {
   '/speak': '2026-10-afterparty-01',
   '/sponsor': '2026-10-afterparty-02',
   '/about': '2026-10-afterparty-03',
+  '/companies': '2026-08-minneapolis-04',
   '/join': '2026-08-sf-04',
   '/start-a-chapter': '2026-08-sf-05',
   '/past-events': '2026-09-minneapolis-04',

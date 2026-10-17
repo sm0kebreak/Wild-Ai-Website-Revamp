@@ -20,6 +20,11 @@
 */
 @layer base {
   :root {
+    --space-inline: 1.25rem;
+    --space-section: 2.5rem;
+    --space-stack: 1rem;
+    --space-actions: 1.5rem;
+    --space-grid: 1rem;
     --background: 190 13% 14%;
     --foreground: 160 14% 95%;
 
@@ -284,6 +289,8 @@
     width: 100%;
     min-width: 0;
     max-width: 100%;
+    box-sizing: border-box;
+    padding-block: var(--logo-gap);
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: auto;
@@ -549,11 +556,6 @@
   /* The real navbar mark stays hidden until the flying one has landed on it. */
   [data-intro] [data-nav-logo] {
     opacity: 0;
-  }
-  /* Keep scrolled-away scrollbar width reserved for flow and fixed layers. */
-  [data-intro] body,
-  [data-intro] .site-header {
-    padding-right: var(--scroll-lock-gap, 0px);
   }
   /* Hold the hero entrance until the curtain starts lifting. */
   [data-intro='active'] .rise {
@@ -886,22 +888,6 @@
   }
 }
 
-/* ---------- Scroll reveal ---------- */
-[data-reveal] {
-  opacity: 0;
-  transform: none;
-  transition: opacity 0.45s ease;
-  transition-delay: var(--reveal-delay, 0ms);
-}
-[data-reveal='shown'] {
-  opacity: 1;
-}
-@media (pointer: coarse) {
-  [data-reveal] {
-    opacity: 1;
-  }
-}
-
 @media (max-width: 767px) {
   .page-hero {
     padding: calc(6.25rem + env(safe-area-inset-top)) 0 2.75rem;
@@ -968,19 +954,6 @@
     background-color: hsl(var(--background));
   }
 }
-html[data-native-scroll] {
-  scroll-behavior: auto;
-}
-html[data-native-scroll] .hero-wash {
-  animation: none;
-  filter: none;
-}
-html[data-native-scroll] .site-header.border-border {
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  background-color: hsl(var(--background));
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -989,10 +962,6 @@ html[data-native-scroll] .site-header.border-border {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-  [data-reveal] {
-    opacity: 1;
-    transform: none;
   }
   .rise {
     opacity: 1;
@@ -1194,6 +1163,20 @@ html[data-native-scroll] .site-header.border-border {
   width: 100%;
   background: #070908;
 }
+/* Short top blend. The homepage crossfade is excluded so faces in that frame stay clear. */
+.tesla-media:not(.hero-fade)::before,
+.page-hero__media::before,
+.hero-fade-frame[data-fit='contain']::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2.25rem;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(7, 9, 8, 0.5) 0%, rgba(7, 9, 8, 0) 100%);
+}
 .tesla-media::after,
 .page-hero__media::after {
   content: '';
@@ -1234,6 +1217,7 @@ html[data-native-scroll] .site-header.border-border {
   overflow: hidden;
   background: #070908;
 }
+.hero-fade::before,
 .hero-fade::after {
   content: none;
 }
@@ -1264,15 +1248,45 @@ html[data-native-scroll] .site-header.border-border {
 .hero-fade .tesla-photo[data-active='true'] {
   opacity: 1;
 }
+/* A still hero shows the whole frame. Cover would clip whoever stands at the edge. */
+.hero-fade-frame[data-fit='contain'] {
+  width: 100%;
+  max-height: none;
+  aspect-ratio: auto;
+  height: auto;
+}
+.hero-fade-frame[data-fit='contain'] .hero-fade {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.hero-fade-frame[data-fit='contain'] .tesla-photo {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center center;
+}
 .tesla-copy {
   position: relative;
   z-index: 1;
   width: min(68rem, 100%);
   margin-inline: auto;
-  padding: 0.25rem 1.25rem 2.25rem;
+  padding: var(--space-stack) var(--space-inline) var(--space-section);
   background: #070908;
   text-align: center;
   text-shadow: none;
+}
+/* The homepage hero has to keep Register on the first screen at 800px tall. */
+@media (min-width: 768px) {
+  .hero-stage .tesla-copy {
+    padding-top: 0.5rem;
+  }
 }
 .tesla-copy-wide {
   width: min(76rem, 100%);
@@ -1299,7 +1313,7 @@ html[data-native-scroll] .site-header.border-border {
   letter-spacing: -0.038em;
 }
 .tesla-sub {
-  margin-top: 1.15rem;
+  margin-top: var(--space-stack);
   font-size: clamp(1.125rem, 2vw, 1.5rem);
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -1311,7 +1325,7 @@ html[data-native-scroll] .site-header.border-border {
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  margin-top: 1.75rem;
+  margin-top: var(--space-actions);
 }
 .tesla-actions-start {
   justify-content: flex-start;
@@ -1391,24 +1405,24 @@ html[data-native-scroll] .site-header.border-border {
     justify-content: center;
     width: 100%;
     max-width: none;
-    padding: 1rem 1.15rem calc(1rem + env(safe-area-inset-bottom));
+    padding: var(--space-stack) var(--space-inline) calc(var(--space-section) + env(safe-area-inset-bottom));
     background: #070908;
     text-shadow: none;
   }
   .tesla-sub {
-    margin-top: 0.6rem;
+    margin-top: var(--space-stack);
     font-size: 1.0625rem;
     line-height: 1.25;
   }
   .tesla-actions {
-    margin-top: 0.85rem;
+    margin-top: var(--space-actions);
   }
   .countdown-figures {
     margin-top: 0.55rem;
   }
   .tesla-panel-flow .tesla-copy {
     justify-content: flex-start;
-    padding-top: 1.6rem;
+    padding-top: var(--space-section);
     background: #070908;
   }
   .tesla-title {
@@ -1476,18 +1490,11 @@ html[data-native-scroll] .site-header.border-border {
   }
 }
 
-@media (max-width: 767px) and (max-height: 720px) {
-  .tesla-copy {
-    padding-top: 0.75rem;
-    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
-  }
-}
-
 /* Company marks sit in their own band, larger than the old panel crop. */
 .logo-band {
   background: #070908;
   color: #fff;
-  padding: 1.75rem 0 0.5rem;
+  padding-block: var(--space-section);
 }
 .logo-band .glass,
 .logo-band .logo-card {
@@ -1499,8 +1506,15 @@ html[data-native-scroll] .site-header.border-border {
 .logo-band .border-b {
   border-bottom-color: rgba(255, 255, 255, 0.14);
 }
+.logo-divider {
+  height: 1px;
+  background: hsl(var(--border) / 0.4);
+}
 .logo-band .logo-rail {
   --logo-gap: 2.5rem;
+}
+.logo-band .logo-divider {
+  background: rgba(255, 255, 255, 0.14);
 }
 .logo-band .logo-mark {
   height: var(--logo-slot);
@@ -1525,10 +1539,12 @@ html[data-native-scroll] .site-header.border-border {
   --logo-h: 2.55rem;
   --logo-max: 13.5rem;
 }
+.logo-band > section,
+.logo-band #company-logos {
+  padding-top: 0;
+  padding-bottom: 0;
+}
 @media (min-width: 768px) {
-  .logo-band {
-    padding: 2.25rem 0 0.75rem;
-  }
   .logo-band .logo-rail {
     --logo-gap: 3.5rem;
   }
@@ -1626,6 +1642,86 @@ html[data-native-scroll] .site-header.border-border {
   .page-hero__title,
   .page-hero__title span {
     font-size: clamp(2.15rem, 10vw, 3rem);
+  }
+}
+
+.company-page {
+  background: #070908;
+  color: #fff;
+}
+.company-hero .page-hero__title {
+  max-width: 16ch;
+  font-size: clamp(1.85rem, 4.4vw, 3.25rem);
+  line-height: 1.05;
+}
+.company-grid {
+  list-style: none;
+  width: min(76rem, 100%);
+  margin: 0 auto;
+  padding: var(--space-section) var(--space-inline) calc(var(--space-section) * 1.5);
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.company-card {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: var(--space-stack);
+  align-items: start;
+  padding: var(--space-stack) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.company-slot {
+  display: grid;
+  width: 4.75rem;
+  height: 4.75rem;
+  place-items: center;
+}
+.company-slot img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.company-slot span {
+  font-size: 0.7rem;
+  line-height: 1.2;
+  text-align: center;
+}
+.company-name {
+  font-family: 'Space Grotesk', 'Space Grotesk Fallback', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-decoration: none;
+}
+.company-name:hover,
+.company-name:focus-visible {
+  text-decoration: underline;
+}
+.company-bio,
+.company-demo {
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+}
+.company-demo a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+@media (min-width: 800px) {
+  .company-grid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-section);
+  }
+}
+@media (min-width: 1180px) {
+  .company-grid {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 

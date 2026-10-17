@@ -32,6 +32,7 @@ export const routes = [
   '/speak',
   '/sponsor',
   '/about',
+  '/companies',
   '/join',
   '/start-a-chapter',
   '/past-events',

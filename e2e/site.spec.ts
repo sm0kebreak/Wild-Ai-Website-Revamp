@@ -14,6 +14,7 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/speak', heading: /Demo at/ },
   { path: '/sponsor', heading: /Reach AI/ },
   { path: '/about', heading: /crowded room/ },
+  { path: '/companies', heading: /taken the stage/ },
   { path: '/join', heading: /Join/ },
   { path: '/start-a-chapter', heading: /chapter/i },
   { path: '/past-events', heading: /Past events/ },
@@ -192,29 +193,32 @@ test('registration, demo, sponsor, and LinkedIn hrefs are valid', async ({ page 
   for (const href of recapHrefs) expect(href).toMatch(/^https:\/\/www\.linkedin\.com\/feed\/update\//);
 });
 
-test('See all companies toggles and the carousel has no arrows', async ({ page }) => {
+test('See all companies opens /companies and the carousel has no arrows', async ({ page }) => {
   await openPath(page, '/');
   await expect(page.getByRole('button', { name: 'Show previous logos' })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Show next logos' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Show the carousel' })).toHaveCount(0);
 
-  const toggle = page.locator('button[aria-controls="company-logos"]');
-  await toggle.scrollIntoViewIfNeeded();
-  await expect(toggle).toHaveText('See all companies');
+  const link = page.getByRole('link', { name: 'See all companies' });
+  await link.scrollIntoViewIfNeeded();
+  await expect(link).toHaveAttribute('href', '/companies');
   await expect(page.locator('[data-logo-rail]')).toHaveCount(2);
   const overflow = await page.locator('[data-logo-rail]').first().evaluate((element) => getComputedStyle(element).overflowX);
   expect(overflow).toBe('auto');
 
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(toggle).toHaveText('Show the carousel');
-  await expect(page.locator('#company-logos .grid a, #company-logos .grid span')).not.toHaveCount(0);
-  const gridCount = await page.locator('#company-logos .grid [data-fit]').count();
-  expect(gridCount).toBeGreaterThan(20);
-
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(toggle).toHaveText('See all companies');
-  await expect(page.locator('[data-logo-rail]')).toHaveCount(2);
+  await link.click();
+  await expect(page).toHaveURL(/\/companies$/);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('companies have taken the stage at Wild AI');
+  const names = await page.locator('.company-name').allTextContents();
+  expect(names.length).toBeGreaterThan(60);
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'en')));
+  await expect(page.locator('[data-company="Amazon"] .company-bio')).toContainText('Amazon sells');
+  await expect(page.locator('[data-company="Ovicounter AI"] .company-bio')).toHaveCount(0);
+  await expect(page.locator('[data-company="Amazon"] .company-demo')).toHaveCount(0);
+  await expect(page.locator('[data-company="Attentio"] .company-demo a').first()).toHaveAttribute(
+    'href',
+    '/events/archive-2026-08-05',
+  );
 });
 
 test('events Upcoming and Past filters', async ({ page }) => {
@@ -872,9 +876,12 @@ test('san francisco is an active chapter with its first night', async ({ page })
     nodes.map((node) => node.getAttribute('content') ?? ''),
   );
   expect(descriptions.some((content) => /builders demo raw AI projects/.test(content))).toBe(true);
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Date coming soon');
-  await expect(page.getByRole('heading', { name: 'Next SF event: date coming soon' })).toBeVisible();
-  await expect(page.getByText('Join the email list').first()).toBeVisible();
+  const hero = page.locator('.hero-stage');
+  await expect(hero.getByRole('heading', { level: 1 })).toHaveText(/San Francisco/);
+  await expect(hero.getByRole('heading', { level: 1 })).not.toContainText(/coming soon/i);
+  await expect(hero.locator('.tesla-sub')).toHaveText('Next event: date coming soon');
+  await expect(page.getByRole('heading', { name: 'Join the email list' })).toBeVisible();
+  await expect(page.getByText(/coming soon/i)).toHaveCount(1);
   await expect(page.getByRole('link', { name: 'Want to demo in SF?' })).toHaveAttribute('href', '/speak');
   await expect(page.getByText('Frontier Tower').first()).toBeVisible();
   await expect(page.getByText('Arsalan Zafar').first()).toBeVisible();

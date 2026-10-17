@@ -65,6 +65,7 @@ await writeFile(path.join(dist, '404.html'), missing.document);
 
 const home = await readFile(path.join(dist, 'index.html'), 'utf8');
 const about = await readFile(path.join(dist, 'about/index.html'), 'utf8');
+const companies = await readFile(path.join(dist, 'companies/index.html'), 'utf8');
 const required = [
   ['/', home, 'Wild AI | Show us something wild'],
   ['/', home, 'Wild AI is a monthly meetup where builders show something wild: raw AI projects at any stage, live demos, no slides, and real feedback from the room.'],
@@ -76,6 +77,9 @@ const required = [
   ['/about', about, 'About | Wild AI'],
   ['/about', about, 'What Wild AI is, who runs it, and how a meetup night works.'],
   ['/about', about, 'https://wildai.us/about'],
+  ['/companies', companies, 'Companies | Wild AI'],
+  ['/companies', companies, 'Companies whose people have taken the stage at Wild AI, with a short note on what each one does.'],
+  ['/companies', companies, 'https://wildai.us/companies'],
 ];
 for (const [route, html, text] of required) {
   if (!html.includes(text)) throw new Error(`${route} is missing ${text}`);
