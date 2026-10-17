@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -43,16 +43,11 @@ const StartAChapter = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Start a Wild AI Chapter - Bring AI meetups to your city</title>
-        <meta
-          name="description"
-          content="Bring Wild AI to your city. We provide the playbook, brand, and network - you provide the local energy. Apply to start a chapter."
-        />
-        <meta property="og:title" content="Start a Wild AI Chapter" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="Start a chapter | Wild AI"
+        description="Start a Wild AI chapter in your city."
+        path="/start-a-chapter"
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">
@@ -121,7 +116,7 @@ const StartAChapter = () => {
               Tell us about your city and why you want to build its AI community.
             </p>
             {submitted ? (
-              <div className="surface p-6 md:p-8 text-center">
+              <div className="form-success surface p-6 text-center md:p-8">
                 <CheckCircle2 className="w-10 h-10 text-wildai-mint mx-auto mb-3" />
                 <p className="font-bold mb-2">Application received.</p>
                 <p className="text-sm text-muted-foreground">

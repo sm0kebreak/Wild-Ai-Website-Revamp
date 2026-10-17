@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import PageHero from '@/components/PageHero';
 import Footer from '@/components/Footer';
@@ -27,6 +27,7 @@ import {
   formatDate,
   formatTime,
 } from '@/hooks/useChapters';
+import { publicChapters } from '@/data/chapters';
 import { DEMO_SIGNUP, meetupAgenda, rsvpUrlFor, standingMeetupTime } from '@/lib/meetupSchedule';
 import { upcomingLineups } from '@/data/speakerArchive';
 import SpeakerRow from '@/components/SpeakerRow';
@@ -37,7 +38,7 @@ const ChapterPage = () => {
   const { data: organizers } = useChapterOrganizers(chapter?.id);
   const { data: events } = useChapterEvents(chapter);
 
-  if (!isLoading && !chapter) return <NotFound />;
+  if (!chapter && !publicChapters.some((item) => item.slug === city)) return <NotFound />;
 
   const sorted = (events ?? []).slice().sort((a, b) => b.event_date.localeCompare(a.event_date));
   const next = sorted.filter((e) => isUpcoming(e.event_date)).pop();
@@ -62,16 +63,11 @@ const ChapterPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Wild AI {chapter.city} - AI meetup & demo nights</title>
-        <meta
-          name="description"
-          content={`Wild AI ${chapter.city}: ${chapter.tagline ?? 'monthly AI meetups with 15-minute demos and networking'}. All ages. Free. See the next event and RSVP.`}
-        />
-        <meta property="og:title" content={`Wild AI ${chapter.city}`} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title={`Wild AI ${chapter.city}`}
+        description={`Wild AI in ${chapter.city}. The next meetup, the venue, and how to show up.`}
+        path={`/${chapter.slug}`}
+      />
       <Navbar />
 
       <main className="pb-20 flex-grow">

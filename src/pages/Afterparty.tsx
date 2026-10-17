@@ -5,19 +5,21 @@ import Footer from '@/components/Footer';
 import LoonCafeMap from '@/components/LoonCafeMap';
 import { LOGO_SRC } from '@/components/Logo';
 import { MapPin } from 'lucide-react';
+import RoutePhoto from '@/components/RoutePhoto';
 const Afterparty = () => {
   const isMobile = useIsMobile();
   return <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="pt-20 pb-8 md:pt-24 md:pb-12 flex items-center relative">
+      <section className="page-hero">
+        <RoutePhoto />
         <div className="absolute top-16 left-0 w-full flex justify-center">
           <img src={LOGO_SRC} alt="Wild AI Logo" className={`${isMobile ? 'h-32 max-w-full' : 'h-48 md:h-64'} w-auto object-contain mix-blend-lighten`} />
         </div>
         
         <div className={`container mx-auto px-4 ${isMobile ? 'mt-36' : 'mt-56 md:mt-64'}`}>
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              <span className="text-gradient">Wild AI Afterparty</span>
+            <h1 className="page-hero__title mb-6">
+              <span>Wild AI Afterparty</span>
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">

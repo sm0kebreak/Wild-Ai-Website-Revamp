@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -32,16 +32,11 @@ const facts = [
 
 const Press = () => (
   <div className="flex flex-col min-h-screen">
-    <Helmet>
-      <title>Press - Wild AI</title>
-      <meta
-        name="description"
-        content="Press resources for Wild AI: brand assets, boilerplate, fact sheet, and media contact."
-      />
-      <meta property="og:title" content="Wild AI Press" />
-      <meta property="og:type" content="website" />
-      <meta name="twitter:card" content="summary" />
-    </Helmet>
+    <Seo
+      title="Press | Wild AI"
+      description="Press notes for Wild AI: what the meetup is, and who to contact."
+      path="/press"
+    />
     <Navbar />
 
     <main className="pb-20 flex-grow">

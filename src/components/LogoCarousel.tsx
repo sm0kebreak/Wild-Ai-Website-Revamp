@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
 import LogoRail from '@/components/motion/LogoRail';
 import Reveal from '@/components/motion/Reveal';
 import { logoFit, logos, type CompanyLogo } from '@/data/companyLogos';
@@ -59,10 +58,8 @@ const LogoMark = ({ company, grid = false }: { company: CompanyLogo; grid?: bool
   );
 };
 
-const LogoFilters = () => {
-  if (typeof document === 'undefined') return null;
-  return createPortal(
-    <svg aria-hidden="true" width="0" height="0" style={{ position: 'absolute' }}>
+const LogoFilters = () => (
+  <svg aria-hidden="true" width="0" height="0" style={{ position: 'absolute' }}>
       <filter id="logo-mono" colorInterpolationFilters="sRGB">
         <feColorMatrix
           type="matrix"
@@ -93,10 +90,8 @@ const LogoFilters = () => {
           values="0 0 0 0 0.93  0 0 0 0 0.96  0 0 0 0 0.95  1.7 5.72 0.58 0 -0.35"
         />
       </filter>
-    </svg>,
-    document.body,
-  );
-};
+    </svg>
+);
 
 /** Two counter-scrolling rows of companies represented at Wild AI events. */
 const LogoCarousel = () => {

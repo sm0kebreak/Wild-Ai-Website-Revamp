@@ -1,3 +1,4 @@
+import { inflateSync } from 'node:zlib';
 import { expect, test, type Page } from '@playwright/test';
 
 const LUMA_EVENT = 'https://luma.com/50wo8gm8';
@@ -7,7 +8,7 @@ const DEMO_LINE =
 const LUMA_URLS = new Set([LUMA_EVENT, LUMA_CALENDAR]);
 
 const routes: { path: string; heading: RegExp; redirect?: string }[] = [
-  { path: '/', heading: /The room where/ },
+  { path: '/', heading: /Monday, October 19/ },
   { path: '/events', heading: /Wild AI\s+events/ },
   { path: '/chapters', heading: /Find your/ },
   { path: '/speak', heading: /Demo at/ },
@@ -26,10 +27,10 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/events/may-2026', heading: /MAY 2026/ },
   { path: '/events/gopher-ai-demo-night', heading: /DEMO NIGHT/ },
   { path: '/events/gopher-ai-conference', heading: /DEMO NIGHT/ },
-  { path: '/admin', heading: /The room where/, redirect: '/' },
-  { path: '/admin/login', heading: /The room where/, redirect: '/' },
-  { path: '/admin/show-and-tell', heading: /The room where/, redirect: '/' },
-  { path: '/admin/emails', heading: /The room where/, redirect: '/' },
+  { path: '/admin', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/login', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/show-and-tell', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin/emails', heading: /Monday, October 19/, redirect: '/' },
   { path: '/minneapolis', heading: /Next up/ },
   { path: '/san-francisco', heading: /coming soon/ },
   { path: '/toronto', heading: /coming soon/ },
@@ -38,8 +39,8 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/events/msp-october-2026', heading: /October/ },
   { path: '/events/archive-2026-09-21', heading: /September Meetup/ },
   { path: '/events/archive-2025-06-19', heading: /June Meetup/ },
-  { path: '/afterparty', heading: /The room where/, redirect: '/' },
-  { path: '/press', heading: /The room where/, redirect: '/' },
+  { path: '/afterparty', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/press', heading: /Monday, October 19/, redirect: '/' },
 ];
 
 const seedPages = [
@@ -101,7 +102,7 @@ test.describe('routes', () => {
     await openPath(page, '/this-page-does-not-exist');
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/not found/i);
     await page.getByRole('link', { name: 'Return to Home' }).click();
-    await assertPage(page, /The room where/);
+    await assertPage(page, /Monday, October 19/);
   });
 });
 
@@ -158,7 +159,7 @@ test('registration, demo, sponsor, and LinkedIn hrefs are valid', async ({ page 
       if (isRegistrationLabel(link.text)) {
         expect(LUMA_URLS.has(link.href), `${path} ${link.text} -> ${link.href}`).toBe(true);
       }
-      if (/^sign up to demo$/i.test(link.text)) expect(link.href).toBe('/speak');
+      if (/^(sign up to demo|demo it)$/i.test(link.text)) expect(link.href).toBe('/speak');
       if (/^become a sponsor$/i.test(link.text)) expect(link.href).toBe('/sponsor');
       if (link.text === 'Read the full recap on LinkedIn' || /linkedin/i.test(link.href)) {
         expect(link.href, link.text).toMatch(/^https:\/\/([a-z0-9-]+\.)?(linkedin\.com|lnkd\.in)\//);
@@ -168,11 +169,13 @@ test('registration, demo, sponsor, and LinkedIn hrefs are valid', async ({ page 
   }
 
   await openPath(page, '/');
-  await expect(page.getByRole('link', { name: 'Register now' })).toHaveAttribute('href', LUMA_EVENT);
-  await expect(page.locator('header').getByRole('link', { name: 'Register' })).toHaveAttribute('href', LUMA_EVENT);
-  await expect(page.locator('#next-event').getByRole('link', { name: 'Register' })).toHaveAttribute('href', LUMA_EVENT);
-  await expect(page.getByRole('link', { name: 'Sign up to demo' })).toHaveAttribute('href', '/speak');
-  await expect(page.getByRole('link', { name: 'Become a sponsor' })).toHaveAttribute('href', '/sponsor');
+  await expect(page.locator('.hero-stage').getByRole('link', { name: 'Register', exact: true })).toHaveAttribute('href', LUMA_EVENT);
+  await expect(page.locator('header').getByRole('link', { name: 'Register', exact: true })).toHaveAttribute('href', LUMA_EVENT);
+  await expect(page.locator('#next-event').getByRole('link', { name: 'Register', exact: true })).toHaveAttribute('href', LUMA_EVENT);
+  await expect(page.getByRole('link', { name: 'Demo it', exact: true })).toHaveAttribute('href', '/speak');
+  await expect(page.getByRole('link', { name: 'How it works', exact: true })).toHaveAttribute('href', '/speak');
+  await expect(page.locator('#sponsor-a-night').getByRole('link', { name: 'Sponsor', exact: true })).toHaveAttribute('href', '/sponsor');
+  await expect(page.locator('#sponsor-a-night').getByRole('link', { name: 'Learn more', exact: true })).toHaveAttribute('href', '/sponsor');
 
   await openPath(page, '/events');
   await expect(page.getByRole('link', { name: /RSVP/ }).first()).toHaveAttribute('href', LUMA_EVENT);
@@ -247,7 +250,8 @@ const BILLY_LINKEDIN = 'https://www.linkedin.com/in/billy-walker';
 test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
   await openPath(page, '/');
   const next = page.locator('#next-event');
-  await expect(next.getByText('6:40 PM')).toBeVisible();
+  await expect(next.getByText('Three demos starting at 6:40')).toBeVisible();
+  await expect(next.getByText('Dangerous Man Brewing')).toBeVisible();
   await expect(next.getByText('Vikas Sabbi')).toBeVisible();
   await expect(next.getByText('Eric Phillips')).toBeVisible();
   await expect(next.getByText('Billy Walker')).toBeVisible();
@@ -263,11 +267,12 @@ test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
   await expect(next.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
 
   await openPath(page, '/events/msp-october-2026');
-  await expect(page.getByText('6:40 PM').first()).toBeVisible();
+  await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
+  await expect(page.getByText('Dangerous Man Brewing').first()).toBeVisible();
   await expect(page.getByText('6:30')).toHaveCount(0);
   await expect(page.locator('meta[data-rh="true"][name="description"]')).toHaveAttribute(
     'content',
-    /Live demos start at 6:40 PM CT\. Networking until 9\./,
+    /Three demos starting at 6:40 · Networking until 9 PM at Dangerous Man Brewing/,
   );
   const lineup = page.locator('div.surface').filter({ has: page.getByRole('heading', { name: 'SPEAKER LINEUP' }) });
   await expect(lineup.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
@@ -278,14 +283,15 @@ test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'RSVP NOW' })).toHaveAttribute('href', LUMA_EVENT);
 
   await openPath(page, '/events');
-  await expect(page.getByText('Demos 6:40 PM').first()).toBeVisible();
+  await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
   await expect(page.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
   await expect(page.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
   await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
   await expect(page.getByText('Eric Phillips')).toBeVisible();
 
   await openPath(page, '/minneapolis');
-  await expect(page.getByText('6:40 PM').first()).toBeVisible();
+  await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
+  await expect(page.getByText('Dangerous Man Brewing').first()).toBeVisible();
   await expect(page.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
   await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
   await expect(page.getByText(/first high schooler ever/i)).toBeVisible();
@@ -352,13 +358,23 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
     'href',
     'https://www.linkedin.com/in/justin14/',
   );
-  await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Justin Bosco/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/justin-bosco.jpg',
+  );
+  await expect(page.getByRole('link', { name: /Maanas Taneja/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/maanas-taneja.jpg',
+  );
   await expect(page.getByRole('link', { name: /Micah Peoples/ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/micahpeoples/',
   );
-  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Micah Peoples/ }).locator('img')).toHaveAttribute(
+    'src',
+    '/team/micah-peoples.jpg',
+  );
+  await expect(page.locator('ul.grid > li img')).toHaveCount(10);
   await expect(page.getByRole('link', { name: /Muhammad Shahid/ })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/muhammad-shahid-moandco/',
@@ -394,6 +410,20 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
   await expect(instagram).toHaveCount(1);
   await expect(instagram).toHaveAttribute('href', 'https://www.instagram.com/wildai.us/');
   await expect(page.locator('footer').getByRole('link', { name: 'Admin' })).toHaveCount(0);
+});
+
+test('homepage next meetup leads with the date', async ({ page }) => {
+  await openPath(page, '/');
+  const hero = page.locator('.hero-stage');
+  await expect(hero.getByText('Monday, October 19', { exact: true })).toBeVisible();
+  await expect(hero.getByText('Dangerous Man Brewing')).toBeVisible();
+  await expect(hero.getByText(/Doors 6:00 PM/)).toBeVisible();
+  await expect(hero.locator('.animate-ping')).toHaveCount(0);
+  const figures = hero.locator('.countdown-figures');
+  await expect(figures).toBeVisible();
+  const font = await figures.evaluate((element) => getComputedStyle(element).fontFamily);
+  expect(font.toLowerCase()).not.toContain('mono');
+  expect(font.toLowerCase()).toContain('inter');
 });
 
 test('anchors scroll to the named section', async ({ page }) => {
@@ -612,4 +642,262 @@ test('primary navigation reaches every section', async ({ page }, testInfo) => {
     await page.getByRole('option', { name: 'Join the list' }).click();
     await assertPage(page, /Join/);
   }
+});
+
+test('October 2 afterparty photos keep their full frame', async ({ page }) => {
+  await openPath(page, '/');
+  await page.getByRole('tab', { name: 'Oct 2 · Minneapolis' }).click();
+  const grid = page.getByRole('list', { name: 'Photos from Wild AI afterparty' });
+  await expect(grid.getByRole('button', { name: /Open photo/ })).toHaveCount(4);
+  const frames = await grid.locator('img').evaluateAll((imgs) =>
+    Promise.all(
+      imgs.map(async (img) => {
+        const image = img as HTMLImageElement;
+        if (image.decode) await image.decode().catch(() => undefined);
+        const box = image.getBoundingClientRect();
+        return {
+          src: image.getAttribute('src') ?? '',
+          alt: image.getAttribute('alt') ?? '',
+          fit: getComputedStyle(image).objectFit,
+          rendered: box.width / box.height,
+          natural: image.naturalWidth / image.naturalHeight,
+        };
+      }),
+    ),
+  );
+  expect(frames.map((frame) => frame.src)).toEqual([
+    '/event-photos/2026-10-afterparty-01-960.webp',
+    '/event-photos/2026-10-afterparty-02-960.webp',
+    '/event-photos/2026-10-afterparty-03-960.webp',
+    '/event-photos/2026-10-afterparty-04-960.webp',
+  ]);
+  for (const frame of frames) {
+    expect(frame.fit).toBe('contain');
+    expect(frame.alt.length).toBeGreaterThan(0);
+    expect(Math.abs(frame.rendered - frame.natural)).toBeLessThan(0.08);
+  }
+  await expect(page.locator('#photos figcaption')).toHaveCount(0);
+});
+
+test('non-cover images keep their natural aspect ratio', async ({ page }, testInfo) => {
+  const sizes =
+    testInfo.project.name === 'iphone'
+      ? [
+          { width: 375, height: 812 },
+          { width: 390, height: 844 },
+          { width: 430, height: 932 },
+        ]
+      : [{ width: 1280, height: 800 }];
+  for (const size of sizes) {
+    await page.setViewportSize(size);
+    await openPath(page, '/');
+    const logos = page.locator('button[aria-controls="company-logos"]');
+    if ((await logos.count()) && (await logos.getAttribute('aria-expanded')) !== 'true') {
+      await logos.scrollIntoViewIfNeeded();
+      await logos.click();
+    }
+    await page.evaluate(async () => {
+      const decode = (img: HTMLImageElement) =>
+        Promise.race([
+          img.decode ? img.decode().catch(() => undefined) : Promise.resolve(),
+          new Promise((resolve) => setTimeout(resolve, 2500)),
+        ]);
+      await Promise.all(Array.from(document.images).map((img) => decode(img)));
+    });
+    const failures = await page.evaluate(() => {
+      const bad: string[] = [];
+      for (const img of Array.from(document.images)) {
+        const style = getComputedStyle(img);
+        if (style.display === 'none' || style.visibility === 'hidden' || style.objectFit === 'cover') continue;
+        const box = img.getBoundingClientRect();
+        if (box.width < 8 || box.height < 8 || !img.naturalWidth || !img.naturalHeight) continue;
+        const natural = img.naturalWidth / img.naturalHeight;
+        const rendered = box.width / box.height;
+        const delta = Math.abs(rendered - natural);
+        if (delta > Math.max(0.08, natural * 0.08)) {
+          const name = img.alt || img.currentSrc || img.src;
+          bad.push(`${name} rendered ${rendered.toFixed(3)} natural ${natural.toFixed(3)}`);
+        }
+      }
+      return bad;
+    });
+    expect(failures, `${size.width}x${size.height}\n${failures.join('\n')}`).toEqual([]);
+  }
+});
+
+type Rgba = [number, number, number, number];
+
+const parseColor = (input: string): Rgba => {
+  const match = input.match(/rgba?\(([^)]+)\)/);
+  if (!match) throw new Error(`Unparsed color ${input}`);
+  const parts = match[1].split(',').map((part) => Number.parseFloat(part.trim()));
+  return [parts[0], parts[1], parts[2], parts[3] ?? 1];
+};
+
+const linear = (channel: number) => {
+  const s = channel / 255;
+  return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+};
+
+const luminance = (rgb: number[]) => 0.2126 * linear(rgb[0]) + 0.7152 * linear(rgb[1]) + 0.0722 * linear(rgb[2]);
+
+const contrastRatio = (fg: Rgba, bg: number[]) => {
+  const painted = [
+    fg[0] * fg[3] + bg[0] * (1 - fg[3]),
+    fg[1] * fg[3] + bg[1] * (1 - fg[3]),
+    fg[2] * fg[3] + bg[2] * (1 - fg[3]),
+  ];
+  const lighter = Math.max(luminance(painted), luminance(bg));
+  const darker = Math.min(luminance(painted), luminance(bg));
+  return (lighter + 0.05) / (darker + 0.05);
+};
+
+const decodePng = (buf: Buffer) => {
+  let offset = 8;
+  let width = 0;
+  let height = 0;
+  let colorType = 6;
+  const idat: Buffer[] = [];
+  while (offset + 8 < buf.length) {
+    const length = buf.readUInt32BE(offset);
+    const type = buf.toString('ascii', offset + 4, offset + 8);
+    const data = buf.subarray(offset + 8, offset + 8 + length);
+    if (type === 'IHDR') {
+      width = data.readUInt32BE(0);
+      height = data.readUInt32BE(4);
+      colorType = data[9];
+      if (data[8] !== 8 || data[12] !== 0) throw new Error('Unsupported PNG');
+    } else if (type === 'IDAT') {
+      idat.push(data);
+    } else if (type === 'IEND') {
+      break;
+    }
+    offset += 12 + length;
+  }
+  const channels = colorType === 6 ? 4 : colorType === 2 ? 3 : 0;
+  if (!channels) throw new Error(`Unsupported PNG color type ${colorType}`);
+  const inflated = inflateSync(Buffer.concat(idat));
+  const stride = width * channels;
+  const pixels = Buffer.alloc(width * height * 4);
+  let src = 0;
+  let prev = Buffer.alloc(stride);
+  const paeth = (a: number, b: number, c: number) => {
+    const p = a + b - c;
+    const pa = Math.abs(p - a);
+    const pb = Math.abs(p - b);
+    const pc = Math.abs(p - c);
+    if (pa <= pb && pa <= pc) return a;
+    if (pb <= pc) return b;
+    return c;
+  };
+  for (let y = 0; y < height; y += 1) {
+    const filter = inflated[src];
+    src += 1;
+    const row = Buffer.alloc(stride);
+    for (let i = 0; i < stride; i += 1) {
+      const raw = inflated[src];
+      src += 1;
+      const a = i >= channels ? row[i - channels] : 0;
+      const b = prev[i];
+      const c = i >= channels ? prev[i - channels] : 0;
+      let value = raw;
+      if (filter === 1) value = (raw + a) & 255;
+      else if (filter === 2) value = (raw + b) & 255;
+      else if (filter === 3) value = (raw + Math.floor((a + b) / 2)) & 255;
+      else if (filter === 4) value = (raw + paeth(a, b, c)) & 255;
+      else if (filter !== 0) throw new Error(`Bad PNG filter ${filter}`);
+      row[i] = value;
+    }
+    prev = row;
+    for (let x = 0; x < width; x += 1) {
+      const i = x * channels;
+      const o = (y * width + x) * 4;
+      pixels[o] = row[i];
+      pixels[o + 1] = row[i + 1];
+      pixels[o + 2] = row[i + 2];
+      pixels[o + 3] = channels === 4 ? row[i + 3] : 255;
+    }
+  }
+  return { width, height, pixels };
+};
+
+test('hero text, countdown, and buttons meet WCAG AA', async ({ page }) => {
+  await openPath(page, '/');
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.locator('.hero-stage .tesla-photo[data-active="true"]').evaluate((img: HTMLImageElement) => img.decode());
+  const inView = await page.locator('.hero-stage .tesla-pill-primary').evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.top >= 0 && rect.bottom <= window.innerHeight - 2;
+  });
+  expect(inView).toBe(true);
+  const samples = await page.evaluate(() => {
+    const pick = (el: Element, inset: number, grid: number) => {
+      const rect = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      const size = Number.parseFloat(style.fontSize);
+      const weight = Number.parseInt(style.fontWeight, 10);
+      const left = rect.left + inset;
+      const right = rect.right - inset;
+      const top = rect.top + inset;
+      const bottom = rect.bottom - inset;
+      const points: { x: number; y: number }[] = [];
+      const spanX = right - left;
+      const spanY = bottom - top;
+      if (spanX <= 2 || spanY <= 2 || grid === 1) {
+        points.push({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
+      } else {
+        for (let iy = 0; iy < grid; iy += 1) {
+          for (let ix = 0; ix < grid; ix += 1) {
+            points.push({
+              x: left + (spanX * ix) / (grid - 1),
+              y: top + (spanY * iy) / (grid - 1),
+            });
+          }
+        }
+      }
+      return {
+        color: style.color,
+        large: size >= 24 || (weight >= 700 && size >= 18.66),
+        points,
+      };
+    };
+    const hero = document.querySelector('.hero-stage');
+    if (!hero) throw new Error('missing hero');
+    const regions = [
+      ['headline', hero.querySelector('h1'), 10, 3],
+      ['subline', hero.querySelector('.tesla-sub'), 4, 3],
+      ['countdown', hero.querySelector('.countdown-figures span span'), 2, 1],
+      ['countdown label', hero.querySelector('.countdown-figures span span:last-child'), 1, 1],
+      ['primary', hero.querySelector('.tesla-pill-primary'), 10, 1],
+      ['secondary', hero.querySelector('.tesla-pill-secondary'), 10, 1],
+    ] as const;
+    return regions.map(([name, el, inset, grid]) => {
+      if (!el) throw new Error(`missing ${name}`);
+      return { name, ...pick(el, inset, grid) };
+    });
+  });
+
+  await page.addStyleTag({
+    content: '.tesla-copy, .tesla-copy * { color: transparent !important; -webkit-text-fill-color: transparent !important; text-shadow: none !important; }',
+  });
+  const dpr = await page.evaluate(() => window.devicePixelRatio);
+  const shot = decodePng(await page.screenshot({ animations: 'disabled' }));
+  const viewport = page.viewportSize();
+  expect(viewport).not.toBeNull();
+  expect(shot.width).toBe(Math.round((viewport?.width ?? 0) * dpr));
+
+  const misses: string[] = [];
+  for (const region of samples) {
+    const fg = parseColor(region.color);
+    const ratios = region.points.map((point) => {
+      const x = Math.max(0, Math.min(shot.width - 1, Math.round(point.x * dpr)));
+      const y = Math.max(0, Math.min(shot.height - 1, Math.round(point.y * dpr)));
+      const o = (y * shot.width + x) * 4;
+      return contrastRatio(fg, [shot.pixels[o], shot.pixels[o + 1], shot.pixels[o + 2]]);
+    });
+    const worst = Math.min(...ratios);
+    const required = region.large ? 3 : 4.5;
+    if (worst < required) misses.push(`${region.name} ${worst.toFixed(2)}:1 needs ${required}:1`);
+  }
+  expect(misses, misses.join('\n')).toEqual([]);
 });

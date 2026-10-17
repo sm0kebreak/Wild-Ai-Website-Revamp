@@ -1,37 +1,33 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogPostCard from '@/components/BlogPostCard';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
 import { Skeleton } from '@/components/ui/skeleton';
+import RoutePhoto from '@/components/RoutePhoto';
 
 const Blog = () => {
   const { data, isLoading, error } = useBlogPosts();
 
   return (
     <>
-      <Helmet>
-        <title>Blog | Wild AI</title>
-        <meta name="description" content="Stay updated with the latest insights on AI development, research, and community events from Wild AI." />
-        <meta property="og:title" content="Blog | Wild AI" />
-        <meta property="og:description" content="Stay updated with the latest insights on AI development, research, and community events from Wild AI." />
-        <meta property="og:type" content="website" />
-      </Helmet>
+      <Seo title="Blog | Wild AI" description="Notes from Wild AI meetups." path="/blog" />
       
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-1 pt-24 pb-16">
-          <div className="container mx-auto px-4">
+        <main className="flex-1 pb-16">
+          <header className="page-hero">
+            <RoutePhoto />
+            <div className="container relative mx-auto px-4 text-center">
+              <h1 className="page-hero__title">Blog</h1>
+              <p className="page-hero__lede mx-auto">
+                Insights, updates, and stories from the Wild AI community.
+              </p>
+            </div>
+          </header>
+          <div className="container mx-auto px-4 pt-12">
             <div className="max-w-6xl mx-auto">
-              <header className="mb-12 text-center">
-                <h1 className="text-4xl md:text-5xl font-display font-bold text-primary mb-4">
-                  Blog
-                </h1>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Insights, updates, and stories from the Wild AI community.
-                </p>
-              </header>
 
               {isLoading && (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

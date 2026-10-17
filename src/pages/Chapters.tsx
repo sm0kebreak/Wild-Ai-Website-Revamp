@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import EmailCapture from '@/components/EmailCapture';
@@ -27,20 +27,11 @@ const Chapters = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Wild AI chapters - {CHAPTER_SEO_CITIES}</title>
-        <meta
-          name="description"
-          content={`Find a Wild AI meetup in ${CHAPTER_SEO_CITIES}. See the next event in your city, or get notified when a date is set.`}
-        />
-        <meta property="og:title" content="Find a Wild AI chapter" />
-        <meta
-          property="og:description"
-          content={`Wild AI meetups in ${CHAPTER_SEO_CITIES}. Pick a city and see what is next.`}
-        />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-      </Helmet>
+      <Seo
+        title="Chapters | Wild AI"
+        description={`Wild AI chapters in ${CHAPTER_SEO_CITIES}.`}
+        path="/chapters"
+      />
       <Navbar />
       <main className="pb-20 flex-grow">
         <PageHero
