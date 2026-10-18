@@ -1272,6 +1272,32 @@
   object-fit: contain;
   object-position: center center;
 }
+/*
+  Desktop stills sit in one calm frame. A full-bleed 4:3 or portrait
+  was taller than the viewport from 1280 up. The crossfade keeps its box.
+  Phone and tablet widths under 1024 stay full width.
+*/
+@media (min-width: 1024px) {
+  .tesla-media:not(.hero-fade),
+  .page-hero__media,
+  .hero-fade-frame[data-fit='contain'],
+  .hero-fade-frame[data-fit='contain'] .hero-fade {
+    width: fit-content;
+    max-width: min(calc(50svh * 4 / 3), 46rem, 88vw);
+    margin-inline: auto;
+  }
+  .tesla-media:not(.hero-fade) > .tesla-photo,
+  .page-hero__photo,
+  .hero-fade-frame[data-fit='contain'] .tesla-photo {
+    width: auto;
+    height: auto;
+    max-width: min(calc(50svh * 4 / 3), 46rem, 88vw);
+    max-height: min(50svh, 34rem);
+  }
+  .photo-carousel {
+    height: min(70vw, 50svh, 34rem);
+  }
+}
 .tesla-copy {
   position: relative;
   z-index: 1;
