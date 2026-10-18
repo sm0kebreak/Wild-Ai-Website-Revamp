@@ -1292,18 +1292,14 @@
     height: auto;
     max-width: min(calc(60svh * 4 / 3), 54rem, 88vw);
     max-height: min(60svh, 40rem);
-  }
-  .tesla-media:not(.hero-fade)::before,
-  .page-hero__media::before,
-  .hero-fade-frame[data-fit='contain']::before {
-    height: 24%;
-    background: linear-gradient(
-      to bottom,
-      #070908 0%,
-      rgba(7, 9, 8, 0.82) 32%,
-      rgba(7, 9, 8, 0.35) 70%,
-      rgba(7, 9, 8, 0) 100%
-    );
+    /* The ::before wash paints under the photo. Mask the image so the top edge dissolves into #070908. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 35%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 35%);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-mode: alpha;
   }
   .photo-carousel {
     height: min(70vw, 60svh, 40rem);
