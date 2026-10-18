@@ -116,7 +116,7 @@ const SanFranciscoChapter = () => {
                 className="tesla-photo"
                 src={photoSrc(HERO)}
                 srcSet={photoSrcSet(HERO)}
-                sizes="(min-width: 1024px) 736px, 100vw"
+                sizes="(min-width: 1024px) 864px, 100vw"
                 alt=""
                 width={frame.width}
                 height={frame.height}

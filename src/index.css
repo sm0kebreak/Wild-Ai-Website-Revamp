@@ -1273,9 +1273,8 @@
   object-position: center center;
 }
 /*
-  Desktop stills sit in one calm frame. A full-bleed 4:3 or portrait
-  was taller than the viewport from 1280 up. The crossfade keeps its box.
-  Phone and tablet widths under 1024 stay full width.
+  Desktop stills sit in one calm frame, a step larger than the first cap.
+  The crossfade keeps its box. Phone and tablet widths under 1024 stay full width.
 */
 @media (min-width: 1024px) {
   .tesla-media:not(.hero-fade),
@@ -1283,7 +1282,7 @@
   .hero-fade-frame[data-fit='contain'],
   .hero-fade-frame[data-fit='contain'] .hero-fade {
     width: fit-content;
-    max-width: min(calc(50svh * 4 / 3), 46rem, 88vw);
+    max-width: min(calc(60svh * 4 / 3), 54rem, 88vw);
     margin-inline: auto;
   }
   .tesla-media:not(.hero-fade) > .tesla-photo,
@@ -1291,11 +1290,23 @@
   .hero-fade-frame[data-fit='contain'] .tesla-photo {
     width: auto;
     height: auto;
-    max-width: min(calc(50svh * 4 / 3), 46rem, 88vw);
-    max-height: min(50svh, 34rem);
+    max-width: min(calc(60svh * 4 / 3), 54rem, 88vw);
+    max-height: min(60svh, 40rem);
+  }
+  .tesla-media:not(.hero-fade)::before,
+  .page-hero__media::before,
+  .hero-fade-frame[data-fit='contain']::before {
+    height: 24%;
+    background: linear-gradient(
+      to bottom,
+      #070908 0%,
+      rgba(7, 9, 8, 0.82) 32%,
+      rgba(7, 9, 8, 0.35) 70%,
+      rgba(7, 9, 8, 0) 100%
+    );
   }
   .photo-carousel {
-    height: min(70vw, 50svh, 34rem);
+    height: min(70vw, 60svh, 40rem);
   }
 }
 .tesla-copy {

@@ -11,7 +11,7 @@ export const SitePhoto = ({ stem }: { stem: string }) => {
         className="page-hero__photo"
         src={photoSrc(stem)}
         srcSet={photoSrcSet(stem)}
-        sizes="(min-width: 1024px) 736px, 100vw"
+        sizes="(min-width: 1024px) 864px, 100vw"
         alt=""
         width={photo.width}
         height={photo.height}
