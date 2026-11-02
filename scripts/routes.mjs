@@ -1,7 +1,11 @@
 /** Real pages. Redirects (/admin, /press, /afterparty) are not included. */
+import { MINNEAPOLIS_MEETUPS, minneapolisMeetupPath } from '../src/data/minneapolisMeetups.ts';
+import { chicagoYmdFrom } from '../src/lib/chicagoTime.ts';
+
 export const SITE = 'https://wildai.us';
 
 const ARCHIVE_DATES = [
+  '2026-10-19',
   '2026-10-14',
   '2026-09-21',
   '2026-08-17',
@@ -51,9 +55,9 @@ export const routes = [
   '/toronto',
   '/chicago',
   '/austin',
-  '/events/msp-october-2026',
-  '/events/msp-november-2026',
-  '/events/msp-december-2026',
+  ...MINNEAPOLIS_MEETUPS.filter((meetup) => meetup.date >= chicagoYmdFrom(new Date())).map((meetup) =>
+    minneapolisMeetupPath(meetup.date),
+  ),
   ...ARCHIVE_DATES.map((date) => `/events/archive-${date}`),
 ];
 

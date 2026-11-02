@@ -162,7 +162,7 @@ const archiveChapter = (city: string): Chapter => {
   };
 };
 
-/** The 21 archived nights, including speakers, independent of the database. */
+/** Archived nights, including speakers, independent of the database. */
 export const archiveChapterEvents = (): ChapterEvent[] =>
   pastEvents.map((event) => {
     const chapter = archiveChapter(event.city);

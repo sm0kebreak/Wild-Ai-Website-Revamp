@@ -1,4 +1,5 @@
 import type { Chapter, ChapterEvent } from '@/hooks/useChapters';
+import { MINNEAPOLIS_MEETUPS, meetupMonthName, minneapolisMeetupSlug } from '@/data/minneapolisMeetups';
 import { confirmedMeetupSpeakers } from '@/data/speakerArchive';
 import { chicagoYmd, currentDate } from '@/lib/now';
 
@@ -27,20 +28,12 @@ export const meetupFormatCopy =
 /** Wild AI Luma calendar. Nights without their own event page register here. */
 export const LUMA_CALENDAR_URL = 'https://luma.com/wildai';
 
-/** October 19, 2026 is the only night with its own Luma event. */
-const LUMA_EVENT_URLS: Record<string, string> = {
-  '2026-10-19': 'https://luma.com/50wo8gm8',
-};
-
 /** Announced Minneapolis nights. Registration is on Luma. */
-export const CONFIRMED_MEETUPS = [
-  { date: '2026-10-19' },
-  { date: '2026-11-16' },
-  { date: '2026-12-21' },
-] as const;
+const LUMA_EVENT_URLS: Record<string, string> = Object.fromEntries(
+  MINNEAPOLIS_MEETUPS.map((meetup) => [meetup.date, meetup.luma]),
+);
 
-export const CONFIRMED_MEETUP_DATE = CONFIRMED_MEETUPS[0].date;
-export const CONFIRMED_MEETUP_URL = LUMA_EVENT_URLS[CONFIRMED_MEETUP_DATE];
+export const CONFIRMED_MEETUPS = MINNEAPOLIS_MEETUPS.map((meetup) => ({ date: meetup.date }));
 
 export const rsvpUrlFor = (dateIso: string) => LUMA_EVENT_URLS[dateIso] ?? LUMA_CALENDAR_URL;
 
@@ -54,7 +47,9 @@ export const standingMeetupTime = (dateIso: string) =>
 /** Confirmed dates that have not passed, soonest first. */
 export const confirmedMeetupDates = (from = currentDate()): string[] => {
   const today = chicagoYmd(from);
-  return CONFIRMED_MEETUPS.map((meetup) => meetup.date).filter((date) => date >= today);
+  return CONFIRMED_MEETUPS.map((meetup) => meetup.date)
+    .filter((date) => date >= today)
+    .sort((a, b) => a.localeCompare(b));
 };
 
 export const meetupAgenda = [
@@ -77,13 +72,9 @@ const thirdMonday = (year: number, month: number) => {
   return new Date(year, month, 1 + ((8 - first.getDay()) % 7) + 14);
 };
 
-const monthName = (dateIso: string) =>
-  new Date(dateIso + 'T00:00:00').toLocaleDateString('en-US', { month: 'long' });
+export const meetupTitle = (dateIso: string) => `${meetupMonthName(dateIso)} Meetup - Wild AI`;
 
-export const meetupTitle = (dateIso: string) => `${monthName(dateIso)} Meetup - Wild AI`;
-
-export const meetupSlug = (dateIso: string) =>
-  `msp-${monthName(dateIso).toLowerCase()}-${dateIso.slice(0, 4)}`;
+export const meetupSlug = minneapolisMeetupSlug;
 
 /** Next `count` third-Mondays, starting with today's month if it hasn't passed. */
 export const upcomingMeetupDates = (count = 4, from = currentDate()): string[] => {

@@ -1,14 +1,20 @@
 import { inflateSync } from 'node:zlib';
 import { expect, test, type Page } from '@playwright/test';
 
-const LUMA_EVENT = 'https://luma.com/50wo8gm8';
+const LUMA_EVENT = 'https://luma.com/apk860qm';
 const LUMA_CALENDAR = 'https://luma.com/wildai';
 const DEMO_LINE =
   'Sign up to demo: 15 minutes on the mic. Demo to the room what you built, then take questions and feedback from the audience.';
-const LUMA_URLS = new Set([LUMA_EVENT, LUMA_CALENDAR]);
+const LUMA_URLS = new Set([
+  LUMA_EVENT,
+  LUMA_CALENDAR,
+  'https://luma.com/v4c2w2gu',
+  'https://luma.com/8kzm3krz',
+  'https://luma.com/yuh7of9h',
+]);
 
 const routes: { path: string; heading: RegExp; redirect?: string }[] = [
-  { path: '/', heading: /Monday, October 19/ },
+  { path: '/', heading: /Monday, November 16/ },
   { path: '/events', heading: /Wild AI\s+events/ },
   { path: '/chapters', heading: /Find your/ },
   { path: '/speak', heading: /Demo at/ },
@@ -28,20 +34,23 @@ const routes: { path: string; heading: RegExp; redirect?: string }[] = [
   { path: '/events/may-2026', heading: /MAY 2026/ },
   { path: '/events/gopher-ai-demo-night', heading: /DEMO NIGHT/ },
   { path: '/events/gopher-ai-conference', heading: /DEMO NIGHT/ },
-  { path: '/admin', heading: /Monday, October 19/, redirect: '/' },
-  { path: '/admin/login', heading: /Monday, October 19/, redirect: '/' },
-  { path: '/admin/show-and-tell', heading: /Monday, October 19/, redirect: '/' },
-  { path: '/admin/emails', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/admin', heading: /Monday, November 16/, redirect: '/' },
+  { path: '/admin/login', heading: /Monday, November 16/, redirect: '/' },
+  { path: '/admin/show-and-tell', heading: /Monday, November 16/, redirect: '/' },
+  { path: '/admin/emails', heading: /Monday, November 16/, redirect: '/' },
   { path: '/minneapolis', heading: /Next up/ },
   { path: '/san-francisco', heading: /San Francisco/ },
   { path: '/toronto', heading: /coming soon/ },
   { path: '/chicago', heading: /coming soon/ },
   { path: '/austin', heading: /coming soon/ },
-  { path: '/events/msp-october-2026', heading: /October/ },
+  { path: '/events/msp-november-2026', heading: /November/ },
+  { path: '/events/msp-january-2027', heading: /January/ },
+  { path: '/events/msp-february-2027', heading: /February/ },
+  { path: '/events/archive-2026-10-19', heading: /October/ },
   { path: '/events/archive-2026-09-21', heading: /September Meetup/ },
   { path: '/events/archive-2025-06-19', heading: /June Meetup/ },
-  { path: '/afterparty', heading: /Monday, October 19/, redirect: '/' },
-  { path: '/press', heading: /Monday, October 19/, redirect: '/' },
+  { path: '/afterparty', heading: /Monday, November 16/, redirect: '/' },
+  { path: '/press', heading: /Monday, November 16/, redirect: '/' },
 ];
 
 const seedPages = [
@@ -58,7 +67,7 @@ const seedPages = [
   '/show-and-tell',
   '/location',
   '/minneapolis',
-  '/events/msp-october-2026',
+  '/events/msp-november-2026',
 ];
 
 test.beforeEach(async ({ page }) => {
@@ -103,7 +112,7 @@ test.describe('routes', () => {
     await openPath(page, '/this-page-does-not-exist');
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/not found/i);
     await page.getByRole('link', { name: 'Return to Home' }).click();
-    await assertPage(page, /Monday, October 19/);
+    await assertPage(page, /Monday, November 16/);
   });
 });
 
@@ -183,8 +192,16 @@ test('registration, demo, sponsor, and LinkedIn hrefs are valid', async ({ page 
   const upcomingHrefs = await page.locator('a[href*="luma.com"]').evaluateAll((anchors) =>
     anchors.map((anchor) => anchor.getAttribute('href')),
   );
-  expect(upcomingHrefs).toContain(LUMA_EVENT);
-  expect(upcomingHrefs).toContain(LUMA_CALENDAR);
+  expect(upcomingHrefs).toEqual(
+    expect.arrayContaining([
+      LUMA_EVENT,
+      LUMA_CALENDAR,
+      'https://luma.com/v4c2w2gu',
+      'https://luma.com/8kzm3krz',
+      'https://luma.com/yuh7of9h',
+    ]),
+  );
+  expect(upcomingHrefs).not.toContain('https://luma.com/50wo8gm8');
 
   await openPath(page, '/past-events');
   const recapLinks = page.getByRole('link', { name: 'Read the full recap on LinkedIn' });
@@ -224,14 +241,17 @@ test('See all companies opens /companies and the carousel has no arrows', async 
 test('events Upcoming and Past filters', async ({ page }) => {
   await openPath(page, '/events');
   await expect(page.getByRole('button', { name: 'UPCOMING' })).toBeVisible();
-  await expect(page.getByText('October 19, 2026')).toBeVisible();
   await expect(page.getByText('November 16, 2026')).toBeVisible();
   await expect(page.getByText('December 21, 2026')).toBeVisible();
+  await expect(page.getByText('January 18, 2027')).toBeVisible();
+  await expect(page.getByText('February 15, 2027')).toBeVisible();
+  await expect(page.getByText('October 19, 2026')).toHaveCount(0);
   await expect(page.getByText('No past events for this filter yet.')).toHaveCount(0);
 
   await page.getByRole('button', { name: 'PAST' }).click();
   await expect(page.getByText('June 19, 2025')).toBeVisible();
-  await expect(page.getByText('October 19, 2026')).toHaveCount(0);
+  await expect(page.getByText('October 19, 2026')).toBeVisible();
+  await expect(page.getByText('November 16, 2026')).toHaveCount(0);
   await expect(page.getByText('No past events for this filter yet.')).toHaveCount(0);
 
   await page.getByRole('link', { name: /June 19, 2025/ }).click();
@@ -245,32 +265,30 @@ test('events Upcoming and Past filters', async ({ page }) => {
 
   await openPath(page, '/events');
   await page.getByRole('button', { name: 'UPCOMING' }).click();
-  await expect(page.getByText('October 19, 2026')).toBeVisible();
+  await expect(page.getByText('November 16, 2026')).toBeVisible();
+  await expect(page.getByText('October 19, 2026')).toHaveCount(0);
 });
 
-const VIKAS_LINKEDIN = 'https://www.linkedin.com/in/vikas-sabbi-801010a9';
-const BILLY_LINKEDIN = 'https://www.linkedin.com/in/billy-walker';
-
-test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
+test('November 16 lineup and 6:40 PM demo start', async ({ page }) => {
   await openPath(page, '/');
   const next = page.locator('#next-event');
   await expect(next.getByText('Three demos starting at 6:40')).toBeVisible();
   await expect(next.getByText('Dangerous Man Brewing')).toBeVisible();
-  await expect(next.getByText('Vikas Sabbi')).toBeVisible();
-  await expect(next.getByText('Eric Phillips')).toBeVisible();
-  await expect(next.getByText('Billy Walker')).toBeVisible();
-  await expect(next.getByText('Ducky, a peer-to-peer desktop app.')).toBeVisible();
-  await expect(next.getByText(/Circex, AI that turns NASA/)).toBeVisible();
-  await expect(next.getByText(/first high schooler ever to speak at Wild AI/i)).toBeVisible();
-  await expect(next.getByText(/stealth project, more soon/i)).toBeVisible();
+  await expect(next.getByText('Liam Dale')).toBeVisible();
+  await expect(next.getByText('John Rice')).toBeVisible();
+  await expect(next.getByText('Morgan Paradis')).toBeVisible();
+  await expect(next.getByText('Foray.eco')).toBeVisible();
+  await expect(next.getByText('AIPeekaboo')).toBeVisible();
+  await expect(next.getByText('llamafone')).toBeVisible();
+  await expect(next.getByText('Vikas Sabbi')).toHaveCount(0);
   const nextText = await next.innerText();
-  expect(nextText.indexOf('Vikas Sabbi')).toBeLessThan(nextText.indexOf('Eric Phillips'));
-  expect(nextText.indexOf('Eric Phillips')).toBeLessThan(nextText.indexOf('Billy Walker'));
-  await expect(next.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
-  await expect(next.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
-  await expect(next.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
+  expect(nextText.indexOf('Liam Dale')).toBeLessThan(nextText.indexOf('John Rice'));
+  expect(nextText.indexOf('John Rice')).toBeLessThan(nextText.indexOf('Morgan Paradis'));
+  await expect(next.getByRole('link', { name: /Liam Dale/ })).toHaveCount(0);
+  await expect(next.getByRole('link', { name: /John Rice/ })).toHaveCount(0);
+  await expect(next.getByRole('link', { name: /Morgan Paradis/ })).toHaveCount(0);
 
-  await openPath(page, '/events/msp-october-2026');
+  await openPath(page, '/events/msp-november-2026');
   await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
   await expect(page.getByText('Dangerous Man Brewing').first()).toBeVisible();
   await expect(page.getByText('6:30')).toHaveCount(0);
@@ -279,32 +297,38 @@ test('October 19 lineup and 6:40 PM demo start', async ({ page }) => {
     /Three demos starting at 6:40 · Networking until 9 PM at Dangerous Man Brewing/,
   );
   const lineup = page.locator('div.surface').filter({ has: page.getByRole('heading', { name: 'SPEAKER LINEUP' }) });
-  await expect(lineup.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
-  await expect(lineup.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
-  await expect(lineup.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
-  await expect(lineup.getByText('Eric Phillips')).toBeVisible();
-  await expect(lineup.getByText(/first high schooler ever/i)).toBeVisible();
+  await expect(lineup.getByText('Liam Dale')).toBeVisible();
+  await expect(lineup.getByText('John Rice')).toBeVisible();
+  await expect(lineup.getByText('Morgan Paradis')).toBeVisible();
+  await expect(lineup.getByText('Foray.eco')).toBeVisible();
+  await expect(lineup.getByText('AIPeekaboo')).toBeVisible();
+  await expect(lineup.getByText('llamafone')).toBeVisible();
+  await expect(lineup.getByRole('link', { name: /Liam Dale/ })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'RSVP NOW' })).toHaveAttribute('href', LUMA_EVENT);
 
   await openPath(page, '/events');
   await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
-  await expect(page.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
-  await expect(page.getByRole('link', { name: /Billy Walker/ })).toHaveAttribute('href', BILLY_LINKEDIN);
-  await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
-  await expect(page.getByText('Eric Phillips')).toBeVisible();
+  await expect(page.getByText('Liam Dale')).toBeVisible();
+  await expect(page.getByText('John Rice')).toBeVisible();
+  await expect(page.getByText('Morgan Paradis')).toBeVisible();
+  await expect(page.getByText('Vikas Sabbi')).toHaveCount(0);
 
   await openPath(page, '/minneapolis');
   await expect(page.getByText('Three demos starting at 6:40').first()).toBeVisible();
   await expect(page.getByText('Dangerous Man Brewing').first()).toBeVisible();
-  await expect(page.getByRole('link', { name: /Vikas Sabbi/ })).toHaveAttribute('href', VIKAS_LINKEDIN);
-  await expect(page.getByRole('link', { name: /Eric Phillips/ })).toHaveCount(0);
-  await expect(page.getByText(/first high schooler ever/i)).toBeVisible();
+  await expect(page.getByText('Liam Dale')).toBeVisible();
+  await expect(page.getByText('Foray.eco')).toBeVisible();
+  await expect(page.getByText('Vikas Sabbi')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Register' }).first()).toHaveAttribute('href', LUMA_EVENT);
 });
 
 test('Jake content: demo copy, sponsor price, team, and socials', async ({ page }) => {
   await openPath(page, '/speak');
   await expect(page.getByText(DEMO_LINE).first()).toBeVisible();
+  await page.getByText('How do I register?').click();
+  await expect(page.getByRole('link', { name: LUMA_EVENT })).toBeVisible();
+  await expect(page.getByText(/November 16, 2026 meetup is at/)).toBeVisible();
+  await expect(page.getByText('October 19, 2026')).toHaveCount(0);
   await expect(page.getByLabel('LinkedIn or X URL')).toBeVisible();
   await expect(page.locator('input[type="file"]')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'PAST SPEAKERS' })).toHaveCount(0);
@@ -419,8 +443,15 @@ test('Jake content: demo copy, sponsor price, team, and socials', async ({ page 
 test('homepage next meetup leads with the date', async ({ page }) => {
   await openPath(page, '/');
   const hero = page.locator('.hero-stage');
-  await expect(hero.getByText('Monday, October 19', { exact: true })).toBeVisible();
+  await expect(hero.getByText('Monday, November 16', { exact: true })).toBeVisible();
   await expect(hero.getByText('Dangerous Man Brewing')).toBeVisible();
+  const linkedData = await page.locator('script[type="application/ld+json"]').allTextContents();
+  expect(
+    linkedData.some(
+      (block) => block.includes('Monday, November 16, 2026') && block.includes('https://luma.com/apk860qm') && block.includes('2026-11-16T18:00:00-06:00'),
+    ),
+  ).toBe(true);
+  expect(linkedData.some((block) => block.includes('50wo8gm8') || block.includes('2026-10-19'))).toBe(false);
   await expect(hero.getByText(/Doors 6:00 PM/)).toBeVisible();
   await expect(hero.locator('.animate-ping')).toHaveCount(0);
   const figures = hero.locator('.countdown-figures');
