@@ -538,6 +538,21 @@ const people = {
     linkedin: 'https://www.linkedin.com/in/billy-walker',
     companies: [],
   },
+  liamDale: {
+    id: 'liam-dale',
+    name: 'Liam Dale',
+    companies: ['Foray.eco'],
+  },
+  johnRice: {
+    id: 'john-rice',
+    name: 'John Rice',
+    companies: ['AIPeekaboo'],
+  },
+  morganParadis: {
+    id: 'morgan-paradis',
+    name: 'Morgan Paradis',
+    companies: ['llamafone'],
+  },
 } satisfies Record<string, Person>;
 
 const line = (person: Person, role?: string): LineupSpeaker =>
@@ -545,6 +560,14 @@ const line = (person: Person, role?: string): LineupSpeaker =>
 
 /** Newest first. Sarah M. Kaja is omitted because she did not speak. */
 export const pastEvents: PastEventRecord[] = [
+  {
+    id: '2026-10-19',
+    date: '2026-10-19',
+    displayDate: 'October 19, 2026',
+    city: 'Minneapolis',
+    venue: 'Dangerous Man Brewing',
+    speakers: [],
+  },
   {
     id: '2026-10-14',
     date: '2026-10-14',
@@ -852,9 +875,11 @@ export const pastEvents: PastEventRecord[] = [
 ];
 
 /**
- * October 19, 2026 lineup, in announced order.
+ * Announced lineups for Minneapolis nights that are still ahead, in announced order.
+ * October 19, 2026 is kept so that lineup is not rewritten into the past-events list.
  * Eric Phillips has no LinkedIn URL. He is the first high schooler ever to speak at Wild AI.
- * No employers or headshots were provided.
+ * No employers or headshots were provided for the October lineup.
+ * November names are the announced demos. No LinkedIn URLs or headshots were provided.
  */
 export const upcomingLineups: Record<string, LineupSpeaker[]> = {
   '2026-10-19': [
@@ -864,6 +889,11 @@ export const upcomingLineups: Record<string, LineupSpeaker[]> = {
       "Circex, AI that turns NASA's free-text telescope alerts into searchable data. The first high schooler ever to speak at Wild AI.",
     ),
     line(people.billyWalker, 'Demoing his stealth project, more soon.'),
+  ],
+  '2026-11-16': [
+    line(people.liamDale, 'Foray.eco'),
+    line(people.johnRice, 'AIPeekaboo'),
+    line(people.morganParadis, 'llamafone'),
   ],
 };
 

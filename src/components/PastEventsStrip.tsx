@@ -76,6 +76,7 @@ const PastEventRow = ({
 }) => {
   const [open, setOpen] = useState(false);
   const panelId = pastEventPanelId(event.id);
+  const expandable = event.speakers.length > 0 || Boolean(event.recap) || Boolean(event.youtubeEmbedId);
   return (
     <li data-event-id={event.id} className="relative isolate border-b border-border px-4 py-1.5 last:border-b-0">
       {stacks ? (
@@ -89,7 +90,7 @@ const PastEventRow = ({
           </div>
           <div className="flex items-center gap-2">
             {open && <AvatarStack speakers={event.speakers} />}
-            <button
+            {expandable && <button
               type="button"
               data-event-id={event.id}
               aria-expanded={open}
@@ -102,7 +103,7 @@ const PastEventRow = ({
                 className={`h-4 w-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`}
                 aria-hidden="true"
               />
-            </button>
+            </button>}
           </div>
         </div>
       ) : (
@@ -126,14 +127,14 @@ const PastEventRow = ({
           )}
         </div>
       )}
-      {stacks && open && (
+      {stacks && expandable && open && (
         <div id={panelId} data-night={event.displayDate} className="mt-2 border-t border-border/70 pt-2.5">
           {event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
           <SpeakerRow speakers={event.speakers} detailed />
         </div>
       )}
       {!stacks && event.recap && <Recap text={event.recap} href={event.linkedinRecapUrl} />}
-      {!stacks && (
+      {!stacks && event.speakers.length > 0 && (
         <div className="mt-2.5">
           <SpeakerRow speakers={event.speakers} detailed={detailed} />
         </div>

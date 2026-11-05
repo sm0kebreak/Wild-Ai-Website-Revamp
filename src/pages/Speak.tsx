@@ -7,9 +7,7 @@ import { Mic2 } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import { SitePhoto } from '@/components/RoutePhoto';
 import { MANIFESTO_STEM } from '@/data/sitePhotos';
-import { DEMO_SIGNUP, LUMA_CALENDAR_URL, MEETUP_TIME_LINE, MEETUP_VENUE } from '@/lib/meetupSchedule';
-
-const OCTOBER_LUMA = 'https://luma.com/50wo8gm8';
+import { DEMO_SIGNUP, LUMA_CALENDAR_URL, MEETUP_TIME_LINE, MEETUP_VENUE, nextMeetupDate, rsvpUrlFor } from '@/lib/meetupSchedule';
 
 const faqs = [
   {
@@ -34,7 +32,16 @@ const faqs = [
   },
 ];
 
-const Speak = () => (
+const Speak = () => {
+  const nextDate = nextMeetupDate();
+  const nextLabel = new Date(`${nextDate}T00:00:00`).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  const nextLuma = rsvpUrlFor(nextDate);
+
+  return (
   <div className="flex flex-col min-h-screen">
     <Seo
       title="Demo at Wild AI"
@@ -85,9 +92,9 @@ const Speak = () => (
                 <summary className="font-bold font-mono cursor-pointer text-sm">{f.q}</summary>
                 {f.q === 'How do I register?' ? (
                   <p className="text-muted-foreground text-sm mt-3">
-                    Register on Luma. The October 19, 2026 meetup is at{' '}
-                    <a href={OCTOBER_LUMA} className="text-wildai-mint hover:underline" target="_blank" rel="noopener noreferrer">
-                      {OCTOBER_LUMA}
+                    Register on Luma. The {nextLabel} meetup is at{' '}
+                    <a href={nextLuma} className="text-wildai-mint hover:underline" target="_blank" rel="noopener noreferrer">
+                      {nextLuma}
                     </a>
                     . Other nights, and the calendar, use{' '}
                     <a href={LUMA_CALENDAR_URL} className="text-wildai-mint hover:underline" target="_blank" rel="noopener noreferrer">
@@ -111,6 +118,7 @@ const Speak = () => (
     </main>
     <Footer />
   </div>
-);
+  );
+};
 
 export default Speak;

@@ -13,6 +13,7 @@
       "permanent": true
     },
     { "source": "/admin", "destination": "/", "permanent": false },
-    { "source": "/admin/:path*", "destination": "/", "permanent": false }
+    { "source": "/admin/:path*", "destination": "/", "permanent": false },
+    { "source": "/events/msp-october-2026", "destination": "/events/archive-2026-10-19", "permanent": true }
   ]
 }

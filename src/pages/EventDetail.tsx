@@ -232,7 +232,7 @@ const EventDetail = () => {
                   })}
                 </div>
               </div>
-            ) : (
+            ) : upcoming ? (
               <div className="surface p-6 md:p-8">
                 <h2 className="section-title">SPEAKER LINEUP</h2>
                 <p className="text-muted-foreground">
@@ -242,7 +242,7 @@ const EventDetail = () => {
                   </Link>
                 </p>
               </div>
-            )}
+            ) : null}
 
             {/* Venue + map */}
             {event.venue_name && (

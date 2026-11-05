@@ -1,6 +1,8 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { MINNEAPOLIS_MEETUPS } from '../src/data/minneapolisMeetups.ts';
+import { chicagoIso, chicagoYmdFrom } from '../src/lib/chicagoTime.ts';
 import { routes, sitemapXml } from './routes.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
@@ -66,13 +68,15 @@ await writeFile(path.join(dist, '404.html'), missing.document);
 const home = await readFile(path.join(dist, 'index.html'), 'utf8');
 const about = await readFile(path.join(dist, 'about/index.html'), 'utf8');
 const companies = await readFile(path.join(dist, 'companies/index.html'), 'utf8');
+const nextMeetup = MINNEAPOLIS_MEETUPS.find((meetup) => meetup.date >= chicagoYmdFrom(new Date(builtAt)));
+if (!nextMeetup) throw new Error('no upcoming Minneapolis meetup');
 const required = [
   ['/', home, 'Wild AI | Show us something wild'],
   ['/', home, 'Wild AI is a monthly meetup where builders show something wild: raw AI projects at any stage, live demos, no slides, and real feedback from the room.'],
   ['/', home, 'https://wildai.us/og/wildai-og.jpg'],
   ['/', home, 'summary_large_image'],
-  ['/', home, 'https://luma.com/50wo8gm8'],
-  ['/', home, '2026-10-19T18:00:00-05:00'],
+  ['/', home, nextMeetup.luma],
+  ['/', home, chicagoIso(nextMeetup.date, '18:00')],
   ['/', home, 'https://www.linkedin.com/company/wild-ai-community'],
   ['/about', about, 'About | Wild AI'],
   ['/about', about, 'What Wild AI is, who runs it, and how a meetup night works.'],
